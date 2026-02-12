@@ -4,43 +4,47 @@
     <meta charset="UTF-8">
     <title>Jed Marc Nocum</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 antialiased">
+<div class="mx-auto max-w-3xl px-6 py-10">
+    <nav class="mb-10 rounded-lg border border-slate-200 bg-white px-4 py-3 shadow-sm">
+        <ul class="flex flex-wrap gap-5 text-sm font-medium text-slate-600">
+            <li><a class="transition hover:text-indigo-600" href="/">Home</a></li>
+            <li><a class="transition hover:text-indigo-600" href="/resume.html">Resume</a></li>
+            <li><a class="transition hover:text-indigo-600" href="/labs.html">Labs</a></li>
+        </ul>
+    </nav>
 
-<nav>
-    <a href="/">Home</a>
-    <a href="/resume.html">Resume</a>
-    <a href="/labs.html">Labs</a>
-</nav>
+    <main class="space-y-8 rounded-xl border border-slate-200 bg-white p-8 shadow-sm">
+        <header class="space-y-3">
+            <h1 class="text-3xl font-bold tracking-tight text-slate-900">Jed Marc Nocum</h1>
+            <p class="leading-relaxed text-slate-600">
+                IT Support &amp; Networking Professional<br>
+                CompTIA A+, Network+, Security+ | CCNA Candidate<br>
+                Former Web Developer transitioning into Infrastructure &amp; Enterprise Networking
+            </p>
+        </header>
 
-<h1>Jed Marc Nocum</h1>
+        <section class="space-y-3 border-t border-slate-200 pt-6">
+            <h2 class="text-xl font-semibold text-slate-900">About</h2>
+            <p class="leading-relaxed text-slate-700">
+                I am an IT professional currently transitioning from web development into IT support and networking.
+                I am actively studying for the CCNA and building hands-on labs focused on VLANs, OSPF, STP, EtherChannel,
+                and enterprise network design.
+            </p>
+        </section>
 
-<p class="tagline">
-IT Support & Networking Professional<br>
-CompTIA A+, Network+, Security+ | CCNA Candidate<br>
-Former Web Developer transitioning into Infrastructure & Enterprise Networking
-</p>
+        <section class="space-y-3 border-t border-slate-200 pt-6">
+            <h2 class="text-xl font-semibold text-slate-900">Contact</h2>
+            <p class="text-slate-700">Email: your.email@example.com</p>
+            <p class="text-slate-700">LinkedIn: https://linkedin.com/in/yourprofile</p>
+        </section>
+    </main>
 
-<hr>
-
-<h2>About</h2>
-
-<p>
-I am an IT professional currently transitioning from web development into IT support and networking.
-I am actively studying for the CCNA and building hands-on labs focused on VLANs, OSPF, STP, EtherChannel,
-and enterprise network design.
-</p>
-
-<hr>
-
-<h2>Contact</h2>
-<p>Email: your.email@example.com</p>
-<p>LinkedIn: https://linkedin.com/in/yourprofile</p>
-
-<footer>
-© 2026 Jed Marc Nocum
-</footer>
-
+    <footer class="mt-8 text-sm text-slate-500">
+        © 2026 Jed Marc Nocum
+    </footer>
+</div>
 </body>
 </html>

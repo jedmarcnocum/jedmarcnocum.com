@@ -3,30 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <title>OSPF Lab - Jed Marc Nocum</title>
-    <link rel="stylesheet" href="../style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 antialiased">
+<div class="mx-auto max-w-3xl px-6 py-10">
+    <nav class="mb-10 rounded-lg border border-slate-200 bg-white px-4 py-3 shadow-sm">
+        <ul class="flex flex-wrap gap-5 text-sm font-medium text-slate-600">
+            <li><a class="transition hover:text-indigo-600" href="/">Home</a></li>
+            <li><a class="transition hover:text-indigo-600" href="/resume.html">Resume</a></li>
+            <li><a class="transition hover:text-indigo-600" href="/labs.html">Labs</a></li>
+        </ul>
+    </nav>
 
-<nav>
-    <a href="/">Home</a>
-    <a href="/resume.html">Resume</a>
-    <a href="/labs.html">Labs</a>
-</nav>
+    <main class="space-y-8 rounded-xl border border-slate-200 bg-white p-8 shadow-sm">
+        <h1 class="text-3xl font-bold tracking-tight text-slate-900">Multi-Router OSPF Lab</h1>
 
-<h1>Multi-Router OSPF Lab</h1>
+        <section class="space-y-3 border-t border-slate-200 pt-6">
+            <h2 class="text-xl font-semibold text-slate-900">Objective</h2>
+            <p class="leading-relaxed text-slate-700">Configure OSPF across multiple routers and validate adjacency and reachability.</p>
+        </section>
 
-<h2>Objective</h2>
-<p>Configure OSPF across multiple routers and validate adjacency and reachability.</p>
+        <section class="space-y-3 border-t border-slate-200 pt-6">
+            <h2 class="text-xl font-semibold text-slate-900">Key Configuration</h2>
+            <pre class="overflow-x-auto rounded-md bg-slate-900 p-4 text-sm text-slate-100"><code>router ospf 1
+ network 10.0.0.0 0.0.0.255 area 0</code></pre>
+        </section>
+    </main>
 
-<h2>Key Configuration</h2>
-<pre>
-router ospf 1
- network 10.0.0.0 0.0.0.255 area 0
-</pre>
-
-<footer>
-© 2026 Jed Marc Nocum
-</footer>
-
+    <footer class="mt-8 text-sm text-slate-500">
+        © 2026 Jed Marc Nocum
+    </footer>
+</div>
 </body>
 </html>

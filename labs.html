@@ -3,25 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>Labs - Jed Marc Nocum</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 antialiased">
+<div class="mx-auto max-w-3xl px-6 py-10">
+    <nav class="mb-10 rounded-lg border border-slate-200 bg-white px-4 py-3 shadow-sm">
+        <ul class="flex flex-wrap gap-5 text-sm font-medium text-slate-600">
+            <li><a class="transition hover:text-indigo-600" href="/">Home</a></li>
+            <li><a class="transition hover:text-indigo-600" href="/resume.html">Resume</a></li>
+            <li><a class="transition hover:text-indigo-600" href="/labs.html">Labs</a></li>
+        </ul>
+    </nav>
 
-<nav>
-    <a href="/">Home</a>
-    <a href="/resume.html">Resume</a>
-    <a href="/labs.html">Labs</a>
-</nav>
+    <main class="space-y-8 rounded-xl border border-slate-200 bg-white p-8 shadow-sm">
+        <h1 class="text-3xl font-bold tracking-tight text-slate-900">Networking Labs</h1>
 
-<h1>Networking Labs</h1>
+        <ul class="space-y-3">
+            <li>
+                <a class="block rounded-md border border-slate-200 px-4 py-3 text-slate-700 transition hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700" href="/labs/ospf-lab.html">
+                    Multi-Router OSPF Lab with VLAN Integration
+                </a>
+            </li>
+        </ul>
+    </main>
 
-<ul>
-    <li><a href="/labs/ospf-lab.html">Multi-Router OSPF Lab with VLAN Integration</a></li>
-</ul>
-
-<footer>
-© 2026 Jed Marc Nocum
-</footer>
-
+    <footer class="mt-8 text-sm text-slate-500">
+        © 2026 Jed Marc Nocum
+    </footer>
+</div>
 </body>
 </html>
