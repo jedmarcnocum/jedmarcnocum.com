@@ -1,0 +1,14 @@
+{
+  "name": "jedmarcnocum-com",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "build:css": "tailwindcss -i ./assets/tailwind.input.css -o ./dist/assets/styles.css --minify",
+    "build:html": "node ./scripts/build.mjs",
+    "build": "npm run build:html && npm run build:css"
+  },
+  "devDependencies": {
+    "html-minifier-terser": "^7.2.0",
+    "tailwindcss": "^3.4.17"
+  }
+}
