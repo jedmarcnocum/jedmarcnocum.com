@@ -1,7 +1,7 @@
 import { copyFile, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { minify } from "html-minifier-terser";
 
-const htmlFiles = ["index.html", "404.html", "certifications.html", "portfolio.html", "labs.html"];
+const htmlFiles = ["index.html", "404.html", "resume.html", "certifications.html", "portfolio.html", "labs.html"];
 
 async function copyDirectory(source, destination) {
   await mkdir(destination, { recursive: true });
