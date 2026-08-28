@@ -3,9 +3,10 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
+    "build:assets": "node ./scripts/build-assets.mjs",
     "build:css": "tailwindcss -c ./css/tailwind.config.js -i ./css/tailwind.input.css -o ./dist/assets/styles.css --minify",
-    "build:html": "node ./scripts/build.mjs",
-    "build": "npm run build:html && npm run build:css"
+    "build:html": "node ./scripts/build-html.mjs",
+    "build": "npm run build:html && npm run build:assets && npm run build:css"
   },
   "devDependencies": {
     "html-minifier-terser": "^7.2.0",

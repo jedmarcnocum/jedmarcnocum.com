@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>
+      From Packet Tracer to Cisco Modeling Labs - Jed-Marc Nocum
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Starting a CCNA lab rebuild in Cisco Modeling Labs, from VMware setup to the first working Cisco IOL nodes."
+    />
+    <link rel="stylesheet" href="/assets/styles.css" />
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/assets/favicon-32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/assets/favicon-16.png"
+    />
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+  </head>
+  <body class="bg-slate-50 text-slate-800 antialiased">
+    <div class="mx-auto max-w-3xl px-6 py-10">
+      <nav
+        class="mb-10 rounded-lg border border-slate-200 bg-white px-4 py-3 shadow-sm"
+      >
+        <ul
+          class="list-none flex flex-wrap justify-center items-center gap-5 text-center text-sm font-medium text-slate-600"
+        >
+          <li>
+            <a class="transition hover:text-indigo-600" href="/">
+              Home
+            </a>
+          </li>
+          <li>
+            <a class="transition hover:text-indigo-600" href="/resume.html"
+              >
+              Resume
+            </a
+            >
+          </li>
+          <li>
+            <a
+              class="transition hover:text-indigo-600"
+              href="/certifications.html"
+              >
+              Certifications
+            </a
+            >
+          </li>
+          <li>
+            <a class="transition hover:text-indigo-600" href="/portfolio.html"
+              >
+              Portfolio
+            </a
+            >
+          </li>
+          <li>
+            <a
+              class="font-semibold text-indigo-600"
+              href="/blog.html"
+              aria-current="page"
+              >
+              Blog
+            </a
+            >
+          </li>
+        </ul>
+      </nav>
+      <main class="rounded-xl border border-slate-200 bg-white p-8 shadow-sm">
+        <article class="space-y-8">
+          <header class="space-y-4">
+            <div class="flex flex-wrap items-center gap-3 text-sm">
+              <span
+                class="rounded-full bg-indigo-50 px-3 py-1 font-semibold text-indigo-700"
+                >
+                CCNA lab rebuild
+              </span
+              >
+              <time class="text-slate-500" datetime="2026-08-28"
+                >
+                28 August 2026
+              </time
+              >
+            </div>
+            <div class="space-y-3">
+              <h1 class="text-3xl font-bold tracking-tight text-slate-900">
+                From Packet Tracer to Cisco Modeling Labs: Starting My CCNA Lab
+                Rebuild
+              </h1>
+              <p class="text-lg leading-relaxed text-slate-600">
+                Getting CML-Free running in VMware Workstation, resolving the
+                reference-platform issue, and proving that the first Cisco nodes
+                could start and provide console access.
+              </p>
+            </div>
+            <figure class="space-y-3">
+              <img
+                class="w-full rounded-lg border border-slate-200"
+                src="/assets/blog/cml-lab-rebuild/ccna-lab-topology.png"
+                alt="Overview of the original Packet Tracer CCNA lab topology, including core and access switches, VLANs, servers, and wireless networks."
+              />
+              <figcaption class="text-sm leading-relaxed text-slate-500">
+                The original Packet Tracer topology that I will progressively
+                rebuild and extend in CML.
+              </figcaption>
+            </figure>
+          </header>
+          <section class="space-y-3 border-t border-slate-200 pt-6">
+            <h2 class="text-xl font-semibold text-slate-900">
+              Why I’m rebuilding my CCNA lab
+            </h2>
+            <p class="leading-relaxed text-slate-700">
+              While studying for the CCNA, I built my hands-on work in Cisco
+              Packet Tracer. Rather than treating each topic as a separate
+              exercise, I kept expanding one topology as I learned more.
+            </p>
+            <p class="leading-relaxed text-slate-700">
+              That project now covers VLAN segmentation, trunking, inter-VLAN
+              routing, RSTP, EtherChannel, OSPF, HSRP, DHCP, DNS, NAT/PAT, ACLs,
+              IPv4/IPv6, wireless, voice/QoS, and access-layer security
+              controls. It gave me a solid foundation and helped me pass the
+              CCNA, but I did not want the project to end after the exam.
+            </p>
+            <p class="leading-relaxed text-slate-700">
+              I wanted to keep building in an environment closer to a Cisco lab
+              workflow: creating nodes, wiring interfaces, opening device
+              consoles, and troubleshooting the platform itself. That is why I
+              decided to begin rebuilding the project in Cisco Modeling Labs
+              (CML).
+            </p>
+          </section>
+          <section class="space-y-3 border-t border-slate-200 pt-6">
+            <h2 class="text-xl font-semibold text-slate-900">
+              Why move from Packet Tracer to CML?
+            </h2>
+            <p class="leading-relaxed text-slate-700">
+              Packet Tracer was the right tool while I was learning the core
+              CCNA concepts. It made it easy to build, test, and visualise a
+              network.
+            </p>
+            <p class="leading-relaxed text-slate-700">
+              CML is the next step for this project. I am not replacing the
+              Packet Tracer lab or claiming that a two-node test is a finished
+              enterprise network. I am creating a new environment where I can
+              rebuild the design in stages, document the differences, and
+              eventually connect it with a Windows Server and Active Directory
+              lab.
+            </p>
+            <p class="leading-relaxed text-slate-700">
+              I started with CML-Free. Its five-running-node limit is enough to
+              build and test a compact core topology first, without
+              overcomplicating the migration.
+            </p>
+          </section>
+          <section class="space-y-3 border-t border-slate-200 pt-6">
+            <h2 class="text-xl font-semibold text-slate-900">
+              Setting up CML in VMware Workstation
+            </h2>
+            <p class="leading-relaxed text-slate-700">
+              I imported the CML virtual appliance into VMware Workstation and
+              attached Cisco’s reference-platform ISO. The server booted
+              successfully, but CML still needed access to the
+              reference-platform content before Cisco IOL node types could be
+              used in a lab.
+            </p>
+          </section>
+          <section class="space-y-3 border-t border-slate-200 pt-6">
+            <h2 class="text-xl font-semibold text-slate-900">
+              The first problem: CML could not detect the reference platform
+            </h2>
+            <p class="leading-relaxed text-slate-700">
+              CML asked for the reference-platform ISO even though I had
+              selected it in VMware, reporting that it could not find a CD-ROM
+              device. The missing part was the connection state of the virtual
+              CD/DVD device: selecting an ISO file is not enough if the device
+              is not connected to the running virtual machine.
+            </p>
+            <p class="leading-relaxed text-slate-700">
+              I shut CML down cleanly, returned to VMware’s CD/DVD settings,
+              and enabled both
+              <em>
+                Connected
+              </em>
+              and
+              <em>
+                Connect at power on
+              </em>
+              . After starting the virtual machine
+              again, CML could see the mounted ISO and the Copy Refplat process
+              began successfully.
+            </p>
+            <p class="leading-relaxed text-slate-700">
+              It was a useful reminder that a lab problem is not always a Cisco
+              configuration problem. Sometimes the issue is one layer below—in
+              this case, how VMware presented storage to the CML appliance.
+            </p>
+          </section>
+          <section class="space-y-3 border-t border-slate-200 pt-6">
+            <h2 class="text-xl font-semibold text-slate-900">
+              Getting into the CML interface
+            </h2>
+            <p class="leading-relaxed text-slate-700">
+              Once the reference platform had been copied, I confirmed that CML
+              had imported the Cisco IOL node definitions. I then created a new
+              lab and kept the first test deliberately small:
+            </p>
+            <pre
+              class="overflow-x-auto rounded-lg bg-slate-900 p-4 text-sm text-slate-100"
+            >
+              IOL router  ─────────  IOL-L2 switch
+            </pre
+            >
+            <p class="leading-relaxed text-slate-700">
+              The goal was not to recreate the whole CCNA topology yet. I wanted
+              to verify the basic workflow first:
+            </p>
+            <ul class="list-disc space-y-2 pl-5 leading-relaxed text-slate-700">
+              <li>
+                Add Cisco nodes to a CML canvas.
+              </li>
+              <li>
+                Create a link and select interfaces.
+              </li>
+              <li>
+                Start the nodes and open each console.
+              </li>
+              <li>
+                Confirm that the Cisco CLI is accessible.
+              </li>
+            </ul>
+          </section>
+          <section class="space-y-3 border-t border-slate-200 pt-6">
+            <h2 class="text-xl font-semibold text-slate-900">
+              First successful CML test
+            </h2>
+            <p class="leading-relaxed text-slate-700">
+              After creating the link, I started both nodes and opened their
+              consoles. The CLI loaded successfully, confirming that the
+              reference platform, node images, lab wiring, and console access
+              were all working.
+            </p>
+            <p class="leading-relaxed text-slate-700">
+              This small test was an important milestone: I had moved from an
+              existing Packet Tracer portfolio to a working CML environment
+              where I can rebuild the same design progressively.
+            </p>
+          </section>
+          <section class="space-y-3 border-t border-slate-200 pt-6">
+            <h2 class="text-xl font-semibold text-slate-900">
+              What I learned from the initial setup
+            </h2>
+            <ol
+              class="list-decimal space-y-2 pl-5 leading-relaxed text-slate-700"
+            >
+              <li>
+                Confirm what the error was actually saying: CML could not find a
+                CD-ROM device.
+              </li>
+              <li>
+                Check VMware virtual hardware instead of assuming the selected
+                ISO was connected.
+              </li>
+              <li>
+                Correct the CD/DVD connection settings.
+              </li>
+              <li>
+                Re-run the reference-platform copy process.
+              </li>
+              <li>
+                Verify the result by adding IOL nodes, connecting them, starting
+                them, and opening their consoles.
+              </li>
+            </ol>
+            <p class="leading-relaxed text-slate-700">
+              Seeing a “copy complete” message is useful, but a successful
+              router-and-switch test proves that the lab is ready to use.
+            </p>
+          </section>
+          <section class="space-y-3 border-t border-slate-200 pt-6">
+            <h2 class="text-xl font-semibold text-slate-900">
+              What’s next
+            </h2>
+            <p class="leading-relaxed text-slate-700">
+              The next step is to rebuild a compact version of the existing core
+              topology within CML-Free’s five-node limit, feature by feature
+              rather than all at once.
+            </p>
+            <ul class="list-disc space-y-2 pl-5 leading-relaxed text-slate-700">
+              <li>
+                VLANs and trunking.
+              </li>
+              <li>
+                EtherChannel and spanning-tree behaviour.
+              </li>
+              <li>
+                Inter-VLAN routing, OSPF, and HSRP.
+              </li>
+              <li>
+                DHCP, DNS, NAT, ACLs, and IPv6.
+              </li>
+              <li>
+                Troubleshooting and verification evidence.
+              </li>
+            </ul>
+            <p class="leading-relaxed text-slate-700">
+              Later, I plan to integrate a separate Windows Server and Active
+              Directory lab so I can practise cross-discipline
+              troubleshooting—for example, determining whether a client issue
+              is caused by VLAN assignment, DHCP, DNS, routing, ACLs, or Active
+              Directory.
+            </p>
+          </section>
+          <section class="space-y-3 border-t border-slate-200 pt-6">
+            <h2 class="text-xl font-semibold text-slate-900">
+              Why I’m documenting the build
+            </h2>
+            <p class="leading-relaxed text-slate-700">
+              This blog is part of my networking portfolio. I want to show the
+              process behind the project: what I was trying to achieve, what
+              went wrong, how I checked it, and how I verified the fix.
+            </p>
+            <p class="leading-relaxed text-slate-700">
+              The original Packet Tracer project remains available on
+              <a
+                class="font-semibold text-indigo-600 underline-offset-2 hover:underline"
+                href="https://github.com/jedmarcnocum/CCNA_Lab"
+                target="_blank"
+                rel="noopener noreferrer"
+                >
+                GitHub
+              </a
+              >
+              . The next post will cover the first switching stage and the
+              design choices I make as I translate the existing lab into the new
+              environment.
+            </p>
+          </section>
+        </article>
+      </main>
+      <footer
+        class="flex flex-col items-center justify-center mt-8 text-sm text-slate-500"
+      >
+        <p class="my-0">
+          &copy; 2026 Jed-Marc Nocum &middot;
+          <a
+            class="font-medium text-indigo-600 underline-offset-2 hover:underline"
+            href="https://www.linkedin.com/in/jed-marc-nocum-367a75b2/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >
+            LinkedIn
+          </a
+          >
+          &middot;
+          <a
+            class="font-medium text-indigo-600 underline-offset-2 hover:underline"
+            href="https://github.com/jedmarcnocum"
+            target="_blank"
+            rel="noopener noreferrer"
+            >
+            GitHub
+          </a
+          >
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>
