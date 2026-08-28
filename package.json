@@ -4,9 +4,10 @@
   "version": "1.0.0",
   "scripts": {
     "build:assets": "node ./scripts/build-assets.mjs",
-    "build:css": "tailwindcss -c ./css/tailwind.config.js -i ./css/tailwind.input.css -o ./dist/assets/styles.css --minify",
+    "build:css": "tailwindcss -c ./css/tailwind.config.js -i ./css/tailwind.input.css -o ./assets/styles.css",
+    "build:css:watch": "tailwindcss -c ./css/tailwind.config.js -i ./css/tailwind.input.css -o ./assets/styles.css --watch",
     "build:html": "node ./scripts/build-html.mjs",
-    "build": "npm run build:html && npm run build:assets && npm run build:css"
+    "build": "npm run build:css && npm run build:html && npm run build:assets"
   },
   "devDependencies": {
     "html-minifier-terser": "^7.2.0",
