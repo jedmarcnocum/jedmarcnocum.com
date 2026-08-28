@@ -77,14 +77,9 @@
       <main class="rounded-xl border border-slate-200 bg-white p-8 shadow-sm">
         <article class="space-y-8">
           <header class="space-y-4">
-            <div class="space-y-2 text-sm">
-              <span
-                class="inline-flex rounded-full bg-indigo-50 px-3 py-1 font-semibold text-indigo-700"
-              >
-                CCNA lab rebuild
-              </span>
-              <time class="block text-slate-500" datetime="2026-08-28">
-                28 August 2026
+            <div class="space-y-2 text-sm">  
+              <time class="block text-slate-500" datetime="2026-08">
+                August 2026
               </time>
             </div>
             <div class="space-y-3">
@@ -92,33 +87,17 @@
                 From Packet Tracer to Cisco Modeling Labs: Starting My CCNA Lab
                 Rebuild
               </h1>
-              <p class="text-lg leading-relaxed text-slate-600">
-                Getting CML-Free running in VMware Workstation, resolving the
-                reference-platform issue, and proving that the first Cisco nodes
-                could start and provide console access.
-              </p>
             </div>
-            <figure class="space-y-3">
-              <img
-                class="w-full rounded-lg border border-slate-200"
-                src="/assets/blog/cml-lab-rebuild/ccna-lab-topology.png"
-                alt="Overview of the original Packet Tracer CCNA lab topology, including core and access switches, VLANs, servers, and wireless networks."
-              />
-              <figcaption class="text-sm leading-relaxed text-slate-500">
-                The original Packet Tracer topology that I will progressively
-                rebuild and extend in CML.
-              </figcaption>
-            </figure>
+
           </header>
           <section class="space-y-3 border-t border-slate-200 pt-6">
             <h2 class="text-xl font-semibold text-slate-900">
               Why I’m rebuilding my CCNA lab
             </h2>
             <p class="leading-relaxed text-slate-700">
-              While studying for the CCNA, I built my hands-on work in Cisco
-              Packet Tracer. Rather than treating each topic as a separate
-              exercise, I kept expanding one topology as I learned more.
+              While studying for the CCNA, I used Cisco Packet Tracer alongside Jeremy’s IT Lab course on Udemy. As I worked through the lessons, the individual lab exercises sometimes felt disconnected because each focused on a specific topic. To see the bigger picture and connect the dots, I began building my own topology rather than treating every topic as a separate exercise. I expanded that topology as I learned more.
             </p>
+
             <p class="leading-relaxed text-slate-700">
               That project now covers VLAN segmentation, trunking, inter-VLAN
               routing, RSTP, EtherChannel, OSPF, HSRP, DHCP, DNS, NAT/PAT, ACLs,
@@ -126,6 +105,17 @@
               controls. It gave me a solid foundation and helped me pass the
               CCNA, but I did not want the project to end after the exam.
             </p>
+            <figure class="space-y-3">
+              <img
+                class="w-full rounded-lg border border-slate-200"
+                src="/assets/blog/cml-lab-rebuild/ccna-lab-topology.png"
+                alt="Overview of the original Packet Tracer CCNA lab topology, including core and access switches, VLANs, servers, and wireless networks."
+              /> 
+              <figcaption class="text-sm leading-relaxed text-slate-500">
+                The original Packet Tracer topology that I will progressively
+                rebuild and extend in CML.
+              </figcaption>
+            </figure>
             <p class="leading-relaxed text-slate-700">
               I wanted to keep building in an environment closer to a Cisco lab
               workflow: creating nodes, wiring interfaces, opening device
@@ -133,30 +123,9 @@
               decided to begin rebuilding the project in Cisco Modeling Labs
               (CML).
             </p>
+
           </section>
-          <section class="space-y-3 border-t border-slate-200 pt-6">
-            <h2 class="text-xl font-semibold text-slate-900">
-              Why move from Packet Tracer to CML?
-            </h2>
-            <p class="leading-relaxed text-slate-700">
-              Packet Tracer was the right tool while I was learning the core
-              CCNA concepts. It made it easy to build, test, and visualise a
-              network.
-            </p>
-            <p class="leading-relaxed text-slate-700">
-              CML is the next step for this project. I am not replacing the
-              Packet Tracer lab or claiming that a two-node test is a finished
-              enterprise network. I am creating a new environment where I can
-              rebuild the design in stages, document the differences, and
-              eventually connect it with a Windows Server and Active Directory
-              lab.
-            </p>
-            <p class="leading-relaxed text-slate-700">
-              I started with CML-Free. Its five-running-node limit is enough to
-              build and test a compact core topology first, without
-              overcomplicating the migration.
-            </p>
-          </section>
+       
           <section class="space-y-3 border-t border-slate-200 pt-6">
             <h2 class="text-xl font-semibold text-slate-900">
               Setting up CML in VMware Workstation
