@@ -7,7 +7,7 @@ const htmlFiles = [
   "certifications.html",
   "portfolio.html",
   "blog.html",
-  "blog/cml-lab-rebuild.html"
+  "blog/cml-lab-rebuild/part-1-getting-started.html"
 ];
 
 await mkdir("dist", { recursive: true });

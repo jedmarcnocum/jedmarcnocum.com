@@ -3,12 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <title>
-      From Packet Tracer to Cisco Modeling Labs - Jed-Marc Nocum
+      CML Lab Rebuild Part 1: Getting Started with CML-Free - Jed-Marc Nocum
     </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Starting a CCNA lab rebuild in Cisco Modeling Labs, from VMware setup to the first working Cisco IOL nodes."
+      content="Part 1 of a CCNA lab rebuild: setting up CML-Free in VMware Workstation and validating an IOSv router and IOSvL2 switch test lab."
     />
     <link rel="stylesheet" href="/assets/styles.css" />
     <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
@@ -84,8 +84,7 @@
             </div>
             <div class="space-y-3">
               <h1 class="text-3xl font-bold tracking-tight text-slate-900">
-                From Packet Tracer to Cisco Modeling Labs: Starting My CCNA Lab
-                Rebuild
+                CML Lab Rebuild, Part 1: Getting Started with CML-Free
               </h1>
             </div>
 
@@ -105,6 +104,7 @@
               controls. It gave me a solid foundation and helped me pass the
               CCNA, but I did not want the project to end after the exam.
             </p>
+            <br>
             <figure class="space-y-3">
               <img
                 class="w-full rounded-lg border border-slate-200"
@@ -121,79 +121,121 @@
               workflow: creating nodes, wiring interfaces, opening device
               consoles, and troubleshooting the platform itself. That is why I
               decided to begin rebuilding the project in Cisco Modeling Labs
-              (CML).
+              (CML). Before committing to a paid CML subscription, I decided to begin
+              with CML-Free. Its five-running-node limit was enough to test how
+              CML fits my workflow, learn the platform, and confirm that I
+              could build and troubleshoot Cisco labs comfortably in it.
             </p>
 
           </section>
-       
+
           <section class="space-y-3 border-t border-slate-200 pt-6">
             <h2 class="text-xl font-semibold text-slate-900">
               Setting up CML in VMware Workstation
             </h2>
             <p class="leading-relaxed text-slate-700">
-              I imported the CML virtual appliance into VMware Workstation and
-              attached Cisco’s reference-platform ISO. The server booted
-              successfully, but CML still needed access to the
-              reference-platform content before Cisco IOL node types could be
-              used in a lab.
+              Setting up CML in VMware Workstation was straightforward. I downloaded the CML-Free OVA file, imported it into VMware, and configured the virtual machine’s CPU, memory, and network settings. After powering on the VM, I can access both cockpit and the CML web interface through a browser.
             </p>
+
+            <figure class="space-y-3">
+              <img
+                class="w-full rounded-lg border border-slate-200"
+                src="/assets/blog/cml-lab-rebuild/cml2-vmware-login.png"
+                alt="CML controller console in VMware showing the Ubuntu login prompt and CML web console address."
+                loading="lazy"
+              />
+              <figcaption class="text-sm leading-relaxed text-slate-500">
+                The CML controller booted successfully in VMware and displayed
+                the address for its web console.
+              </figcaption>
+            </figure>
+            <div class="space-y-6">
+              <figure class="space-y-3">
+                <img
+                  class="w-full rounded-lg border border-slate-200"
+                  src="/assets/blog/cml-lab-rebuild/cml-login.png"
+                  alt="Cisco Modeling Labs login screen for CML 2.10.0 build 13."
+                  loading="lazy"
+                />
+                <figcaption class="text-sm leading-relaxed text-slate-500">
+                  The Cisco Modeling Labs sign-in screen.
+                </figcaption>
+              </figure>
+              <figure class="space-y-3">
+                <img
+                  class="w-full rounded-lg border border-slate-200"
+                  src="/assets/blog/cml-lab-rebuild/cokcpit-login.png"
+                  alt="Cockpit login screen for the CML controller."
+                  loading="lazy"
+                />
+                <figcaption class="text-sm leading-relaxed text-slate-500">
+                  Cockpit's login screen for accessing the CML controller with a
+                  server user account.
+                </figcaption>
+              </figure>
+            </div>
           </section>
-          <section class="space-y-3 border-t border-slate-200 pt-6">
-            <h2 class="text-xl font-semibold text-slate-900">
-              The first problem: CML could not detect the reference platform
-            </h2>
-            <p class="leading-relaxed text-slate-700">
-              CML asked for the reference-platform ISO even though I had
-              selected it in VMware, reporting that it could not find a CD-ROM
-              device. The missing part was the connection state of the virtual
-              CD/DVD device: selecting an ISO file is not enough if the device
-              is not connected to the running virtual machine.
-            </p>
-            <p class="leading-relaxed text-slate-700">
-              I shut CML down cleanly, returned to VMware’s CD/DVD settings,
-              and enabled both
-              <em>
-                Connected
-              </em>
-              and
-              <em>
-                Connect at power on
-              </em>
-              . After starting the virtual machine
-              again, CML could see the mounted ISO and the Copy Refplat process
-              began successfully.
-            </p>
-            <p class="leading-relaxed text-slate-700">
-              It was a useful reminder that a lab problem is not always a Cisco
-              configuration problem. Sometimes the issue is one layer below—in
-              this case, how VMware presented storage to the CML appliance.
-            </p>
-          </section>
+         
           <section class="space-y-3 border-t border-slate-200 pt-6">
             <h2 class="text-xl font-semibold text-slate-900">
               Getting into the CML interface
             </h2>
             <p class="leading-relaxed text-slate-700">
-              Once the reference platform had been copied, I confirmed that CML
-              had imported the Cisco IOL node definitions. I then created a new
-              lab and kept the first test deliberately small:
+              After completing the initial setup, I checked the CML controller
+              in Cockpit. This confirmed that the Ubuntu virtual machine was
+              healthy and gave me a view of its CPU and memory use, uptime, and
+              virtual hardware configuration.
             </p>
-            <pre
-              class="overflow-x-auto rounded-lg bg-slate-900 p-4 text-sm text-slate-100"
-            >
-              IOL router  ─────────  IOL-L2 switch
-            </pre
-            >
             <p class="leading-relaxed text-slate-700">
-              The goal was not to recreate the whole CCNA topology yet. I wanted
-              to verify the basic workflow first:
+              I then opened CML's Node Definitions page to see the device types
+              available for lab topologies and to explore the options for adding
+              or importing definitions. This was my starting point for becoming
+              familiar with the platform before building the first test lab.
+            </p>
+            <div class="space-y-6">
+              <figure class="space-y-3">
+                <img
+                  class="w-full rounded-lg border border-slate-200"
+                  src="/assets/blog/cml-lab-rebuild/cockpit-overview.png"
+                  alt="Cockpit overview for the CML virtual machine."
+                  loading="lazy"
+                />
+                <figcaption class="text-sm leading-relaxed text-slate-500">
+                  Cockpit shows the CML controller's health, resource use,
+                  virtual hardware, and configuration details.
+                </figcaption>
+              </figure>
+              <figure class="space-y-3">
+                <img
+                  class="w-full rounded-lg border border-slate-200"
+                  src="/assets/blog/cml-lab-rebuild/cml-overview.png"
+                  alt="Cisco Modeling Labs dashboard overview."
+                  loading="lazy"
+                />
+                <figcaption class="text-sm leading-relaxed text-slate-500">
+                  CML's Node Definitions page lists available device types and
+                  provides options to add or import definitions.
+                </figcaption>
+              </figure>
+            </div>
+            
+            <p class="leading-relaxed text-slate-700">
+              Next, I created a new CML lab and added an IOSv router and an
+              IOSvL2 switch to the canvas. I linked their GigabitEthernet0/0
+              interfaces, started both nodes, and opened their consoles. Seeing
+              both devices boot to the Cisco IOS CLI confirmed that the basic
+              workflow was working.
+            </p>
+            <p class="leading-relaxed text-slate-700">
+              The goal was not to recreate the whole CCNA topology yet. I
+              wanted to verify the basic workflow first:
             </p>
             <ul class="list-disc space-y-2 pl-5 leading-relaxed text-slate-700">
               <li>
-                Add Cisco nodes to a CML canvas.
+                Add an IOSv router and IOSvL2 switch to a CML canvas.
               </li>
               <li>
-                Create a link and select interfaces.
+                Link their GigabitEthernet0/0 interfaces.
               </li>
               <li>
                 Start the nodes and open each console.
@@ -218,37 +260,20 @@
               existing Packet Tracer portfolio to a working CML environment
               where I can rebuild the same design progressively.
             </p>
-          </section>
-          <section class="space-y-3 border-t border-slate-200 pt-6">
-            <h2 class="text-xl font-semibold text-slate-900">
-              What I learned from the initial setup
-            </h2>
-            <ol
-              class="list-decimal space-y-2 pl-5 leading-relaxed text-slate-700"
-            >
-              <li>
-                Confirm what the error was actually saying: CML could not find a
-                CD-ROM device.
-              </li>
-              <li>
-                Check VMware virtual hardware instead of assuming the selected
-                ISO was connected.
-              </li>
-              <li>
-                Correct the CD/DVD connection settings.
-              </li>
-              <li>
-                Re-run the reference-platform copy process.
-              </li>
-              <li>
-                Verify the result by adding IOL nodes, connecting them, starting
-                them, and opening their consoles.
-              </li>
-            </ol>
-            <p class="leading-relaxed text-slate-700">
-              Seeing a “copy complete” message is useful, but a successful
-              router-and-switch test proves that the lab is ready to use.
-            </p>
+
+                        <figure class="space-y-3">
+              <img
+                class="w-full rounded-lg border border-slate-200"
+                src="/assets/blog/cml-lab-rebuild/test-lab.png"
+                alt="CML workbench showing a linked IOSv router and IOSvL2 switch with both device consoles open."
+                loading="lazy"
+              />
+              <figcaption class="text-sm leading-relaxed text-slate-500">
+                My first CML test lab: an IOSv router and IOSvL2 switch linked
+                through GigabitEthernet0/0, with both device consoles open after
+                the nodes started.
+              </figcaption>
+            </figure>
           </section>
           <section class="space-y-3 border-t border-slate-200 pt-6">
             <h2 class="text-xl font-semibold text-slate-900">
@@ -256,8 +281,7 @@
             </h2>
             <p class="leading-relaxed text-slate-700">
               The next step is to rebuild a compact version of the existing core
-              topology within CML-Free’s five-node limit, feature by feature
-              rather than all at once.
+              topology within CML-Free’s five-node limit, then upgrade to CML-Personal or CML-Enterprise to continue the rebuild. I will then progressively add more nodes and features, including:
             </p>
             <ul class="list-disc space-y-2 pl-5 leading-relaxed text-slate-700">
               <li>
@@ -277,11 +301,13 @@
               </li>
             </ul>
             <p class="leading-relaxed text-slate-700">
-              Later, I plan to integrate a separate Windows Server and Active
-              Directory lab so I can practise cross-discipline
-              troubleshooting—for example, determining whether a client issue
+              Later, I plan to integrate my separate Windows Server and Active
+              Directory lab in VirtualBox so I can practise cross-discipline
+              troubleshooting — for example, determining whether a client issue
               is caused by VLAN assignment, DHCP, DNS, routing, ACLs, or Active
               Directory.
+
+              I am also considering building scripting, automation, firewall and security labs in CML, as well as exploring the integration of CML with Ansible and other automation tools. This will allow me to expand my skills beyond traditional networking and into the realm of network automation and orchestration.
             </p>
           </section>
           <section class="space-y-3 border-t border-slate-200 pt-6">
