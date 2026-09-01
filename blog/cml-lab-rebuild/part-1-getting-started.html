@@ -183,14 +183,8 @@
             <p class="leading-relaxed text-slate-700">
               After completing the initial setup, I checked the CML controller
               in Cockpit. This confirmed that the Ubuntu virtual machine was
-              healthy and gave me a view of its CPU and memory use, uptime, and
+              running fine and gave me a view of its CPU and memory use, uptime, and
               virtual hardware configuration.
-            </p>
-            <p class="leading-relaxed text-slate-700">
-              I then opened CML's Node Definitions page to see the device types
-              available for lab topologies and to explore the options for adding
-              or importing definitions. This was my starting point for becoming
-              familiar with the platform before building the first test lab.
             </p>
             <div class="space-y-6">
               <figure class="space-y-3">
@@ -205,6 +199,13 @@
                   virtual hardware, and configuration details.
                 </figcaption>
               </figure>
+
+              <p class="leading-relaxed text-slate-700">
+                I then opened CML's Node Definitions page to see the device types
+                available for lab topologies and to explore the options for adding
+                or importing definitions. This was my starting point for becoming
+                familiar with the platform before building the first test lab.
+              </p>
               <figure class="space-y-3">
                 <img
                   class="w-full rounded-lg border border-slate-200"
@@ -227,41 +228,13 @@
               workflow was working.
             </p>
             <p class="leading-relaxed text-slate-700">
-              The goal was not to recreate the whole CCNA topology yet. I
-              wanted to verify the basic workflow first:
-            </p>
-            <ul class="list-disc space-y-2 pl-5 leading-relaxed text-slate-700">
-              <li>
-                Add an IOSv router and IOSvL2 switch to a CML canvas.
-              </li>
-              <li>
-                Link their GigabitEthernet0/0 interfaces.
-              </li>
-              <li>
-                Start the nodes and open each console.
-              </li>
-              <li>
-                Confirm that the Cisco CLI is accessible.
-              </li>
-            </ul>
-          </section>
-          <section class="space-y-3 border-t border-slate-200 pt-6">
-            <h2 class="text-xl font-semibold text-slate-900">
-              First successful CML test
-            </h2>
-            <p class="leading-relaxed text-slate-700">
               After creating the link, I started both nodes and opened their
               consoles. The CLI loaded successfully, confirming that the
               reference platform, node images, lab wiring, and console access
               were all working.
             </p>
-            <p class="leading-relaxed text-slate-700">
-              This small test was an important milestone: I had moved from an
-              existing Packet Tracer portfolio to a working CML environment
-              where I can rebuild the same design progressively.
-            </p>
 
-                        <figure class="space-y-3">
+            <figure class="space-y-3">
               <img
                 class="w-full rounded-lg border border-slate-200"
                 src="/assets/blog/cml-lab-rebuild/test-lab.png"
@@ -301,13 +274,12 @@
               </li>
             </ul>
             <p class="leading-relaxed text-slate-700">
-              Later, I plan to integrate my separate Windows Server and Active
-              Directory lab in VirtualBox so I can practise cross-discipline
-              troubleshooting — for example, determining whether a client issue
-              is caused by VLAN assignment, DHCP, DNS, routing, ACLs, or Active
-              Directory.
-
-              I am also considering building scripting, automation, firewall and security labs in CML, as well as exploring the integration of CML with Ansible and other automation tools. This will allow me to expand my skills beyond traditional networking and into the realm of network automation and orchestration.
+              Once the core network is stable, I plan to connect it to my
+              separate Windows Server and Active Directory lab in VirtualBox.
+              By doing this, it will allow me to troubleshoot different scenarios, eg whether a client issue comes from VLAN assignment, DHCP, DNS, routing, ACLs or Active Directory.
+            </p>
+            <p class="leading-relaxed text-slate-700">
+              I am also planning to add  firewall and security features, followed by scripting and automation with Ansible and other tools.
             </p>
           </section>
           <section class="space-y-3 border-t border-slate-200 pt-6">
@@ -315,9 +287,7 @@
               Why I’m documenting the build
             </h2>
             <p class="leading-relaxed text-slate-700">
-              This blog is part of my networking portfolio. I want to show the
-              process behind the project: what I was trying to achieve, what
-              went wrong, how I checked it, and how I verified the fix.
+              This blog is part of my networking portfolio. I want to share my progress and what I was trying to achieve, what went wrong, how I checked it, and how I verified the fix.
             </p>
             <p class="leading-relaxed text-slate-700">
               The original Packet Tracer project remains available on
@@ -330,9 +300,7 @@
                 GitHub
               </a
               >
-              . The next post will cover the first switching stage and the
-              design choices I make as I translate the existing lab into the new
-              environment.
+              . The next post will begin the Foundation phase: mapping the existing Packet Tracer design into CML, finalising the device inventory, naming convention, VLAN and IP addressing plan. I will have to play around a bit with CML to see how to best implement the design and if there's any changes needed in the existing topology to make it work in CML. 
             </p>
           </section>
         </article>
