@@ -1,0 +1,14 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build Development Tailwind CSS",
+      "type": "process",
+      "command": "npm.cmd",
+      "args": ["run", "dev:css"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      }
+    }
+  ]
+}
