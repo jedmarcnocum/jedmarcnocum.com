@@ -1,0 +1,14 @@
+{
+  "task.allowAutomaticTasks": "on",
+  "triggerTaskOnSave.delay": 250,
+  "triggerTaskOnSave.tasks": {
+    "Build Development Tailwind CSS": [
+      "!dist/**",
+      "!node_modules/**",
+      "**/*.html",
+      "**/*.js",
+      "css/**/*.css",
+      "css/tailwind.config.js"
+    ]
+  }
+}

@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>
+      CML Lab Rebuild Part 1: Getting Started with CML-Free - Jed-Marc Nocum
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Part 1 of a CCNA lab rebuild: setting up CML-Free in VMware Workstation and validating an IOSv router and IOSvL2 switch test lab."
+    />
+    <link rel="stylesheet" href="/assets/styles.css" />
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/assets/favicon-32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/assets/favicon-16.png"
+    />
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+  </head>
+  <body class="bg-slate-50 text-slate-800 antialiased">
+    <div class="mx-auto max-w-4xl px-6 py-10">
+      <nav
+        class="mb-10 rounded-lg border border-slate-200 bg-white px-4 py-3 shadow-sm"
+      >
+        <ul
+          class="list-none flex flex-wrap justify-center items-center gap-5 text-center text-sm font-medium text-slate-600"
+        >
+          <li>
+            <a class="transition hover:text-indigo-600" href="/">
+              Home
+            </a>
+          </li>
+          <li>
+            <a class="transition hover:text-indigo-600" href="/resume.html"
+              >
+              Resume
+            </a
+            >
+          </li>
+          <li>
+            <a
+              class="transition hover:text-indigo-600"
+              href="/certifications.html"
+              >
+              Certifications
+            </a
+            >
+          </li>
+          <li>
+            <a class="transition hover:text-indigo-600" href="/portfolio.html"
+              >
+              Portfolio
+            </a
+            >
+          </li>
+          <li>
+            <a
+              class="font-semibold text-indigo-600"
+              href="/blog.html"
+              aria-current="page"
+              >
+              Blog
+            </a
+            >
+          </li>
+        </ul>
+      </nav>
+      <main class="rounded-xl border border-slate-200 bg-white p-8 shadow-sm">
+        <article class="space-y-8">
+          <header class="space-y-4">
+            <div class="space-y-2 text-sm">  
+              <time class="block text-slate-500" datetime="2026-08">
+                August 2026
+              </time>
+            </div>
+            <div class="space-y-3">
+              <h1 class="text-3xl font-bold tracking-tight text-slate-900">
+                CML Lab Rebuild, Part 1: Getting Started with CML-Free
+              </h1>
+            </div>
+
+          </header>
+          <section class="space-y-3 border-t border-slate-200 pt-6">
+            <h2 class="text-xl font-semibold text-slate-900">
+              Why I’m rebuilding my CCNA lab
+            </h2>
+            <p class="leading-relaxed text-slate-700">
+              While studying for the CCNA, I used Cisco Packet Tracer alongside Jeremy’s IT Lab course on Udemy. As I worked through the lessons, the individual lab exercises sometimes felt disconnected because each focused on a specific topic. To see the bigger picture and connect the dots, I began building my own topology rather than treating every topic as a separate exercise. I expanded that topology as I learned more.
+            </p>
+
+            <p class="leading-relaxed text-slate-700">
+              That project now covers VLAN segmentation, trunking, inter-VLAN
+              routing, RSTP, EtherChannel, OSPF, HSRP, DHCP, DNS, NAT/PAT, ACLs,
+              IPv4/IPv6, wireless, voice/QoS, and access-layer security
+              controls. It gave me a solid foundation and helped me pass the
+              CCNA, but I did not want the project to end after the exam.
+            </p>
+            <br>
+            <figure class="space-y-3">
+              <img
+                class="w-full rounded-lg border border-slate-200"
+                src="/assets/blog/cml-lab-rebuild/ccna-lab-topology.png"
+                alt="Overview of the original Packet Tracer CCNA lab topology, including core and access switches, VLANs, servers, and wireless networks."
+              /> 
+              <figcaption class="text-sm leading-relaxed text-slate-500">
+                The original Packet Tracer topology that I will progressively
+                rebuild and extend in CML.
+              </figcaption>
+            </figure>
+            <p class="leading-relaxed text-slate-700">
+              I wanted to keep building in an environment closer to a Cisco lab
+              workflow: creating nodes, wiring interfaces, opening device
+              consoles, and troubleshooting the platform itself. That is why I
+              decided to begin rebuilding the project in Cisco Modeling Labs
+              (CML). Before committing to a paid CML subscription, I decided to begin
+              with CML-Free. Its five-running-node limit was enough to test how
+              CML fits my workflow, learn the platform, and confirm that I
+              could build and troubleshoot Cisco labs comfortably in it.
+            </p>
+
+          </section>
+
+          <section class="space-y-3 border-t border-slate-200 pt-6">
+            <h2 class="text-xl font-semibold text-slate-900">
+              Setting up CML in VMware Workstation
+            </h2>
+            <p class="leading-relaxed text-slate-700">
+              Setting up CML in VMware Workstation was straightforward. I downloaded the CML-Free OVA file, imported it into VMware, and configured the virtual machine’s CPU, memory, and network settings. After powering on the VM, I can access both cockpit and the CML web interface through a browser.
+            </p>
+
+            <figure class="space-y-3">
+              <img
+                class="w-full rounded-lg border border-slate-200"
+                src="/assets/blog/cml-lab-rebuild/cml2-vmware-login.png"
+                alt="CML controller console in VMware showing the Ubuntu login prompt and CML web console address."
+                loading="lazy"
+              />
+              <figcaption class="text-sm leading-relaxed text-slate-500">
+                The CML controller booted successfully in VMware and displayed
+                the address for its web console.
+              </figcaption>
+            </figure>
+            <div class="space-y-6">
+              <figure class="space-y-3">
+                <img
+                  class="w-full rounded-lg border border-slate-200"
+                  src="/assets/blog/cml-lab-rebuild/cml-login.png"
+                  alt="Cisco Modeling Labs login screen for CML 2.10.0 build 13."
+                  loading="lazy"
+                />
+                <figcaption class="text-sm leading-relaxed text-slate-500">
+                  The Cisco Modeling Labs sign-in screen.
+                </figcaption>
+              </figure>
+              <figure class="space-y-3">
+                <img
+                  class="w-full rounded-lg border border-slate-200"
+                  src="/assets/blog/cml-lab-rebuild/cokcpit-login.png"
+                  alt="Cockpit login screen for the CML controller."
+                  loading="lazy"
+                />
+                <figcaption class="text-sm leading-relaxed text-slate-500">
+                  Cockpit's login screen for accessing the CML controller with a
+                  server user account.
+                </figcaption>
+              </figure>
+            </div>
+          </section>
+         
+          <section class="space-y-3 border-t border-slate-200 pt-6">
+            <h2 class="text-xl font-semibold text-slate-900">
+              Getting into the CML interface
+            </h2>
+            <p class="leading-relaxed text-slate-700">
+              After completing the initial setup, I checked the CML controller
+              in Cockpit. This confirmed that the Ubuntu virtual machine was
+              running fine and gave me a view of its CPU and memory use, uptime, and
+              virtual hardware configuration.
+            </p>
+            <div class="space-y-6">
+              <figure class="space-y-3">
+                <img
+                  class="w-full rounded-lg border border-slate-200"
+                  src="/assets/blog/cml-lab-rebuild/cockpit-overview.png"
+                  alt="Cockpit overview for the CML virtual machine."
+                  loading="lazy"
+                />
+                <figcaption class="text-sm leading-relaxed text-slate-500">
+                  Cockpit shows the CML controller's health, resource use,
+                  virtual hardware, and configuration details.
+                </figcaption>
+              </figure>
+
+              <p class="leading-relaxed text-slate-700">
+                I then opened CML's Node Definitions page to see the device types
+                available for lab topologies and to explore the options for adding
+                or importing definitions. This was my starting point for becoming
+                familiar with the platform before building the first test lab.
+              </p>
+              <figure class="space-y-3">
+                <img
+                  class="w-full rounded-lg border border-slate-200"
+                  src="/assets/blog/cml-lab-rebuild/cml-overview.png"
+                  alt="Cisco Modeling Labs dashboard overview."
+                  loading="lazy"
+                />
+                <figcaption class="text-sm leading-relaxed text-slate-500">
+                  CML's Node Definitions page lists available device types and
+                  provides options to add or import definitions.
+                </figcaption>
+              </figure>
+            </div>
+            
+            <p class="leading-relaxed text-slate-700">
+              Next, I created a new CML lab and added an IOSv router and an
+              IOSvL2 switch to the canvas. I linked their GigabitEthernet0/0
+              interfaces, started both nodes, and opened their consoles. Seeing
+              both devices boot to the Cisco IOS CLI confirmed that the basic
+              workflow was working.
+            </p>
+            <p class="leading-relaxed text-slate-700">
+              After creating the link, I started both nodes and opened their
+              consoles. The CLI loaded successfully, confirming that the
+              reference platform, node images, lab wiring, and console access
+              were all working.
+            </p>
+
+            <figure class="space-y-3">
+              <img
+                class="w-full rounded-lg border border-slate-200"
+                src="/assets/blog/cml-lab-rebuild/test-lab.png"
+                alt="CML workbench showing a linked IOSv router and IOSvL2 switch with both device consoles open."
+                loading="lazy"
+              />
+              <figcaption class="text-sm leading-relaxed text-slate-500">
+                My first CML test lab: an IOSv router and IOSvL2 switch linked
+                through GigabitEthernet0/0, with both device consoles open after
+                the nodes started.
+              </figcaption>
+            </figure>
+          </section>
+          <section class="space-y-3 border-t border-slate-200 pt-6">
+            <h2 class="text-xl font-semibold text-slate-900">
+              What’s next
+            </h2>
+            <p class="leading-relaxed text-slate-700">
+              The next step is to rebuild a compact version of the existing core
+              topology within CML-Free’s five-node limit, then upgrade to CML-Personal or CML-Enterprise to continue the rebuild. I will then progressively add more nodes and features, including:
+            </p>
+            <ul class="list-disc space-y-2 pl-5 leading-relaxed text-slate-700">
+              <li>
+                VLANs and trunking.
+              </li>
+              <li>
+                EtherChannel and spanning-tree behaviour.
+              </li>
+              <li>
+                Inter-VLAN routing, OSPF, and HSRP.
+              </li>
+              <li>
+                DHCP, DNS, NAT, ACLs, and IPv6.
+              </li>
+              <li>
+                Troubleshooting and verification evidence.
+              </li>
+            </ul>
+            <p class="leading-relaxed text-slate-700">
+              Once the core network is stable, I plan to connect it to my
+              separate Windows Server and Active Directory lab in VirtualBox.
+              By doing this, it will allow me to troubleshoot different scenarios, eg whether a client issue comes from VLAN assignment, DHCP, DNS, routing, ACLs or Active Directory.
+            </p>
+            <p class="leading-relaxed text-slate-700">
+              I am also planning to add  firewall and security features, followed by scripting and automation with Ansible and other tools.
+            </p>
+          </section>
+          <section class="space-y-3 border-t border-slate-200 pt-6">
+            <h2 class="text-xl font-semibold text-slate-900">
+              Why I’m documenting the build
+            </h2>
+            <p class="leading-relaxed text-slate-700">
+              This blog is part of my networking portfolio. I want to share my progress and what I was trying to achieve, what went wrong, how I checked it, and how I verified the fix.
+            </p>
+            <p class="leading-relaxed text-slate-700">
+              The original Packet Tracer project remains available on
+              <a
+                class="font-semibold text-indigo-600 underline-offset-2 hover:underline"
+                href="https://github.com/jedmarcnocum/CCNA_Lab"
+                target="_blank"
+                rel="noopener noreferrer"
+                >
+                GitHub
+              </a
+              >
+              . The next post will begin the Foundation phase: mapping the existing Packet Tracer design into CML, finalising the device inventory, naming convention, VLAN and IP addressing plan. I will have to play around a bit with CML to see how to best implement the design and if there's any changes needed in the existing topology to make it work in CML. 
+            </p>
+          </section>
+        </article>
+      </main>
+      <footer
+        class="flex flex-col items-center justify-center mt-8 text-sm text-slate-500"
+      >
+        <p class="my-0">
+          &copy; 2026 Jed-Marc Nocum &middot;
+          <a
+            class="font-medium text-indigo-600 underline-offset-2 hover:underline"
+            href="https://www.linkedin.com/in/jed-marc-nocum-367a75b2/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >
+            LinkedIn
+          </a
+          >
+          &middot;
+          <a
+            class="font-medium text-indigo-600 underline-offset-2 hover:underline"
+            href="https://github.com/jedmarcnocum"
+            target="_blank"
+            rel="noopener noreferrer"
+            >
+            GitHub
+          </a
+          >
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>
