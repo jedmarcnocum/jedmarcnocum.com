@@ -1,4 +1,5 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { minify } from "html-minifier-terser";
 
 const htmlFiles = [
   "index.html",
@@ -13,9 +14,18 @@ const htmlFiles = [
 await mkdir("dist", { recursive: true });
 
 for (const file of htmlFiles) {
+  const html = await readFile(file, "utf8");
   const outputPath = `dist/${file}`;
   const outputDirectory = outputPath.slice(0, outputPath.lastIndexOf("/"));
+  const minifiedHtml = await minify(html, {
+    collapseWhitespace: true,
+    removeComments: true,
+    removeRedundantAttributes: true,
+    removeScriptTypeAttributes: true,
+    removeStyleLinkTypeAttributes: true,
+    useShortDoctype: true
+  });
 
   await mkdir(outputDirectory, { recursive: true });
-  await writeFile(outputPath, await readFile(file, "utf8"), "utf8");
+  await writeFile(outputPath, minifiedHtml, "utf8");
 }
