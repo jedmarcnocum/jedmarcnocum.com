@@ -87,32 +87,31 @@
           <header class="space-y-4">
             <div class="space-y-2 text-sm">  
               <time class="block text-slate-500" datetime="2026-08">
-                August 2026
+                September 2026
               </time>
             </div>
             <div class="space-y-3">
               <h1 class="text-3xl font-bold tracking-tight text-slate-900">
-                CML Lab Rebuild, Part 1: Getting Started with CML-Free
+                🚀 CML Lab Rebuild, Part 1: Getting Started with CML-Free
               </h1>
             </div>
 
           </header>
           <section class="space-y-3 border-t border-slate-200 pt-6">
             <h2 class="text-xl font-semibold text-slate-900">
-              Why I’m rebuilding my CCNA lab
+              ❓Why I’m rebuilding my CCNA lab
             </h2>
             <p class="leading-relaxed text-slate-700">
-              While studying for the CCNA, I used Cisco Packet Tracer alongside Jeremy’s IT Lab course on Udemy. As I worked through the lessons, the individual lab exercises sometimes felt disconnected because each focused on a specific topic. To see the bigger picture and connect the dots, I began building my own topology rather than treating every topic as a separate exercise. I expanded that topology as I learned more.
+              While studying for my CCNA, I relied heavily on Cisco Packet Tracer and Jeremy’s IT Lab on Udemy. But as I worked through the lessons, the individual lab exercises started to feel a bit disconnected. I wanted to see the bigger picture and connect the dots! So, instead of treating every topic as a separate exercise, I started building my own topology.😎
             </p>
 
             <p class="leading-relaxed text-slate-700">
               That project now covers VLAN segmentation, trunking, inter-VLAN
               routing, RSTP, EtherChannel, OSPF, HSRP, DHCP, DNS, NAT/PAT, ACLs,
               IPv4/IPv6, wireless, voice/QoS, and access-layer security
-              controls. It gave me a solid foundation and helped me pass the
-              CCNA, but I did not want the project to end after the exam.
+              controls. It gave me a rock-solid foundation and helped me pass the CCNA — but honestly, I didn't want the fun to end after the exam and I am super excited to continue building and expanding the lab in a more realistic environment!
             </p>
-            <br>
+
             <figure class="space-y-3">
               <img
                 class="w-full rounded-lg border border-slate-200"
@@ -125,21 +124,92 @@
               </figcaption>
             </figure>
             <p class="leading-relaxed text-slate-700">
-              I wanted to keep building in an environment closer to a Cisco lab
-              workflow: creating nodes, wiring interfaces, opening device
-              consoles, and troubleshooting the platform itself. That is why I
-              decided to begin rebuilding the project in Cisco Modeling Labs
-              (CML). Before committing to a paid CML subscription, I decided to begin
-              with CML-Free. Its five-running-node limit was enough to test how
-              CML fits my workflow, learn the platform, and confirm that I
-              could build and troubleshoot Cisco labs comfortably in it.
+              I wanted to keep building in an environment that felt closer to a real-world Cisco workflow: creating nodes, wiring interfaces, opening device consoles, and troubleshooting the platform itself. 
             </p>
+            <p class="leading-relaxed text-slate-700">
+              Enter <b>Cisco Modeling Labs (CML)</b>! I decided to start with CML-Free to test the waters. Its five-node limit is perfect for learning the platform and confirming I can comfortably build and troubleshoot labs before committing to a paid subscription.
+            </p>
+          </section>
 
+          <section class="space-y-5 border-t border-slate-200 pt-6">
+            <div class="space-y-3">
+              <h2 class="text-xl font-semibold text-slate-900">
+                Breaking the Packet Tracer Limits
+              </h2>
+              <p class="leading-relaxed text-slate-700">
+                Packet Tracer is an incredible simulation tool, but it is still
+                a simulator. As my topology grew and I tried to implement true
+                dual-stack IPv4/IPv6 parity, advanced voice QoS, and deep
+                security testing, I started hitting software walls. By
+                migrating to <strong>Cisco Modeling Labs (CML)</strong>, I am
+                upgrading from simulated software to actual Cisco IOS virtual
+                machines.
+              </p>
+              <p class="leading-relaxed text-slate-700">
+                Here is a breakdown of the Packet Tracer limitations I
+                encountered during my v1.0 build and what I am excited to
+                finally resolve in CML:
+              </p>
+            </div>
+
+            <div class="overflow-x-auto rounded-lg border border-slate-200">
+              <table class="min-w-[52rem] border-collapse text-left text-sm">
+                <thead class="bg-slate-100 text-slate-900">
+                  <tr>
+                    <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Feature</th>
+                    <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Packet Tracer limitation</th>
+                    <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">CML / real IOS capability</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200 text-slate-700">
+                  <tr class="align-top">
+                    <th class="px-4 py-3 font-semibold text-slate-900" scope="row">IPv6 first-hop redundancy</th>
+                    <td class="px-4 py-3">IPv6 FHRP is unreliable or buggy, forcing hosts to point directly to SVIs instead of a virtual gateway, as documented in my repository.</td>
+                    <td class="px-4 py-3">Full support for <strong>HSRP for IPv6</strong>, including <code class="rounded bg-slate-100 px-1 py-0.5 text-xs text-slate-800">standby version 2</code> and IPv6 link-local virtual IPs.</td>
+                  </tr>
+                  <tr class="align-top">
+                    <th class="px-4 py-3 font-semibold text-slate-900" scope="row">Voice and quality of service</th>
+                    <td class="px-4 py-3">Basic strict-priority queuing is supported, but full Modular QoS CLI support for advanced shaping, policing, and CBWFQ is missing.</td>
+                    <td class="px-4 py-3">Deep <strong>MQC</strong> support across routing platforms for real-world traffic engineering.</td>
+                  </tr>
+                  <tr class="align-top">
+                    <th class="px-4 py-3 font-semibold text-slate-900" scope="row">Layer 2 security and DAI validation</th>
+                    <td class="px-4 py-3">Duplicate IP addressing is prevented, so a true ARP-spoofing attack cannot be simulated to test Dynamic ARP Inspection accurately.</td>
+                    <td class="px-4 py-3">Full Layer 2 attack simulations are possible, such as attaching a Kali Linux VM node.</td>
+                  </tr>
+                  <tr class="align-top">
+                    <th class="px-4 py-3 font-semibold text-slate-900" scope="row">Spanning Tree and EtherChannel</th>
+                    <td class="px-4 py-3">Complex RSTP/LACP interactions and BPDU Guard edge cases can glitch or fail to converge properly in the simulator.</td>
+                    <td class="px-4 py-3">Actual <strong>IOSvL2</strong> virtual machines behave like physical Cisco switches.</td>
+                  </tr>
+                  <tr class="align-top">
+                    <th class="px-4 py-3 font-semibold text-slate-900" scope="row">Advanced routing (OSPF)</th>
+                    <td class="px-4 py-3">Basic OSPFv3 capabilities have limited unequal-cost load balancing.</td>
+                    <td class="px-4 py-3">Full <strong>OSPFv3 dual-stack</strong> support using modern address families.</td>
+                  </tr>
+                  <tr class="align-top">
+                    <th class="px-4 py-3 font-semibold text-slate-900" scope="row">DHCPv6</th>
+                    <td class="px-4 py-3">Basic SLAAC works, but stateful DHCPv6 and relay agents frequently fail to distribute leases.</td>
+                    <td class="px-4 py-3">Full stateful and stateless DHCPv6 relay and server configurations.</td>
+                  </tr>
+                  <tr class="align-top">
+                    <th class="px-4 py-3 font-semibold text-slate-900" scope="row">IPv6 security (ACLs)</th>
+                    <td class="px-4 py-3">IPv6 ACL support is limited and relies on basic IPv4-style translation.</td>
+                    <td class="px-4 py-3">Native IPv6 traffic filters and comprehensive extension-header inspection.</td>
+                  </tr>
+                  <tr class="align-top">
+                    <th class="px-4 py-3 font-semibold text-slate-900" scope="row">Automation and programmability</th>
+                    <td class="px-4 py-3">There is no external API or real script support.</td>
+                    <td class="px-4 py-3">Nodes support Python with Netmiko, Ansible, and RESTCONF for future labs.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </section>
 
           <section class="space-y-3 border-t border-slate-200 pt-6">
             <h2 class="text-xl font-semibold text-slate-900">
-              Setting up CML in VMware Workstation
+              🛠️ Setting up CML in VMware Workstation
             </h2>
             <p class="leading-relaxed text-slate-700">
               Setting up CML in VMware Workstation was straightforward. I downloaded the CML-Free OVA file, imported it into VMware, and configured the virtual machine’s CPU, memory, and network settings. After powering on the VM, I can access both cockpit and the CML web interface through a browser.
@@ -186,13 +256,10 @@
          
           <section class="space-y-3 border-t border-slate-200 pt-6">
             <h2 class="text-xl font-semibold text-slate-900">
-              Getting into the CML interface
+              🖥️ Getting into the CML interface
             </h2>
             <p class="leading-relaxed text-slate-700">
-              After completing the initial setup, I checked the CML controller
-              in Cockpit. This confirmed that the Ubuntu virtual machine was
-              running fine and gave me a view of its CPU and memory use, uptime, and
-              virtual hardware configuration.
+              After the initial setup, I jumped into the CML controller in Cockpit. Everything looked great — the Ubuntu virtual machine was running smoothly, and I had a clear view of its CPU, memory usage, uptime, and virtual hardware config.
             </p>
             <div class="space-y-6">
               <figure class="space-y-3">
@@ -209,10 +276,7 @@
               </figure>
 
               <p class="leading-relaxed text-slate-700">
-                I then opened CML's Node Definitions page to see the device types
-                available for lab topologies and to explore the options for adding
-                or importing definitions. This was my starting point for becoming
-                familiar with the platform before building the first test lab.
+                Next, I opened CML's Node Definitions page to explore the available device types. It was awesome getting familiar with the platform's options before diving into the actual build.
               </p>
               <figure class="space-y-3">
                 <img
@@ -227,21 +291,18 @@
                 </figcaption>
               </figure>
             </div>
-            
-            <p class="leading-relaxed text-slate-700">
-              Next, I created a new CML lab and added an IOSv router and an
-              IOSvL2 switch to the canvas. I linked their GigabitEthernet0/0
-              interfaces, started both nodes, and opened their consoles. Seeing
-              both devices boot to the Cisco IOS CLI confirmed that the basic
-              workflow was working.
-            </p>
-            <p class="leading-relaxed text-slate-700">
-              After creating the link, I started both nodes and opened their
-              consoles. The CLI loaded successfully, confirming that the
-              reference platform, node images, lab wiring, and console access
-              were all working.
-            </p>
+      
 
+
+          </section>
+
+          <section class="space-y-3 border-t border-slate-200 pt-6">
+            <h2 class="text-xl font-semibold text-slate-900">
+              ⚡ The First Test Drive
+            </h2>
+            <p class="leading-relaxed text-slate-700">
+              The moment of truth! I created a fresh CML lab, dropped an IOSv router and an IOSvL2 switch onto the canvas, and linked their GigabitEthernet0/0 interfaces. I started both nodes, opened their consoles, and watched the Cisco IOS CLI load up successfully. Seeing that green text confirmed that the node images, lab wiring, and console access were all working perfectly! 🎉
+            </p>
             <figure class="space-y-3">
               <img
                 class="w-full rounded-lg border border-slate-200"
@@ -255,47 +316,64 @@
                 the nodes started.
               </figcaption>
             </figure>
+
           </section>
           <section class="space-y-3 border-t border-slate-200 pt-6">
             <h2 class="text-xl font-semibold text-slate-900">
-              What’s next
+              🗺️ What’s Next? (Coming Up in Part 2!)
             </h2>
             <p class="leading-relaxed text-slate-700">
-              The next step is to rebuild a compact version of the existing core
-              topology within CML-Free’s five-node limit, then upgrade to CML-Personal or CML-Enterprise to continue the rebuild. I will then progressively add more nodes and features, including:
+              In Part 2: The Foundation Phase, I’ll be laying down the core architecture of the network:
             </p>
             <ul class="list-disc space-y-2 pl-5 leading-relaxed text-slate-700">
               <li>
-                VLANs and trunking.
+                📐 <span class="font-semibold">Topology & Schema Design:</span> Translating my original GitHub Packet Tracer lab into a streamlined, 5-node CML layout, complete with a comprehensive dual-stack IPv4 & IPv6 IP/VLAN addressing plan.
               </li>
               <li>
-                EtherChannel and spanning-tree behaviour.
+                ⚡ <span class="font-semibold">Layer 2 Fabric Setup:</span> Configuring VLANs, 802.1Q trunks, LACP EtherChannel bundles, and verifying Rapid Spanning Tree (RSTP) root bridges.
               </li>
               <li>
-                Inter-VLAN routing, OSPF, and HSRP.
-              </li>
-              <li>
-                DHCP, DNS, NAT, ACLs, and IPv6.
-              </li>
-              <li>
-                Troubleshooting and verification evidence.
+                🔒 <span class="font-semibold">Management & Switch Hardening:</span> Securing device access (SSH, local authentication) and assigning static management addresses to prevent unauthorized access.
               </li>
             </ul>
-            <p class="leading-relaxed text-slate-700">
-              Once the core network is stable, I plan to connect it to my
-              separate Windows Server and Active Directory lab in VirtualBox.
-              By doing this, it will allow me to troubleshoot different scenarios, eg whether a client issue comes from VLAN assignment, DHCP, DNS, routing, ACLs or Active Directory.
-            </p>
-            <p class="leading-relaxed text-slate-700">
-              I am also planning to add  firewall and security features, followed by scripting and automation with Ansible and other tools.
-            </p>
           </section>
+
           <section class="space-y-3 border-t border-slate-200 pt-6">
             <h2 class="text-xl font-semibold text-slate-900">
-              Why I’m documenting the build
+              📍 The Full Series Roadmap
             </h2>
             <p class="leading-relaxed text-slate-700">
-              This blog is part of my networking portfolio. I want to share my progress and what I was trying to achieve, what went wrong, how I checked it, and how I verified the fix.
+              Here is how the rest of this CML rebuild series will unfold:
+            </p>
+            
+            <ul class="list-disc space-y-2 pl-5 leading-relaxed text-slate-700">
+              <li>
+                ✅ Part 1: CML Environment Setup & Platform Verification (You are here!)
+              </li>
+              <li>
+                🔜 Part 2: Topology Design, Dual-Stack IP Schema & Layer 2 Switching
+              </li>
+              <li>
+                🌐 Part 3: Layer 3 Routing (OSPFv2 & OSPFv3 Dual-Stack) + IPv6 HSRP Redundancy
+              </li>
+              <li>
+                🔌 Part 4: Network Services (DHCPv4/DHCPv6) & VirtualBox Windows Server Integration
+              </li>
+              <li>
+                🛡️ Part 5: Edge Security, Symmetric Dual-Stack ACLs & NAT/PAT
+              </li>
+              <li>
+                🧪 Part 6: Wireshark Packet Captures, Failover Testing & Final Verification
+              </li>
+            </ul>
+          </section>
+
+          <section class="space-y-3 border-t border-slate-200 pt-6">
+            <h2 class="text-xl font-semibold text-slate-900">
+              📓 Why I’m documenting the build
+            </h2>
+            <p class="leading-relaxed text-slate-700">
+              This blog is part of my networking portfolio. I want to share my progress, explain what I’m trying to achieve, and be transparent about what goes wrong and how I fix it. Stay tuned for Part 2 coming soon! 🚀
             </p>
             <p class="leading-relaxed text-slate-700">
               The original Packet Tracer project remains available on
@@ -307,8 +385,7 @@
                 >
                 GitHub
               </a
-              >
-              . The next post will begin the Foundation phase: mapping the existing Packet Tracer design into CML, finalising the device inventory, naming convention, VLAN and IP addressing plan. I will have to play around a bit with CML to see how to best implement the design and if there's any changes needed in the existing topology to make it work in CML. 
+              >.
             </p>
           </section>
         </article>
