@@ -26,9 +26,43 @@
       <div class="mx-auto max-w-4xl px-6 py-10">
       <main class="site-panel rounded-3xl p-8 sm:p-12">
         <p class="font-mono text-xs uppercase tracking-[.22em] text-orange-400">Selected work</p>
-        <h1 class="mt-4 text-4xl font-semibold tracking-tight text-stone-50 sm:text-5xl">Portfolio, coming soon.</h1>
-        <p class="mt-5 max-w-xl leading-8 text-stone-400">I’m curating a closer look at the infrastructure projects, labs, and problem-solving work behind this site.</p>
-        <a class="site-button mt-8 inline-flex rounded-full bg-emerald-300 px-5 py-3 text-sm font-bold text-[#07110e] transition hover:bg-emerald-200" href="/blog.html">Read the lab notes <span class="ml-2">&rarr;</span></a>
+        <h1 class="mt-4 max-w-2xl text-4xl font-semibold tracking-tight text-stone-50 sm:text-5xl">Hands-on work, built to keep systems moving.</h1>
+        <p class="mt-5 max-w-xl leading-8 text-stone-400">A closer look at the infrastructure projects, active labs, and problem-solving work that bridge the gap between development and operations.</p>
+        <section class="mt-10 overflow-hidden rounded-2xl border border-emerald-300/25 bg-emerald-300/[.06]" aria-labelledby="networking-labs-title">
+          <div class="border-b border-emerald-300/20 px-6 py-4 sm:flex sm:items-center sm:justify-between">
+            <p class="font-mono text-xs uppercase tracking-[.2em] text-emerald-300">01 / Primary focus</p>
+            <span class="mt-2 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[.16em] text-stone-500 sm:mt-0"><span class="h-2 w-2 rounded-full bg-emerald-300"></span> Active lab series</span>
+          </div>
+          <div class="grid gap-8 px-6 py-7 sm:px-8 lg:grid-cols-[1.2fr_.8fr]">
+            <div>
+              <h2 id="networking-labs-title" class="text-2xl font-semibold tracking-tight text-stone-50">Networking Labs</h2>
+              <p class="mt-3 max-w-xl leading-7 text-stone-400">Building and documenting realistic network environments to practise design, validation, troubleshooting, and the operational thinking behind resilient infrastructure.</p>
+              <div class="mt-6 flex flex-wrap gap-2 font-mono text-xs text-emerald-200"><span class="rounded-full border border-emerald-300/20 px-3 py-1.5">Cisco CML</span><span class="rounded-full border border-emerald-300/20 px-3 py-1.5">IOSv / IOSvL2</span><span class="rounded-full border border-emerald-300/20 px-3 py-1.5">Routing &amp; Switching</span></div>
+              <a class="mt-7 inline-flex items-center gap-2 text-sm font-bold text-emerald-300 transition hover:gap-3" href="/blog.html">View lab journal <span aria-hidden="true">&rarr;</span></a>
+            </div>
+            <div class="rounded-xl border border-white/10 bg-black/15 p-5">
+              <p class="font-mono text-[11px] uppercase tracking-[.18em] text-stone-500">Current project</p>
+              <p class="mt-3 text-lg font-semibold text-stone-100">CML Lab Rebuild</p>
+              <p class="mt-2 text-sm leading-6 text-stone-400">Taking an existing CCNA topology into Cisco Modeling Labs for deeper, more realistic network topology.</p>
+              <a class="mt-5 inline-flex text-sm font-semibold text-emerald-300 transition hover:text-emerald-200" href="/blog/cml-lab-rebuild/part-1-getting-started.html">View CML lab rebuild &rarr;</a>
+            </div>
+          </div>
+        </section>
+
+        <section class="mt-5 grid gap-5 md:grid-cols-2" aria-label="Additional work categories">
+          <article class="rounded-2xl border border-white/10 bg-black/10 p-6 transition hover:border-orange-400/40">
+            <p class="font-mono text-xs uppercase tracking-[.2em] text-orange-400">02 / Operations</p>
+            <h2 class="mt-4 text-2xl font-semibold tracking-tight text-stone-50">IT Support</h2>
+            <p class="mt-3 leading-7 text-stone-400">End-user support, issue investigation, clear communication, and dependable follow-through across the systems everyday people rely on.</p>
+            <p class="mt-6 font-mono text-xs uppercase tracking-[.16em] text-stone-500">Support / troubleshooting / service</p>
+          </article>
+          <article class="rounded-2xl border border-white/10 bg-black/10 p-6 transition hover:border-emerald-300/40">
+            <p class="font-mono text-xs uppercase tracking-[.2em] text-emerald-300">03 / Foundation</p>
+            <h2 class="mt-4 text-2xl font-semibold tracking-tight text-stone-50">Web Development &amp; Support</h2>
+            <p class="mt-3 leading-7 text-stone-400">Five-plus years building and supporting web experiences - an engineering background that now informs my systems, documentation, and problem-solving approach.</p>
+            <a class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-emerald-300 transition hover:gap-3" href="https://github.com/jedmarcnocum" target="_blank" rel="noopener noreferrer">View my work <span aria-hidden="true">&rarr;</span></a>
+          </article>
+        </section>
       </main>
       </div>
       <footer class="mx-auto mt-12 flex max-w-7xl flex-col items-center justify-between gap-5 px-5 pb-8 text-sm text-stone-500 sm:flex-row sm:px-8 lg:px-10">
