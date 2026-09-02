@@ -688,10 +688,6 @@ body {
   display: grid;
 }
 
-.hidden {
-  display: none;
-}
-
 .h-10 {
   height: 2.5rem;
 }
@@ -1195,10 +1191,6 @@ body {
   letter-spacing: -0.025em;
 }
 
-.tracking-wide {
-  letter-spacing: 0.025em;
-}
-
 .tracking-wider {
   letter-spacing: 0.05em;
 }
@@ -1548,10 +1540,6 @@ body {
 @media (min-width: 640px) {
   .sm\:-right-6 {
     right: -1.5rem;
-  }
-
-  .sm\:block {
-    display: block;
   }
 
   .sm\:h-3 {
