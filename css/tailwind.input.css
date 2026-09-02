@@ -12,6 +12,65 @@
   background-color: #07110e;
 }
 
+.site-page {
+  background-color: #07110e;
+  color: #e7e5e4;
+}
+
+.site-shell {
+  min-height: 100vh;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.site-shell::before,
+.site-shell::after {
+  content: "";
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+  z-index: -1;
+}
+
+.site-shell::before {
+  background-image: linear-gradient(rgba(110, 231, 183, .03) 1px, transparent 1px), linear-gradient(90deg, rgba(110, 231, 183, .03) 1px, transparent 1px);
+  background-size: 52px 52px;
+  mask-image: linear-gradient(to bottom, black, transparent 70%);
+}
+
+.site-shell::after {
+  background: radial-gradient(circle at 88% 6%, rgba(52, 211, 153, .11), transparent 26rem), radial-gradient(circle at 5% 42%, rgba(251, 146, 60, .06), transparent 22rem);
+}
+
+.site-nav {
+  border-bottom: 1px solid rgba(255,255,255,.1);
+}
+
+.site-panel {
+  background: rgba(12, 25, 21, .9);
+  border: 1px solid rgba(255,255,255,.1);
+  box-shadow: 0 24px 65px rgba(0,0,0,.2);
+}
+
+.site-page .text-slate-900 { color: #fafaf9; }
+.site-page .text-slate-800 { color: #e7e5e4; }
+.site-page .text-slate-700 { color: #d6d3d1; }
+.site-page .text-slate-600, .site-page .text-slate-500 { color: #a8a29e; }
+.site-page .text-indigo-600, .site-page .hover\:text-indigo-600:hover, .site-page .hover\:text-indigo-700:hover { color: #6ee7b7; }
+.site-page .border-slate-200 { border-color: rgba(255,255,255,.1); }
+.site-page .bg-white { background-color: rgba(12,25,21,.9); }
+.site-page .bg-slate-100 { background-color: rgba(110,231,183,.08); }
+.site-page .divide-slate-200 > :not([hidden]) ~ :not([hidden]) { border-color: rgba(255,255,255,.1); }
+.site-page .site-panel a:not(.site-button):not(.site-nav-link) { color: #6ee7b7; }
+.site-page .site-panel img { border-color: rgba(255,255,255,.12); }
+.site-page .site-panel code { background: rgba(110,231,183,.1); color: #d6d3d1; }
+.site-page .site-panel thead { background: rgba(110,231,183,.08); }
+
+@media (prefers-reduced-motion: reduce) {
+  .site-page *, .site-page *::before, .site-page *::after { scroll-behavior: auto !important; }
+}
+
 .home-grid {
   background-image:
     linear-gradient(rgba(110, 231, 183, 0.035) 1px, transparent 1px),

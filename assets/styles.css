@@ -612,10 +612,6 @@ body {
   margin-bottom: 0px;
 }
 
-.mb-10 {
-  margin-bottom: 2.5rem;
-}
-
 .mb-3 {
   margin-bottom: 0.75rem;
 }
@@ -640,8 +636,24 @@ body {
   margin-top: 2.5rem;
 }
 
+.mt-12 {
+  margin-top: 3rem;
+}
+
+.mt-14 {
+  margin-top: 3.5rem;
+}
+
 .mt-3 {
   margin-top: 0.75rem;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.mt-5 {
+  margin-top: 1.25rem;
 }
 
 .mt-6 {
@@ -748,6 +760,10 @@ body {
   max-width: 28rem;
 }
 
+.max-w-xl {
+  max-width: 36rem;
+}
+
 .shrink-0 {
   flex-shrink: 0;
 }
@@ -758,10 +774,6 @@ body {
 
 .list-disc {
   list-style-type: disc;
-}
-
-.list-none {
-  list-style-type: none;
 }
 
 .flex-col {
@@ -891,10 +903,6 @@ body {
   border-radius: 0.5rem;
 }
 
-.rounded-xl {
-  border-radius: 0.75rem;
-}
-
 .border {
   border-width: 1px;
 }
@@ -967,16 +975,6 @@ body {
 .bg-slate-100 {
   --tw-bg-opacity: 1;
   background-color: rgb(241 245 249 / var(--tw-bg-opacity, 1));
-}
-
-.bg-slate-50 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(248 250 252 / var(--tw-bg-opacity, 1));
-}
-
-.bg-white {
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
 }
 
 .p-6 {
@@ -1061,6 +1059,10 @@ body {
   padding-bottom: 1.25rem;
 }
 
+.pb-8 {
+  padding-bottom: 2rem;
+}
+
 .pl-5 {
   padding-left: 1.25rem;
 }
@@ -1101,6 +1103,11 @@ body {
 .text-3xl {
   font-size: 1.875rem;
   line-height: 2.25rem;
+}
+
+.text-4xl {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
 }
 
 .text-5xl {
@@ -1162,6 +1169,10 @@ body {
 
 .tracking-\[-0\.055em\] {
   letter-spacing: -0.055em;
+}
+
+.tracking-\[\.22em\] {
+  letter-spacing: .22em;
 }
 
 .tracking-\[0\.16em\] {
@@ -1309,6 +1320,107 @@ body {
 
 .home-page {
   background-color: #07110e;
+}
+
+.site-page {
+  background-color: #07110e;
+  color: #e7e5e4;
+}
+
+.site-shell {
+  min-height: 100vh;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.site-shell::before,
+.site-shell::after {
+  content: "";
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+  z-index: -1;
+}
+
+.site-shell::before {
+  background-image: linear-gradient(rgba(110, 231, 183, .03) 1px, transparent 1px), linear-gradient(90deg, rgba(110, 231, 183, .03) 1px, transparent 1px);
+  background-size: 52px 52px;
+  -webkit-mask-image: linear-gradient(to bottom, black, transparent 70%);
+          mask-image: linear-gradient(to bottom, black, transparent 70%);
+}
+
+.site-shell::after {
+  background: radial-gradient(circle at 88% 6%, rgba(52, 211, 153, .11), transparent 26rem), radial-gradient(circle at 5% 42%, rgba(251, 146, 60, .06), transparent 22rem);
+}
+
+.site-nav {
+  border-bottom: 1px solid rgba(255,255,255,.1);
+}
+
+.site-panel {
+  background: rgba(12, 25, 21, .9);
+  border: 1px solid rgba(255,255,255,.1);
+  box-shadow: 0 24px 65px rgba(0,0,0,.2);
+}
+
+.site-page .text-slate-900 {
+  color: #fafaf9;
+}
+
+.site-page .text-slate-800 {
+  color: #e7e5e4;
+}
+
+.site-page .text-slate-700 {
+  color: #d6d3d1;
+}
+
+.site-page .text-slate-600, .site-page .text-slate-500 {
+  color: #a8a29e;
+}
+
+.site-page .text-indigo-600, .site-page .hover\:text-indigo-600:hover, .site-page .hover\:text-indigo-700:hover {
+  color: #6ee7b7;
+}
+
+.site-page .border-slate-200 {
+  border-color: rgba(255,255,255,.1);
+}
+
+.site-page .bg-white {
+  background-color: rgba(12,25,21,.9);
+}
+
+.site-page .bg-slate-100 {
+  background-color: rgba(110,231,183,.08);
+}
+
+.site-page .divide-slate-200 > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgba(255,255,255,.1);
+}
+
+.site-page .site-panel a:not(.site-button):not(.site-nav-link) {
+  color: #6ee7b7;
+}
+
+.site-page .site-panel img {
+  border-color: rgba(255,255,255,.12);
+}
+
+.site-page .site-panel code {
+  background: rgba(110,231,183,.1);
+  color: #d6d3d1;
+}
+
+.site-page .site-panel thead {
+  background: rgba(110,231,183,.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-page *, .site-page *::before, .site-page *::after {
+    scroll-behavior: auto !important;
+  }
 }
 
 .home-grid {
@@ -1466,6 +1578,10 @@ body {
     gap: 1.75rem;
   }
 
+  .sm\:p-12 {
+    padding: 3rem;
+  }
+
   .sm\:p-8 {
     padding: 2rem;
   }
@@ -1478,6 +1594,11 @@ body {
   .sm\:text-4xl {
     font-size: 2.25rem;
     line-height: 2.5rem;
+  }
+
+  .sm\:text-5xl {
+    font-size: 3rem;
+    line-height: 1;
   }
 
   .sm\:text-7xl {
