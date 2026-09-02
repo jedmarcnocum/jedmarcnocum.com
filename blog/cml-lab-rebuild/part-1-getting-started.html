@@ -110,18 +110,17 @@
               routing, RSTP, EtherChannel, OSPF, HSRP, DHCP, DNS, NAT/PAT, ACLs,
               IPv4/IPv6, wireless, voice/QoS, and access-layer security
               controls. It gave me a rock-solid foundation and helped me pass the CCNA — but honestly, I didn't want the fun to end after the exam and I am super excited to continue building and expanding the lab in a more realistic environment!
-              You can explore the original
+            </p>
+
+            <p class="leading-relaxed text-slate-700">
+       You can explore the original CCNA Networking Lab
               <a
                 class="font-semibold text-indigo-600 underline-offset-2 hover:underline"
                 href="https://github.com/jedmarcnocum/CCNA_Lab#ccna-networking-lab-portfolio"
                 target="_blank"
                 rel="noopener noreferrer"
-                >
-                CCNA Networking Lab Portfolio on GitHub
-              </a
-              >.
+                >here</a>.
             </p>
-
             <figure class="space-y-3">
               <img
                 class="w-full rounded-lg border border-slate-200"
@@ -134,7 +133,10 @@
               </figcaption>
             </figure>
             <p class="leading-relaxed text-slate-700">
-              I wanted to keep building in an environment that felt closer to a real-world Cisco workflow: creating nodes, wiring interfaces, opening device consoles, and troubleshooting the platform itself. I actually have 3 options to choose from: GS3, EVE-NG, or CML, and I decided to go with CML because it is the closest to a real Cisco environment where I am familiar with at the moment. I'll move to other platforms when I need to learn other vendors like Fortinet, Juniper, Palo Alto, etc.
+              I wanted to keep building in an environment that felt closer to a real-world Cisco workflow: creating nodes, wiring interfaces, opening device consoles, and troubleshooting the platform itself. 
+            </p>
+            <p class="leading-relaxed text-slate-700">
+            I have 3 options to choose from: GNS3, EVE-NG, or CML, and I decided to go with CML because it is the closest to a real Cisco environment where I am familiar with at the moment and I can start with their CML-Free which is a huge advantage. I'll move to other platforms when I need to learn other vendors like Fortinet, Juniper, Palo Alto, etc.
             </p>
           </section>
 
@@ -154,6 +156,10 @@
               </p>
             </div>
 
+            <small class="leading-relaxed text-slate-700">
+              Note: real IOS capabilities are based on my quick research at the moment and may not reflect the actual and most up-to-date information.
+            </small>
+
             <div class="overflow-x-auto rounded-lg border border-slate-200">
               <table class="min-w-[52rem] border-collapse text-left text-sm">
                 <thead class="bg-slate-100 text-slate-900">
@@ -171,8 +177,8 @@
                   </tr>
                   <tr class="align-top">
                     <th class="px-4 py-3 font-semibold text-slate-900" scope="row">Voice and quality of service</th>
-                    <td class="px-4 py-3">Basic strict-priority queuing is supported, but full Modular QoS CLI support for advanced shaping, policing, and CBWFQ is missing.</td>
-                    <td class="px-4 py-3">Deep <strong>MQC</strong> support across routing platforms for real-world traffic engineering.</td>
+                    <td class="px-4 py-3">Basic strict-priority queuing is supported, but full Modular QoS CLI support for advanced shaping, policing, and CBWFQ is missing. Congestion and best-effort drops are not simulated realistically, and QoS configuration can fail to persist after a restart.</td>
+                    <td class="px-4 py-3">Deep <strong>MQC</strong> support across routing platforms, with IOSv-based policy behaviour and more realistic traffic-engineering validation.</td>
                   </tr>
                   <tr class="align-top">
                     <th class="px-4 py-3 font-semibold text-slate-900" scope="row">Layer 2 security and DAI validation</th>
@@ -195,9 +201,50 @@
                     <td class="px-4 py-3">Full stateful and stateless DHCPv6 relay and server configurations.</td>
                   </tr>
                   <tr class="align-top">
+                    <th class="px-4 py-3 font-semibold text-slate-900" scope="row">Dynamic DNS for end hosts</th>
+                    <td class="px-4 py-3">Dynamic DNS is not supported for end hosts, so their DNS records must be created manually.</td>
+                    <td class="px-4 py-3">A real DNS and DHCP service can provide dynamic client registration and name resolution for a more complete services lab.</td>
+                  </tr>
+                  <tr class="align-top">
+                    <th class="px-4 py-3 font-semibold text-slate-900" scope="row">Wireless LAN and centralized DHCP</th>
+                    <td class="px-4 py-3">
+                      Wireless client traffic can appear to originate from the
+                      WLC management VLAN instead of the assigned WLAN VLAN. As
+                      a
+                      <a
+                        class="font-semibold text-indigo-600 underline-offset-2 hover:underline"
+                        href="https://github.com/jedmarcnocum/CCNA_Lab#packet-tracer-limitation-and-workaround"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        >
+                        documented workaround
+                      </a
+                      >, the guest WLAN had to use the WLC's internal DHCP.
+                      Wireless clients can also attach to random APs rather than
+                      choosing an AP based on realistic signal strength.
+                    </td>
+                    <td class="px-4 py-3">
+                      A centralized DHCP server can provide wireless client
+                      leases, keeping wired and wireless addressing in one
+                      service instead of relying on WLC internal DHCP. Wireless
+                      roaming and RF behaviour should still be validated with an
+                      appropriate controller and AP platform.
+                    </td>
+                  </tr>
+                  <tr class="align-top">
                     <th class="px-4 py-3 font-semibold text-slate-900" scope="row">IPv6 security (ACLs)</th>
                     <td class="px-4 py-3">IPv6 ACL support is limited and relies on basic IPv4-style translation.</td>
                     <td class="px-4 py-3">Native IPv6 traffic filters and comprehensive extension-header inspection.</td>
+                  </tr>
+                  <tr class="align-top">
+                    <th class="px-4 py-3 font-semibold text-slate-900" scope="row">ACL configuration persistence</th>
+                    <td class="px-4 py-3">Extended ACLs can remain in the saved configuration but stop filtering after the lab is closed and reopened, requiring the VLAN-interface ACL bindings to be applied again.</td>
+                    <td class="px-4 py-3">IOS configuration can be saved and reloaded for repeatable policy testing without relying on a simulator-specific reapplication workaround.</td>
+                  </tr>
+                  <tr class="align-top">
+                    <th class="px-4 py-3 font-semibold text-slate-900" scope="row">Monitoring and logging</th>
+                    <td class="px-4 py-3">SNMP is limited to community-string configurations with SNMPv1/v2, and syslog handling is simplified to the debugging trap level used in this lab.</td>
+                    <td class="px-4 py-3">IOS nodes can be connected to proper monitoring and logging services to practise current SNMP and syslog workflows.</td>
                   </tr>
                   <tr class="align-top">
                     <th class="px-4 py-3 font-semibold text-slate-900" scope="row">Automation and programmability</th>
@@ -207,12 +254,16 @@
                 </tbody>
               </table>
             </div>
+                  <p class="leading-relaxed text-slate-700">
+              With a clear list of limits to break and an exciting roadmap ahead, I couldn't wait to jump in and start building! Let's dive into how I got the environment setup! 🛠️
+            </p>
           </section>
 
           <section class="space-y-3 border-t border-slate-200 pt-6">
             <h2 class="text-xl font-semibold text-slate-900">
               🛠️ Setting up CML in VMware Workstation
             </h2>
+      
             <p class="leading-relaxed text-slate-700">
               Setting up CML in VMware Workstation was straightforward. I downloaded the CML-Free OVA file, imported it into VMware, and configured the virtual machine’s CPU, memory, and network settings. After powering on the VM, I can access both cockpit and the CML web interface through a browser.
             </p>
@@ -325,17 +376,22 @@
               🗺️ What’s Next? (Coming Up in Part 2!)
             </h2>
             <p class="leading-relaxed text-slate-700">
-              In Part 2: The Foundation Phase, I’ll be laying down the core architecture of the network:
+              Now that CML-Free is installed, configured, and verified in VMware, it's time to stop testing and start building!
             </p>
+
+            <p class="leading-relaxed text-slate-700">
+              In <strong>Part 2: The Foundation Phase</strong>, I’ll be dropping old simulator habits and aligning with clean, realistic design standards for a dual-stack HQ campus. It’s still a lab built for testing and learning, but we are setting it up with best practices in mind! Here is a sneak peek at what’s coming for the new 5-node topology:
+            </p>
+            
             <ul class="list-disc space-y-2 pl-5 leading-relaxed text-slate-700">
               <li>
-                📐 <span class="font-semibold">Topology & Schema Design:</span> Translating my original GitHub Packet Tracer lab into a streamlined, 5-node CML layout, complete with a comprehensive dual-stack IPv4 & IPv6 IP/VLAN addressing plan.
+                📐 <span class="font-semibold">Clean Design Standards:</span> Moving away from simulator shortcuts by intentionally disabling VTP and DTP, and avoiding internal static routing.
               </li>
               <li>
-                ⚡ <span class="font-semibold">Layer 2 Fabric Setup:</span> Configuring VLANs, 802.1Q trunks, LACP EtherChannel bundles, and verifying Rapid Spanning Tree (RSTP) root bridges.
+                🏢 <span class="font-semibold">The 5-Node Campus Layout:</span> Deploying clear site-and-role identities across the Access, Distribution, and Edge layers, alongside an ISP simulation node.
               </li>
               <li>
-                🔒 <span class="font-semibold">Management & Switch Hardening:</span> Securing device access (SSH, local authentication) and assigning static management addresses to prevent unauthorized access.
+                ⚡ <span class="font-semibold">Layer 2 Fabric & Addressing:</span> Laying the groundwork with explicit 802.1Q trunks, a Rapid-PVST baseline, and a comprehensive dual-stack IPv4/IPv6 schema. This foundation will set us up perfectly for the HSRP load-balancing in later phases.
               </li>
             </ul>
           </section>
@@ -350,22 +406,25 @@
             
             <ul class="list-disc space-y-2 pl-5 leading-relaxed text-slate-700">
               <li>
-                ✅ Part 1: CML Environment Setup & Platform Verification (You are here!)
+                ✅ <span class="font-semibold">Part 1:</span> CML Environment Setup & Platform Verification <em>(You are here!)</em>
               </li>
               <li>
-                🔜 Part 2: Topology Design, Dual-Stack IP Schema & Layer 2 Switching
+                🔜 <span class="font-semibold">Part 2:</span> 5-Node Topology Design, Dual-Stack Addressing & Layer-2 Access/Layer-3 Distribution
               </li>
               <li>
-                🌐 Part 3: Layer 3 Routing (OSPFv2 & OSPFv3 Dual-Stack) + IPv6 HSRP Redundancy
+                🌐 <span class="font-semibold">Part 3:</span> Dynamic Dual-Stack Routing & Gateway Resiliency
               </li>
               <li>
-                🔌 Part 4: Network Services (DHCPv4/DHCPv6) & VirtualBox Windows Server Integration
+                🔌 <span class="font-semibold">Part 4:</span> External Endpoints, Network Services & VirtualBox Integration
               </li>
               <li>
-                🛡️ Part 5: Edge Security, Symmetric Dual-Stack ACLs & NAT/PAT
+                🛡️ <span class="font-semibold">Part 5:</span> Edge Security, Dual-Stack ACLs & IPv4 PAT
               </li>
               <li>
-                🧪 Part 6: Wireshark Packet Captures, Failover Testing & Final Verification
+                🤖 <span class="font-semibold">Part 6:</span> Network Automation & Programmability
+              </li>
+              <li>
+                🚀 <span class="font-semibold">Part 7:</span> CML Personal Expansion: Full Campus, Voice & Wireless
               </li>
             </ul>
           </section>
@@ -375,19 +434,10 @@
               📓 Why I’m documenting the build
             </h2>
             <p class="leading-relaxed text-slate-700">
-              This blog is part of my networking portfolio. I want to share my progress, explain what I’m trying to achieve, and be transparent about what goes wrong and how I fix it. Stay tuned for Part 2 coming soon! 🚀
+              This blog is part of my networking portfolio. I want to share my progress, explain what I’m trying to achieve, and be transparent about what goes wrong and how I fix it. 
             </p>
             <p class="leading-relaxed text-slate-700">
-              The original Packet Tracer project remains available on
-              <a
-                class="font-semibold text-indigo-600 underline-offset-2 hover:underline"
-                href="https://github.com/jedmarcnocum/CCNA_Lab"
-                target="_blank"
-                rel="noopener noreferrer"
-                >
-                GitHub
-              </a
-              >.
+              Stay tuned for Part 2 coming soon!
             </p>
           </section>
         </article>
