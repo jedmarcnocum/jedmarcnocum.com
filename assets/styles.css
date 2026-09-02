@@ -948,6 +948,10 @@ body {
   border-color: rgb(110 231 183 / 0.4);
 }
 
+.border-orange-400\/25 {
+  border-color: rgb(251 146 60 / 0.25);
+}
+
 .border-slate-200 {
   --tw-border-opacity: 1;
   border-color: rgb(226 232 240 / var(--tw-border-opacity, 1));
@@ -996,6 +1000,10 @@ body {
   background-color: rgb(251 146 60 / var(--tw-bg-opacity, 1));
 }
 
+.bg-orange-400\/\[\.05\] {
+  background-color: rgb(251 146 60 / .05);
+}
+
 .bg-slate-100 {
   --tw-bg-opacity: 1;
   background-color: rgb(241 245 249 / var(--tw-bg-opacity, 1));
@@ -1007,6 +1015,10 @@ body {
 
 .p-6 {
   padding: 1.5rem;
+}
+
+.p-7 {
+  padding: 1.75rem;
 }
 
 .p-8 {
