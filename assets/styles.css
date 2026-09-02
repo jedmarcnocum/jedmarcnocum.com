@@ -752,8 +752,8 @@ body {
   max-width: 80rem;
 }
 
-.max-w-md {
-  max-width: 28rem;
+.max-w-none {
+  max-width: none;
 }
 
 .max-w-xl {
@@ -1609,6 +1609,10 @@ body {
   .lg\:mx-0 {
     margin-left: 0px;
     margin-right: 0px;
+  }
+
+  .lg\:max-w-md {
+    max-width: 28rem;
   }
 
   .lg\:grid-cols-\[minmax\(0\2c 1\.25fr\)_minmax\(320px\2c \.75fr\)\] {
