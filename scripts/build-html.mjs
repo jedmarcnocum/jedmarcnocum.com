@@ -7,6 +7,9 @@ const htmlFiles = [
   "resume.html",
   "certifications.html",
   "portfolio.html",
+  "portfolio/networking-labs.html",
+  "portfolio/it-support.html",
+  "portfolio/web-development-support.html",
   "blog.html",
   "blog/cml-lab-rebuild/part-1-getting-started.html"
 ];
