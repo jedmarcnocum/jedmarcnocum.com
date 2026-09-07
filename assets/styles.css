@@ -696,6 +696,10 @@ body {
   display: grid;
 }
 
+.hidden {
+  display: none;
+}
+
 .h-10 {
   height: 2.5rem;
 }
@@ -762,10 +766,6 @@ body {
 
 .max-w-7xl {
   max-width: 80rem;
-}
-
-.max-w-md {
-  max-width: 28rem;
 }
 
 .max-w-none {
@@ -1733,6 +1733,58 @@ body {
   font-weight: 600;
 }
 
+.web-year-filter {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem 1rem;
+}
+
+.web-year-filter-label, .web-year-filter-status {
+  color: #a8a29e;
+  font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+  font-size: .7rem;
+  letter-spacing: .13em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.web-year-filter-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+}
+
+.web-year-filter-button {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(110,231,183,.22);
+  border-radius: 999px;
+  color: #d6d3d1;
+  cursor: pointer;
+  font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+  font-size: .7rem;
+  line-height: 1;
+  padding: .48rem .68rem;
+  transition: background .15s ease,border-color .15s ease,color .15s ease;
+}
+
+.web-year-filter-button:hover, .web-year-filter-button:focus-visible {
+  border-color: rgba(110,231,183,.65);
+  color: #d1fae5;
+  outline: none;
+}
+
+.web-year-filter-button[aria-pressed="true"] {
+  background: #6ee7b7;
+  border-color: #6ee7b7;
+  color: #07110e;
+  font-weight: 700;
+}
+
+.web-year-filter-status {
+  margin-left: auto;
+}
+
 .web-supporting-grid {
   grid-template-columns: repeat(2,minmax(0,1fr));
 }
@@ -2071,6 +2123,11 @@ body {
     align-items: flex-start;
     flex-direction: column;
     gap: .85rem;
+  }
+
+  .web-year-filter-status {
+    margin-left: 0;
+    width: 100%;
   }
 
   .web-supporting-grid {
