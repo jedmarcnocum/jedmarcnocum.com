@@ -1695,6 +1695,10 @@ body {
   transition: border-color .2s ease,transform .2s ease;
 }
 
+.web-supporting-card[hidden] {
+  display: none !important;
+}
+
 .web-project-card:hover, .web-supporting-card:hover {
   border-color: rgba(110,231,183,.38);
   transform: translateY(-2px);

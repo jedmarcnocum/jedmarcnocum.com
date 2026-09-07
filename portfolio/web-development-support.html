@@ -132,7 +132,7 @@
           <section class="mt-16" aria-labelledby="supporting-projects-title">
             <div class="web-section-heading">
               <div>
-                <p class="font-mono text-xs uppercase tracking-[.2em] text-orange-400">Complete project index</p>
+                <p class="font-mono text-xs uppercase tracking-[.2em] text-orange-400">Other projects</p>
               </div>
          
             </div>
@@ -140,7 +140,7 @@
             <div class="web-year-filter mt-7" aria-label="Filter supporting projects by year">
               <span class="web-year-filter-label">Filter by year</span>
               <div class="web-year-filter-controls" role="group" aria-label="Project year">
-                <button class="web-year-filter-button" type="button" data-year-filter="all" aria-controls="supporting-project-grid" aria-pressed="true">All years</button>
+                <button class="web-year-filter-button" type="button" data-year-filter="all" aria-controls="supporting-project-grid" aria-pressed="true">All</button>
                 <button class="web-year-filter-button" type="button" data-year-filter="2023" aria-controls="supporting-project-grid" aria-pressed="false">2023</button>
                 <button class="web-year-filter-button" type="button" data-year-filter="2022" aria-controls="supporting-project-grid" aria-pressed="false">2022</button>
                 <button class="web-year-filter-button" type="button" data-year-filter="2021" aria-controls="supporting-project-grid" aria-pressed="false">2021</button>
@@ -153,7 +153,7 @@
 
             <div id="supporting-project-grid" class="web-supporting-grid mt-5">
               <article class="web-supporting-card">
-                <div class="web-placeholder web-placeholder--skin" aria-hidden="true"><div class="web-placeholder-bar"><i></i><i></i><i></i></div><div class="web-placeholder-skin-copy"><span>illumia</span><b>care for your skin</b><em></em></div><div class="web-placeholder-orb"></div></div>
+                <div class="web-placeholder web-placeholder--skin" aria-hidden="true"><div class="web-placeholder-bar"><i></i><i></i><i></i></div><div class="web-placeholder-skin-copy"><b>Illumia Skin</b><em></em></div><div class="web-placeholder-orb"></div></div>
                 <div class="web-supporting-copy"><p class="web-meta">2023 / Shopify</p><h3>Illumia Skin</h3><p>Theme-based storefront work for a beauty and wellness brand.</p><div class="web-tags"><span>Shopify</span><span>Theme customisation</span></div><a class="web-project-link" href="https://illumiaskin.com/" target="_blank" rel="noopener noreferrer">Visit website <span aria-hidden="true">↗</span></a></div>
               </article>
 
@@ -214,6 +214,37 @@
         <a class="transition hover:text-emerald-300" href="/portfolio.html">&larr; Back to portfolio</a>
       </footer>
     </div>
+    <script>
+      (() => {
+        const grid = document.querySelector("#supporting-project-grid");
+        const filterButtons = [...document.querySelectorAll("[data-year-filter]")];
+        const filterStatus = document.querySelector("[data-year-filter-status]");
+        const supportingCards = grid ? [...grid.querySelectorAll(".web-supporting-card")] : [];
+
+        const applyYearFilter = (year) => {
+          let visibleCount = 0;
+
+          supportingCards.forEach((card) => {
+            const cardYear = card.dataset.projectYear || card.querySelector(".web-meta")?.textContent.trim().slice(0, 4);
+            const isVisible = year === "all" || cardYear === year;
+
+            card.hidden = !isVisible;
+            if (isVisible) visibleCount += 1;
+          });
+
+          filterButtons.forEach((button) => {
+            button.setAttribute("aria-pressed", String(button.dataset.yearFilter === year));
+          });
+          if (filterStatus) filterStatus.textContent = `Showing ${visibleCount} ${visibleCount === 1 ? "project" : "projects"}`;
+        };
+
+        filterButtons.forEach((button) => {
+          button.addEventListener("click", () => applyYearFilter(button.dataset.yearFilter));
+        });
+
+        applyYearFilter("all");
+      })();
+    </script>
     <script>
       (() => {
         const projectContext = {
@@ -325,25 +356,40 @@
 
         const projectCompanies = {
           "Illumia Skin": "BruntWork",
+          "The Orange Box PH": "Freelance",
+          "Shop Ethnique PH": "Freelance",
+          "The Glass House Flowers": "Freelance",
+          "Silkygirl PH": "Freelance",
+          "Top Choice Furnitures Inc.": "StreamlinedCampaigns",
           "MACL Balloons & Party Mates Center": "StreamlinedCampaigns",
           "Hong Kong House PH": "StreamlinedCampaigns",
           "Tapao Agriventures Inc.": "StreamlinedCampaigns",
           "Dimsum Factory": "StreamlinedCampaigns",
           "Solidtone Innovations Inc.": "StreamlinedCampaigns",
+          "Theodore's Home Care": "StreamlinedCampaigns",
+          "Vivo Lumio": "StreamlinedCampaigns",
           "Coconatura Sugar": "StreamlinedCampaigns",
           "Bulletproof Vest Philippines": "StreamlinedCampaigns",
+          "First Protect PH": "Freelance",
           "T-Shop Cambodia": "StreamlinedCampaigns",
           "CPI Outsourcing": "StreamlinedCampaigns",
           "LCDC Law Offices": "StreamlinedCampaigns",
           "Teco Industrial Park": "StreamlinedCampaigns",
+          "Malso Language": "StreamlinedCampaigns",
           "Envision Monitoring": "StreamlinedCampaigns",
           "Solenergy Systems Inc.": "StreamlinedCampaigns",
           "R&F Church Services": "StreamlinedCampaigns",
           "StreamlinedCampaigns": "StreamlinedCampaigns",
+          "The A Hostel Boracay": "StreamlinedCampaigns",
           "TravelPros PH": "StreamlinedCampaigns",
+          "Seek the Uniq": "Freelance",
           "Elin PH": "Freelance",
           "Elin Maternity": "Freelance",
+          "Kiddie Closet PHL": "Freelance",
+          "Parol PH": "Freelance",
+          "TerraGems Co": "Freelance",
           "Cangro": "BruntWork",
+          "Spiritus Stones": "BruntWork",
           "Chefs on Wheels": "BruntWork"
         };
 
@@ -357,7 +403,7 @@
           const description = card.querySelector("h3 + p");
           const tags = card.querySelector(".web-tags");
           const meta = card.querySelector(".web-meta");
-          if (description && context?.description) description.textContent = context.description;
+          description?.remove();
           if (tags && context?.tags) {
             tags.replaceChildren(...context.tags.map((tag) => {
               const item = document.createElement("span");
@@ -371,27 +417,6 @@
           }
         });
 
-        const filterButtons = [...document.querySelectorAll("[data-year-filter]")];
-        const filterStatus = document.querySelector("[data-year-filter-status]");
-
-        const applyYearFilter = (year) => {
-          let visibleCount = 0;
-          supportingCards.forEach((card) => {
-            const cardYear = card.querySelector(".web-meta")?.textContent.match(/\b20\d{2}\b/)?.[0];
-            const isVisible = year === "all" || cardYear === year;
-            card.hidden = !isVisible;
-            if (isVisible) visibleCount += 1;
-          });
-
-          filterButtons.forEach((button) => {
-            button.setAttribute("aria-pressed", String(button.dataset.yearFilter === year));
-          });
-          if (filterStatus) filterStatus.textContent = `Showing ${visibleCount} ${visibleCount === 1 ? "project" : "projects"}`;
-        };
-
-        filterButtons.forEach((button) => {
-          button.addEventListener("click", () => applyYearFilter(button.dataset.yearFilter));
-        });
       })();
     </script>
   </body>

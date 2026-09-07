@@ -149,6 +149,7 @@
 .web-project-link:hover { gap: .7rem; }
 .web-project-grid, .web-supporting-grid { display: grid; gap: 1.25rem; }
 .web-project-card, .web-supporting-card { transition: border-color .2s ease,transform .2s ease; }
+.web-supporting-card[hidden] { display: none !important; }
 .web-project-card:hover, .web-supporting-card:hover { border-color: rgba(110,231,183,.38); transform: translateY(-2px); }
 .web-project-copy { gap: .9rem; padding: 1.5rem; }
 .web-project-copy h3, .web-supporting-copy h3 { color: #fafaf9; font-size: 1.35rem; font-weight: 600; letter-spacing: -.025em; line-height: 1.7rem; margin: 0; }
