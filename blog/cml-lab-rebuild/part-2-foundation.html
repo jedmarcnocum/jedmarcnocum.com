@@ -50,7 +50,7 @@
 
             <section class="space-y-5 border-t border-slate-200 pt-6">
               <p class="leading-relaxed text-slate-700">
-                Hello there! 👋 Welcome back to Part 2 of the CML rebuild blog series. As planned, I’ve spun up five nodes in our CML lab, connected the links, and named the devices using a clean format: <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">AREA-DEVICE_TYPE-NUMBER</code>. 🚀
+                Hello there! 👋 Welcome back to Part 2 of the CML rebuild blog series. As planned, I’ve spun up five nodes in our CML lab, connected the links, and named the devices using a clean format: <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">SITE-DEVICE_TYPE-NUMBER</code>. 🚀
               </p>
 
               <figure class="space-y-3">
@@ -73,7 +73,7 @@
                 </p>
 
                 <p class="leading-relaxed text-slate-700">
-                  It was a very happy-go-lucky approach back then, and while it was great for getting my feet wet, I realized that for this rebuild, I need to actually plan in advance instead of just winging it. I didn't want to just copy-paste my past work; I wanted a genuine learning experience. So, after taking a step back and doing some research on modern network topologies, I decided to rip up the original plan and pivot to a Routed Campus Design! 🔄
+                  It was a very happy-go-lucky approach back then, and while it was great for getting my feet wet, I realized that for this rebuild, I need to actually plan in advance instead of just winging it. I didn't want to just copy-paste my past work; I wanted a genuine learning experience and enjoy the process. So, after taking a step back and doing some research on modern network topologies, I decided to rip up the original plan and pivot to a Routed Campus Design! 🔄
                 </p>
            
                 <p class="leading-relaxed text-slate-700">
@@ -94,110 +94,6 @@
               <p class="leading-relaxed text-slate-700">
                 Even though the logical design shifted halfway through, the physical topology and foundational setups remain exactly the same. Let's look at how we built that foundation. 🧱
               </p>
-            </section>
-
-            <section class="space-y-5 border-t border-slate-200 pt-6">
-              <div class="space-y-3">
-                <h2 class="text-xl font-semibold text-slate-900">⚙️ Base Device Configuration</h2>
-                <p class="leading-relaxed text-slate-700">
-                  Whether you are building a Layer 2 or Layer 3 topology, the baseline is identical. With the nodes linked up, I applied a consistent starting configuration to establish local administrative access, protect privileged mode, enable SSH, and kill unused HTTP services before touching the routing config. 🔒
-                </p>
-              </div>
-
-              <div class="overflow-x-auto rounded-lg border border-neutral-700 bg-neutral-800 shadow-sm">
-                <div class="border-b border-neutral-700 px-4 py-2 font-mono text-xs text-neutral-400">Base configuration</div>
-                <pre class="min-w-max p-5 font-mono text-sm leading-7 text-emerald-200"><code>ip domain name hq.jmcn.test
-username labadmin privilege 15 secret &lt;secret&gt;
-enable secret &lt;secret&gt;
-crypto key generate rsa modulus 2048
-ip ssh version 2
-no ip http server
-no ip http secure-server
-
-line console 0
- exec-timeout 30 0
- logging synchronous
-
-line vty 0 6
- login local
- transport input ssh
- exec-timeout 10 0</code></pre>
-              </div>
-
-              <p class="leading-relaxed text-slate-700">
-                Each device gets its own secure secret values, while the shared baseline keeps our console sessions tidy. 🤫
-              </p>
-            </section>
-
-            <section class="space-y-5 border-t border-slate-200 pt-6">
-              <div class="space-y-2">
-                <h2 class="text-xl font-semibold text-slate-900">🗺️ Device and Interface Map</h2>
-                <p class="leading-relaxed text-slate-700">
-                  Because the physical links didn't change during my pivot to a routed design, my interface mappings stayed intact. While wiring up each link, I made sure to add interface descriptions—a habit I didn't practice much in my original CCNA lab, but want to build early on here! 💡
-                </p>
-                <p class="leading-relaxed text-slate-700">
-                  Instead of relying on the CML GUI, I used <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">show lldp neighbors</code> to confirm the local interface, neighboring device, and remote port. GUIs are fast, but keeping manual CLI skills sharp is crucial. 🥷
-                </p>
-              </div>
-
-              <figure class="space-y-3">
-                <img
-                  class="w-full rounded-lg border border-slate-200"
-                  src="/assets/blog/cml-lab-rebuild/pt2/lldp-neigh.png"
-                  alt="HQ-ASW-01 show LLDP neighbors output listing HQ-DSW-01 and HQ-DSW-02 with their connected interfaces."
-                  loading="lazy"
-                />
-                <figcaption class="text-sm leading-relaxed text-slate-500">
-                  LLDP neighbours on HQ-ASW-01 confirm the two distribution-switch connections before their interface descriptions are added.
-                </figcaption>
-              </figure>
-
-              <figure class="space-y-3">
-                <img
-                  class="w-full rounded-lg border border-slate-200"
-                  src="/assets/blog/cml-lab-rebuild/pt2/int-description.png"
-                  alt="HQ-ASW-01 show interfaces description output showing uplinks to HQ-DSW-01 and HQ-DSW-02."
-                  loading="lazy"
-                />
-                <figcaption class="text-sm leading-relaxed text-slate-500">
-                  Interface descriptions on HQ-ASW-01 identify each connected distribution switch and port.
-                </figcaption>
-              </figure>
-              <p class="leading-relaxed text-slate-700">
-                Open the table below to inspect the exact ports and the role of each connection.
-              </p>
-              <details class="rounded-lg border border-slate-200">
-                <summary class="cursor-pointer px-4 py-3 font-semibold text-indigo-600 marker:text-slate-500 hover:text-indigo-700">
-                  Show complete device and interface map
-                </summary>
-                <div class="overflow-x-auto border-t border-slate-200">
-                  <table class="min-w-[68rem] border-collapse text-left text-sm">
-                  <colgroup>
-                    <col class="w-[20%]" />
-                    <col class="w-[26%]" />
-                    <col class="w-[26%]" />
-                    <col class="w-[28%]" />
-                  </colgroup>
-                  <thead class="bg-slate-100 text-slate-900">
-                    <tr>
-                      <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Connection</th>
-                      <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Endpoint A</th>
-                      <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Endpoint B</th>
-                      <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Purpose</th>
-                    </tr>
-                  </thead>
-                  <tbody class="divide-y divide-slate-200 text-slate-700">
-                    <tr class="align-top"><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Access uplink 1</th><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-ASW-01</span><br>GigabitEthernet0/0</td><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-DSW-01</span><br>GigabitEthernet0/0</td><td class="px-4 py-3">Explicit Layer 2 802.1Q trunk from access to distribution.</td></tr>
-                    <tr class="align-top"><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Access uplink 2</th><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-ASW-01</span><br>GigabitEthernet0/1</td><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-DSW-02</span><br>GigabitEthernet0/0</td><td class="px-4 py-3">Separate explicit Layer 2 802.1Q trunk; not a cross-switch EtherChannel.</td></tr>
-                    <tr class="align-top"><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Po12 member 1</th><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-DSW-01</span><br>GigabitEthernet0/1</td><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-DSW-02</span><br>GigabitEthernet0/1</td><td class="px-4 py-3">First member of the two-link Layer 3 LACP Port-Channel between the distribution switches.</td></tr>
-                    <tr class="align-top"><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Po12 member 2</th><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-DSW-01</span><br>GigabitEthernet0/2</td><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-DSW-02</span><br>GigabitEthernet0/2</td><td class="px-4 py-3">Second member of the Layer 3 LACP Port-Channel, providing a resilient distribution-to-distribution path.</td></tr>
-                    <tr class="align-top"><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Distribution uplink 1</th><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-DSW-01</span><br>GigabitEthernet0/3</td><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-EDGE-01</span><br>GigabitEthernet0/0</td><td class="px-4 py-3">Routed Layer 3 uplink from the first distribution switch to the HQ edge.</td></tr>
-                    <tr class="align-top"><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Distribution uplink 2</th><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-DSW-02</span><br>GigabitEthernet0/3</td><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-EDGE-01</span><br>GigabitEthernet0/1</td><td class="px-4 py-3">Routed Layer 3 uplink from the second distribution switch to the HQ edge.</td></tr>
-                    <tr class="align-top"><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Provider link</th><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-EDGE-01</span><br>GigabitEthernet0/2</td><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">ISP-01</span><br>GigabitEthernet0/0</td><td class="px-4 py-3">Routed Layer 3 connection to the isolated ISP simulation.</td></tr>
-                  </tbody>
-                </table>
-                </div>
-              </details>
             </section>
 
             <section class="hidden space-y-5 border-t border-slate-200 pt-6" aria-hidden="true">
@@ -420,7 +316,7 @@ vlan 120
                     <dd class="mt-2 font-mono text-sm"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">20</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></dd>
                   </div>
                   <div class="rounded-lg border border-slate-200 px-4 py-3">
-                    <div class="flex items-baseline justify-between gap-3"><dt class="font-semibold text-slate-900">IT / Users</dt><dd class="font-mono text-sm font-semibold text-amber-300">30–39</dd></div>
+                    <div class="flex items-baseline justify-between gap-3"><dt class="font-semibold text-slate-900">IT</dt><dd class="font-mono text-sm font-semibold text-amber-300">30–39</dd></div>
                     <dd class="mt-2 font-mono text-sm"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">30</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></dd>
                   </div>
                   <div class="rounded-lg border border-slate-200 px-4 py-3">
@@ -498,18 +394,30 @@ vlan 120
               <div class="space-y-3">
                 <h3 class="text-lg font-semibold text-slate-900">&#x1F501; Loopbacks &amp; &#x1F6E3;&#xFE0F; Routed Transits</h3>
                 <p class="leading-relaxed text-slate-700">
-                  Infrastructure loopbacks use a site-aware format, so every router and switch receives a stable identity that stays predictable as the lab expands.
+                  Infrastructure loopbacks use one consistent format that can be use to all sites. Every router and switch receives a stable identity, while the site value keeps the same device-ID plan predictable as the lab expands.
                 </p>
                 <section class="overflow-hidden rounded-lg border border-slate-200 bg-white" aria-labelledby="loopback-plan-title">
                   <div class="flex flex-col gap-1 border-b border-slate-200 bg-slate-100 px-5 py-4 sm:flex-row sm:items-baseline sm:justify-between">
                     <div>
-                      <h4 id="loopback-plan-title" class="font-semibold text-slate-900">Site-aware loopback plan</h4>
+                      <h4 id="loopback-plan-title" class="font-semibold text-slate-900">Multi-site loopback plan</h4>
                       <p class="mt-1 text-sm text-slate-600">Reserved infrastructure loopback space.</p>
                     </div>
                     <p class="font-mono text-sm font-semibold" aria-label="10.255.0.0/16"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-amber-300">255</span><span class="text-slate-500">.</span><span class="text-sky-300">0</span><span class="text-slate-500">.</span><span class="text-violet-300">0/16</span></p>
                   </div>
                   <div class="space-y-4 p-5">
                     <p class="font-mono text-sm" aria-label="10.255 dot site dot device ID slash 32"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-amber-300">255</span><span class="text-slate-500">.</span><span class="text-sky-300">&lt;SITE&gt;</span><span class="text-slate-500">.</span><span class="text-violet-300">&lt;DEVICE-ID&gt;/32</span></p>
+                    <section class="rounded-lg border border-slate-200 px-4 py-4" aria-labelledby="device-id-allocation-title">
+                      <h5 id="device-id-allocation-title" class="text-sm font-semibold text-slate-900">Device ID allocations</h5>
+                      <dl class="mt-3 grid gap-x-6 gap-y-2 text-sm sm:grid-cols-2">
+                        <div class="flex items-baseline justify-between gap-3"><dt class="font-mono font-semibold text-violet-300">1–9</dt><dd class="text-right text-slate-700">Distribution / core</dd></div>
+                        <div class="flex items-baseline justify-between gap-3"><dt class="font-mono font-semibold text-violet-300">10–19</dt><dd class="text-right text-slate-700">Edge / security</dd></div>
+                        <div class="flex items-baseline justify-between gap-3"><dt class="font-mono font-semibold text-violet-300">20–99</dt><dd class="text-right text-slate-700">Access switches</dd></div>
+                        <div class="flex items-baseline justify-between gap-3"><dt class="font-mono font-semibold text-violet-300">100–199</dt><dd class="text-right text-slate-700">Future infrastructure</dd></div>
+                        <div class="flex items-baseline justify-between gap-3"><dt class="font-mono font-semibold text-violet-300">200–239</dt><dd class="text-right text-slate-700">Network appliances / services</dd></div>
+                        <div class="flex items-baseline justify-between gap-3"><dt class="font-mono font-semibold text-violet-300">240–254</dt><dd class="text-right text-slate-700">Reserved</dd></div>
+                      </dl>
+                    </section>
+                    <p class="text-sm font-semibold text-slate-900">For the current HQ build:</p>
                     <dl class="divide-y divide-slate-200 border-y border-slate-200">
                       <div class="grid gap-1 py-3 sm:grid-cols-[1fr_5rem_auto] sm:items-center sm:gap-4">
                         <dt class="font-semibold text-slate-900">HQ-DSW-01</dt>
@@ -528,8 +436,8 @@ vlan 120
                       </div>
                       <div class="grid gap-1 py-3 sm:grid-cols-[1fr_5rem_auto] sm:items-center sm:gap-4">
                         <dt class="font-semibold text-slate-900">HQ-ASW-01</dt>
-                        <dd class="font-mono text-sm text-violet-300">ID 11</dd>
-                        <dd class="font-mono text-sm"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-amber-300">255</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-violet-300">11/32</span></dd>
+                        <dd class="font-mono text-sm text-violet-300">ID 20</dd>
+                        <dd class="font-mono text-sm"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-amber-300">255</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-violet-300">20/32</span></dd>
                       </div>
                     </dl>
                   </div>
@@ -555,6 +463,120 @@ vlan 120
               <p class="leading-relaxed text-slate-700">
                 The next stage is to actually apply this shiny new convention to the Site 1 VLANs, SVIs, routed uplinks, and OSPF configuration. Let's get to it! &#x1F680;
               </p>
+            </section>
+
+            <section class="space-y-6 border-t border-slate-200 pt-6">
+              <div class="space-y-3">
+                <h2 class="text-xl font-semibold text-slate-900">🧱 Lab Setup &amp; Foundation</h2>
+                <p class="leading-relaxed text-slate-700">
+                  Before applying the routed design, I established a consistent device baseline and documented every physical connection in the five-node topology.
+                </p>
+              </div>
+
+              <div class="space-y-5">
+                <div class="space-y-3">
+                  <h3 class="text-lg font-semibold text-slate-900">⚙️ Base Device Configuration</h3>
+                  <p class="leading-relaxed text-slate-700">
+                    Whether you are building a Layer 2 or Layer 3 topology, the baseline is identical. With the nodes linked up, I applied a consistent starting configuration to establish local administrative access, protect privileged mode, enable SSH, and kill unused HTTP services before touching the routing config. 🔒
+                  </p>
+                </div>
+
+                <div class="overflow-x-auto rounded-lg border border-neutral-700 bg-neutral-800 shadow-sm">
+                  <div class="border-b border-neutral-700 px-4 py-2 font-mono text-xs text-neutral-400">Base configuration</div>
+                  <pre class="min-w-max p-5 font-mono text-sm leading-7 text-emerald-200"><code>ip domain name hq.jmcn.test
+username labadmin privilege 15 secret &lt;secret&gt;
+enable secret &lt;secret&gt;
+crypto key generate rsa modulus 2048
+ip ssh version 2
+no ip http server
+no ip http secure-server
+
+line console 0
+ exec-timeout 30 0
+ logging synchronous
+
+line vty 0 6
+ login local
+ transport input ssh
+ exec-timeout 10 0</code></pre>
+                </div>
+
+                <p class="leading-relaxed text-slate-700">
+                  Each device gets its own secure secret values, while the shared baseline keeps our console sessions tidy. 🤫
+                </p>
+              </div>
+
+              <div class="space-y-5 border-t border-slate-200 pt-6">
+                <div class="space-y-2">
+                  <h3 class="text-lg font-semibold text-slate-900">🗺️ Device and Interface Map</h3>
+                  <p class="leading-relaxed text-slate-700">
+                    Because the physical links didn't change during my pivot to a routed design, my interface mappings stayed intact. While wiring up each link, I made sure to add interface descriptions—a habit I didn't practice much in my original CCNA lab, but want to build early on here! 💡
+                  </p>
+                  <p class="leading-relaxed text-slate-700">
+                    Instead of relying on the CML GUI, I used <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">show lldp neighbors</code> to confirm the local interface, neighboring device, and remote port. GUIs are fast, but keeping manual CLI skills sharp is crucial. 🥷
+                  </p>
+                </div>
+
+                <figure class="space-y-3">
+                  <img
+                    class="w-full rounded-lg border border-slate-200"
+                    src="/assets/blog/cml-lab-rebuild/pt2/lldp-neigh.png"
+                    alt="HQ-ASW-01 show LLDP neighbors output listing HQ-DSW-01 and HQ-DSW-02 with their connected interfaces."
+                    loading="lazy"
+                  />
+                  <figcaption class="text-sm leading-relaxed text-slate-500">
+                    LLDP neighbours on HQ-ASW-01 confirm the two distribution-switch connections before their interface descriptions are added.
+                  </figcaption>
+                </figure>
+
+                <figure class="space-y-3">
+                  <img
+                    class="w-full rounded-lg border border-slate-200"
+                    src="/assets/blog/cml-lab-rebuild/pt2/int-description.png"
+                    alt="HQ-ASW-01 show interfaces description output showing uplinks to HQ-DSW-01 and HQ-DSW-02."
+                    loading="lazy"
+                  />
+                  <figcaption class="text-sm leading-relaxed text-slate-500">
+                    Interface descriptions on HQ-ASW-01 identify each connected distribution switch and port.
+                  </figcaption>
+                </figure>
+
+                <p class="leading-relaxed text-slate-700">
+                  Open the table below to inspect the exact ports and the role of each connection.
+                </p>
+                <details class="rounded-lg border border-slate-200">
+                  <summary class="cursor-pointer px-4 py-3 font-semibold text-indigo-600 marker:text-slate-500 hover:text-indigo-700">
+                    Show complete device and interface map
+                  </summary>
+                  <div class="overflow-x-auto border-t border-slate-200">
+                    <table class="min-w-[68rem] border-collapse text-left text-sm">
+                    <colgroup>
+                      <col class="w-[20%]" />
+                      <col class="w-[26%]" />
+                      <col class="w-[26%]" />
+                      <col class="w-[28%]" />
+                    </colgroup>
+                    <thead class="bg-slate-100 text-slate-900">
+                      <tr>
+                        <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Connection</th>
+                        <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Endpoint A</th>
+                        <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Endpoint B</th>
+                        <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Purpose</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200 text-slate-700">
+                      <tr class="align-top"><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Access uplink 1</th><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-ASW-01</span><br>GigabitEthernet0/0</td><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-DSW-01</span><br>GigabitEthernet0/0</td><td class="px-4 py-3">Explicit Layer 2 802.1Q trunk from access to distribution.</td></tr>
+                      <tr class="align-top"><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Access uplink 2</th><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-ASW-01</span><br>GigabitEthernet0/1</td><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-DSW-02</span><br>GigabitEthernet0/0</td><td class="px-4 py-3">Separate explicit Layer 2 802.1Q trunk; not a cross-switch EtherChannel.</td></tr>
+                      <tr class="align-top"><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Po12 member 1</th><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-DSW-01</span><br>GigabitEthernet0/1</td><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-DSW-02</span><br>GigabitEthernet0/1</td><td class="px-4 py-3">First member of the two-link Layer 3 LACP Port-Channel between the distribution switches.</td></tr>
+                      <tr class="align-top"><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Po12 member 2</th><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-DSW-01</span><br>GigabitEthernet0/2</td><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-DSW-02</span><br>GigabitEthernet0/2</td><td class="px-4 py-3">Second member of the Layer 3 LACP Port-Channel, providing a resilient distribution-to-distribution path.</td></tr>
+                      <tr class="align-top"><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Distribution uplink 1</th><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-DSW-01</span><br>GigabitEthernet0/3</td><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-EDGE-01</span><br>GigabitEthernet0/0</td><td class="px-4 py-3">Routed Layer 3 uplink from the first distribution switch to the HQ edge.</td></tr>
+                      <tr class="align-top"><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Distribution uplink 2</th><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-DSW-02</span><br>GigabitEthernet0/3</td><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-EDGE-01</span><br>GigabitEthernet0/1</td><td class="px-4 py-3">Routed Layer 3 uplink from the second distribution switch to the HQ edge.</td></tr>
+                      <tr class="align-top"><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Provider link</th><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-EDGE-01</span><br>GigabitEthernet0/2</td><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">ISP-01</span><br>GigabitEthernet0/0</td><td class="px-4 py-3">Routed Layer 3 connection to the isolated ISP simulation.</td></tr>
+                    </tbody>
+                  </table>
+                  </div>
+                </details>
+              </div>
             </section>
           </article>
         </main>
