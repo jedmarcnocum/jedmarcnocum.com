@@ -740,28 +740,37 @@ body {
   width: 2rem;
 }
 
+.w-\[14\%\] {
+  width: 14%;
+}
+
 .w-\[16\%\] {
   width: 16%;
 }
 
-.w-\[20\%\] {
-  width: 20%;
+.w-\[17\%\] {
+  width: 17%;
 }
 
-.w-\[24\%\] {
-  width: 24%;
+.w-\[18\%\] {
+  width: 18%;
+}
+
+.w-fit {
+  width: -moz-fit-content;
+  width: fit-content;
 }
 
 .w-full {
   width: 100%;
 }
 
-.min-w-\[34rem\] {
-  min-width: 34rem;
+.min-w-\[100rem\] {
+  min-width: 100rem;
 }
 
-.min-w-\[36rem\] {
-  min-width: 36rem;
+.min-w-\[34rem\] {
+  min-width: 34rem;
 }
 
 .min-w-\[48rem\] {
@@ -776,12 +785,12 @@ body {
   min-width: 57rem;
 }
 
-.min-w-\[58rem\] {
-  min-width: 58rem;
+.min-w-\[68rem\] {
+  min-width: 68rem;
 }
 
-.min-w-\[84rem\] {
-  min-width: 84rem;
+.min-w-\[78rem\] {
+  min-width: 78rem;
 }
 
 .min-w-max {
@@ -835,6 +844,10 @@ body {
 
 .list-disc {
   list-style-type: disc;
+}
+
+.grid-cols-\[1fr_5rem_1fr_1fr\] {
+  grid-template-columns: 1fr 5rem 1fr 1fr;
 }
 
 .flex-col {
@@ -987,6 +1000,10 @@ body {
 
 .rounded-lg {
   border-radius: 0.5rem;
+}
+
+.rounded-md {
+  border-radius: 0.375rem;
 }
 
 .rounded-xl {
@@ -1143,6 +1160,11 @@ body {
   padding-right: 0.25rem;
 }
 
+.px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
 .px-3 {
   padding-left: 0.75rem;
   padding-right: 0.75rem;
@@ -1166,6 +1188,11 @@ body {
 .py-0\.5 {
   padding-top: 0.125rem;
   padding-bottom: 0.125rem;
+}
+
+.py-1 {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
 }
 
 .py-1\.5 {
@@ -1216,6 +1243,10 @@ body {
 .py-8 {
   padding-top: 2rem;
   padding-bottom: 2rem;
+}
+
+.pb-2 {
+  padding-bottom: 0.5rem;
 }
 
 .pb-5 {
@@ -2412,6 +2443,10 @@ body {
     display: flex;
   }
 
+  .sm\:grid {
+    display: grid;
+  }
+
   .sm\:h-3 {
     height: 0.75rem;
   }
@@ -2424,8 +2459,8 @@ body {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .sm\:grid-cols-\[1fr_5rem_auto\] {
-    grid-template-columns: 1fr 5rem auto;
+  .sm\:grid-cols-\[1fr_5rem_1fr_1fr\] {
+    grid-template-columns: 1fr 5rem 1fr 1fr;
   }
 
   .sm\:grid-cols-\[5rem_1fr_auto\] {
@@ -2499,6 +2534,11 @@ body {
     line-height: 1;
   }
 
+  .sm\:text-base {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+
   .sm\:text-sm {
     font-size: 0.875rem;
     line-height: 1.25rem;
@@ -2528,6 +2568,10 @@ body {
 
   .lg\:max-w-md {
     max-width: 28rem;
+  }
+
+  .lg\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .lg\:grid-cols-4 {
