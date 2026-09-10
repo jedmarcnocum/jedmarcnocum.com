@@ -249,7 +249,7 @@ vlan 120
                 <div class="space-y-5 p-5">
                   <div>
                     <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Worked HQ example</p>
-                    <p class="mt-1 text-sm text-slate-600">An HR device at Site 1 uses this address:</p>
+                    <p class="mt-1 text-sm text-slate-600">An IT user device at Site 1 uses this address:</p>
                     <p class="mt-3 font-mono text-xl font-semibold tracking-wide sm:text-2xl" aria-label="10.1.10.25">
                       <span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">10</span><span class="text-slate-500">.</span><span class="text-violet-300">25</span>
                     </p>
@@ -266,7 +266,7 @@ vlan 120
                     </div>
                     <div class="border-l-2 border-amber-300 pl-3">
                       <dt class="text-xs font-semibold uppercase tracking-wide text-amber-300">Function / subnet</dt>
-                      <dd class="mt-1 text-sm text-slate-700"><span class="font-mono font-semibold text-amber-300">10</span> = HR network</dd>
+                      <dd class="mt-1 text-sm text-slate-700"><span class="font-mono font-semibold text-amber-300">10</span> = IT user network</dd>
                     </div>
                     <div class="border-l-2 border-violet-300 pl-3">
                       <dt class="text-xs font-semibold uppercase tracking-wide text-violet-300">Host</dt>
@@ -308,49 +308,197 @@ vlan 120
                 </div>
                 <dl class="grid gap-3 p-5 sm:grid-cols-2">
                   <div class="rounded-lg border border-slate-200 px-4 py-3">
-                    <div class="flex items-baseline justify-between gap-3"><dt class="font-semibold text-slate-900">HR</dt><dd class="font-mono text-sm font-semibold text-amber-300">10–19</dd></div>
+                    <div class="flex items-baseline justify-between gap-3"><dt class="font-semibold text-slate-900">IT-USERS</dt><dd class="font-mono text-sm font-semibold text-amber-300">10–19</dd></div>
                     <dd class="mt-2 font-mono text-sm"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">10</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></dd>
                   </div>
                   <div class="rounded-lg border border-slate-200 px-4 py-3">
-                    <div class="flex items-baseline justify-between gap-3"><dt class="font-semibold text-slate-900">Sales</dt><dd class="font-mono text-sm font-semibold text-amber-300">20–29</dd></div>
+                    <div class="flex items-baseline justify-between gap-3"><dt class="font-semibold text-slate-900">SERVERS</dt><dd class="font-mono text-sm font-semibold text-amber-300">20–29</dd></div>
                     <dd class="mt-2 font-mono text-sm"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">20</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></dd>
                   </div>
                   <div class="rounded-lg border border-slate-200 px-4 py-3">
-                    <div class="flex items-baseline justify-between gap-3"><dt class="font-semibold text-slate-900">IT</dt><dd class="font-mono text-sm font-semibold text-amber-300">30–39</dd></div>
+                    <div class="flex items-baseline justify-between gap-3"><dt class="font-semibold text-slate-900">HR-USERS</dt><dd class="font-mono text-sm font-semibold text-amber-300">30–39</dd></div>
                     <dd class="mt-2 font-mono text-sm"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">30</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></dd>
                   </div>
                   <div class="rounded-lg border border-slate-200 px-4 py-3">
-                    <div class="flex items-baseline justify-between gap-3"><dt class="font-semibold text-slate-900">Servers</dt><dd class="font-mono text-sm font-semibold text-amber-300">40–49</dd></div>
+                    <div class="flex items-baseline justify-between gap-3"><dt class="font-semibold text-slate-900">SALES-USERS</dt><dd class="font-mono text-sm font-semibold text-amber-300">40–49</dd></div>
                     <dd class="mt-2 font-mono text-sm"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">40</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></dd>
                   </div>
                   <div class="rounded-lg border border-slate-200 px-4 py-3">
-                    <div class="flex items-baseline justify-between gap-3"><dt class="font-semibold text-slate-900">Guest</dt><dd class="font-mono text-sm font-semibold text-amber-300">50–59</dd></div>
+                    <div class="flex items-baseline justify-between gap-3"><dt class="font-semibold text-slate-900">GUEST-WIFI</dt><dd class="font-mono text-sm font-semibold text-amber-300">50–59</dd></div>
                     <dd class="mt-2 font-mono text-sm"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">50</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></dd>
                   </div>
                   <div class="rounded-lg border border-slate-200 px-4 py-3">
-                    <div class="flex items-baseline justify-between gap-3"><dt class="font-semibold text-slate-900">Management</dt><dd class="font-mono text-sm font-semibold text-amber-300">90–99</dd></div>
+                    <div class="flex items-baseline justify-between gap-3"><dt class="font-semibold text-slate-900">NETWORK-MGMT</dt><dd class="font-mono text-sm font-semibold text-amber-300">90–99</dd></div>
                     <dd class="mt-2 font-mono text-sm"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">99</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></dd>
                   </div>
                   <div class="rounded-lg border border-slate-200 px-4 py-3 sm:col-span-2">
-                    <div class="flex items-baseline justify-between gap-3"><dt class="font-semibold text-slate-900">Voice</dt><dd class="font-mono text-sm font-semibold text-amber-300">100–109</dd></div>
+                    <div class="flex items-baseline justify-between gap-3"><dt class="font-semibold text-slate-900">VOICE</dt><dd class="font-mono text-sm font-semibold text-amber-300">100–109</dd></div>
                     <dd class="mt-2 font-mono text-sm"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">100</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></dd>
                   </div>
                 </dl>
               </section>
 
               <div class="space-y-3 leading-relaxed text-slate-700">
+                <h4 class="text-lg font-semibold text-slate-900">HR-USERS expansion</h4>
                 <p>
-                  The third octet represents a function range, not a permanent, rigid copy of the VLAN ID. Site 1 HR starts at <span class="whitespace-nowrap font-mono"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">10</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></span>.
+                  The third octet reserves a function range rather than copying the VLAN ID forever. <span class="font-mono font-semibold">VLAN 30</span>, <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">HR-USERS</code>, starts at <span class="whitespace-nowrap font-mono"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">30</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></span>.
                 </p>
-                <p>When HR needs more capacity, create a new, separate HR VLAN and subnet:</p>
+                <p>When HR needs more capacity, create a new, separate HR user VLAN and subnet:</p>
                 <ul class="list-disc space-y-2 pl-6">
-                  <li>First expansion: <span class="whitespace-nowrap font-mono"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">11</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></span></li>
-                  <li>Further HR VLANs: <span class="whitespace-nowrap font-mono"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">12</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></span> through <span class="whitespace-nowrap font-mono"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">19</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></span></li>
+                  <li>First expansion: <span class="whitespace-nowrap font-mono"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">31</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></span></li>
+                  <li>Further HR subnets: <span class="whitespace-nowrap font-mono"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">32</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></span> through <span class="whitespace-nowrap font-mono"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">39</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></span></li>
                 </ul>
                 <p>
                   Each remains its own VLAN and <span class="font-mono text-violet-300">/24</span> subnet, so expansion stays predictable instead of cramming multiple networks into one VLAN. 🤝
                 </p>
               </div>
+
+              <section class="overflow-hidden rounded-lg border border-slate-200 bg-white" aria-labelledby="final-hq-vlan-table-title">
+                <div class="flex flex-col gap-1 border-b border-slate-200 bg-slate-100 px-5 py-4 sm:flex-row sm:items-baseline sm:justify-between">
+                  <div>
+                    <h4 id="final-hq-vlan-table-title" class="font-semibold text-slate-900">Final HQ VLAN table</h4>
+                    <p class="mt-1 text-sm text-slate-600">Site 1 / HQ VLANs, IPv4 subnets, and default gateways.</p>
+                  </div>
+                  <p class="text-sm font-semibold text-slate-700">Site 1 / HQ</p>
+                </div>
+                <div class="overflow-x-auto">
+                  <table class="w-full min-w-[58rem] border-collapse text-left text-sm">
+                    <thead class="bg-slate-100 text-slate-900">
+                      <tr>
+                        <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">VLAN</th>
+                        <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Name</th>
+                        <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">IPv4 subnet</th>
+                        <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">IPv4 gateway</th>
+                        <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Purpose</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200 text-slate-700">
+                      <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">10</th><td class="px-4 py-3"><code>IT-USERS</code></td><td class="px-4 py-3"><code>10.1.10.0<span class="font-semibold">/24</span></code></td><td class="px-4 py-3"><code>10.1.10.1</code></td><td class="px-4 py-3">IT user endpoints</td></tr>
+                      <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">20</th><td class="px-4 py-3"><code>SERVERS</code></td><td class="px-4 py-3"><code>10.1.20.0<span class="font-semibold">/24</span></code></td><td class="px-4 py-3"><code>10.1.20.1</code></td><td class="px-4 py-3">Server/service endpoints</td></tr>
+                      <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">30</th><td class="px-4 py-3"><code>HR-USERS</code></td><td class="px-4 py-3"><code>10.1.30.0<span class="font-semibold">/24</span></code></td><td class="px-4 py-3"><code>10.1.30.1</code></td><td class="px-4 py-3">HR user endpoints</td></tr>
+                      <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">40</th><td class="px-4 py-3"><code>SALES-USERS</code></td><td class="px-4 py-3"><code>10.1.40.0<span class="font-semibold">/24</span></code></td><td class="px-4 py-3"><code>10.1.40.1</code></td><td class="px-4 py-3">Sales user endpoints</td></tr>
+                      <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">50</th><td class="px-4 py-3"><code>GUEST-WIFI</code></td><td class="px-4 py-3"><code>10.1.50.0<span class="font-semibold">/24</span></code></td><td class="px-4 py-3"><code>10.1.50.1</code></td><td class="px-4 py-3">Guest/untrusted clients</td></tr>
+                      <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">99</th><td class="px-4 py-3"><code>NETWORK-MGMT</code></td><td class="px-4 py-3"><code>10.1.99.0<span class="font-semibold">/24</span></code></td><td class="px-4 py-3"><code>10.1.99.1</code></td><td class="px-4 py-3">Approved management endpoints</td></tr>
+                      <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">100</th><td class="px-4 py-3"><code>VOICE</code></td><td class="px-4 py-3"><code>10.1.100.0<span class="font-semibold">/24</span></code></td><td class="px-4 py-3"><code>10.1.100.1</code></td><td class="px-4 py-3">Voice endpoints</td></tr>
+                      <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">998</th><td class="px-4 py-3"><code>UNUSED-PORTS</code></td><td class="px-4 py-3">None</td><td class="px-4 py-3">None</td><td class="px-4 py-3">Parking VLAN for unused Layer 2 ports</td></tr>
+                      <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">999</th><td class="px-4 py-3"><code>NATIVE-VLAN</code></td><td class="px-4 py-3">None</td><td class="px-4 py-3">None</td><td class="px-4 py-3">Reserved native VLAN for a future justified Layer 2 trunk</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p class="border-t border-slate-200 px-5 py-4 text-sm leading-relaxed text-slate-600">
+                  The same convention applies to every future site: keep the VLAN function and subnet pattern, then replace the site identifier. For example, Site 2 uses <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">10.2.x.x</code> instead of <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">10.1.x.x</code>.
+                </p>
+              </section>
+
+              <section class="space-y-6 border-t border-slate-200 pt-6" aria-labelledby="ipv6-allocation-title">
+                <div class="space-y-3">
+                  <h2 id="ipv6-allocation-title" class="text-xl font-semibold text-slate-900">IPv6 &amp; Endpoint Address Allocation</h2>
+                  <p class="leading-relaxed text-slate-700">
+                    HQ uses the documentation prefix <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">2001:db8:1::/48</code>. IPv6 subnet IDs mirror the functional VLAN or network identifier wherever practical, while normal endpoint VLANs use <span class="font-mono font-semibold">/64</span> prefixes.
+                  </p>
+                </div>
+
+                <section class="overflow-hidden rounded-lg border border-slate-200 bg-white" aria-labelledby="hq-ipv6-vlan-title">
+                  <div class="border-b border-slate-200 bg-slate-100 px-5 py-4">
+                    <h3 id="hq-ipv6-vlan-title" class="font-semibold text-slate-900">HQ endpoint VLANs</h3>
+                    <p class="mt-1 text-sm text-slate-600">The IPv6 default gateway follows the same intent as IPv4: the first usable address, <code class="rounded bg-white px-1 py-0.5 text-slate-800">&lt;VLAN-prefix&gt;::1</code>.</p>
+                  </div>
+                  <div class="overflow-x-auto">
+                    <table class="w-full min-w-[48rem] border-collapse text-left text-sm">
+                      <thead class="bg-slate-100 text-slate-900">
+                        <tr>
+                          <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">VLAN</th>
+                          <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Name</th>
+                          <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">IPv6 prefix</th>
+                          <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Default gateway</th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-slate-200 text-slate-700">
+                        <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">10</th><td class="px-4 py-3"><code>IT-USERS</code></td><td class="px-4 py-3"><code>2001:db8:1:10::<span class="font-semibold">/64</span></code></td><td class="px-4 py-3"><code>2001:db8:1:10::1</code></td></tr>
+                        <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">20</th><td class="px-4 py-3"><code>SERVERS</code></td><td class="px-4 py-3"><code>2001:db8:1:20::<span class="font-semibold">/64</span></code></td><td class="px-4 py-3"><code>2001:db8:1:20::1</code></td></tr>
+                        <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">30</th><td class="px-4 py-3"><code>HR-USERS</code></td><td class="px-4 py-3"><code>2001:db8:1:30::<span class="font-semibold">/64</span></code></td><td class="px-4 py-3"><code>2001:db8:1:30::1</code></td></tr>
+                        <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">40</th><td class="px-4 py-3"><code>SALES-USERS</code></td><td class="px-4 py-3"><code>2001:db8:1:40::<span class="font-semibold">/64</span></code></td><td class="px-4 py-3"><code>2001:db8:1:40::1</code></td></tr>
+                        <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">50</th><td class="px-4 py-3"><code>GUEST-WIFI</code></td><td class="px-4 py-3"><code>2001:db8:1:50::<span class="font-semibold">/64</span></code></td><td class="px-4 py-3"><code>2001:db8:1:50::1</code></td></tr>
+                        <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">99</th><td class="px-4 py-3"><code>NETWORK-MGMT</code></td><td class="px-4 py-3"><code>2001:db8:1:99::<span class="font-semibold">/64</span></code></td><td class="px-4 py-3"><code>2001:db8:1:99::1</code></td></tr>
+                        <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">100</th><td class="px-4 py-3"><code>VOICE</code></td><td class="px-4 py-3"><code>2001:db8:1:100::<span class="font-semibold">/64</span></code></td><td class="px-4 py-3"><code>2001:db8:1:100::1</code></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <p class="border-t border-slate-200 px-5 py-4 text-sm leading-relaxed text-slate-600">
+                    The gateway convention is <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">&lt;VLAN-prefix&gt;::1</code>, deliberately mirroring the IPv4 <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">.1</code> gateway convention.
+                  </p>
+                </section>
+
+                <section class="overflow-hidden rounded-lg border border-slate-200 bg-white" aria-labelledby="ipv6-transit-title">
+                  <div class="border-b border-slate-200 bg-slate-100 px-5 py-4">
+                    <h3 id="ipv6-transit-title" class="font-semibold text-slate-900">IPv6 routed transit links</h3>
+                    <p class="mt-1 text-sm text-slate-600">Dedicated <span class="font-mono font-semibold">/127</span> networks begin at <code class="rounded bg-white px-1 py-0.5 text-slate-800">2001:db8:1:ff00::/127</code>. This adds IPv6 alongside the existing IPv4 <span class="font-mono">/31</span> transit design.</p>
+                  </div>
+                  <div class="overflow-x-auto">
+                    <table class="w-full min-w-[52rem] border-collapse text-left text-sm">
+                      <thead class="bg-slate-100 text-slate-900">
+                        <tr><th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Link</th><th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">IPv6 subnet</th></tr>
+                      </thead>
+                      <tbody class="divide-y divide-slate-200 text-slate-700">
+                        <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">HQ-DSW-01 ↔ HQ-DSW-02 routed Port-Channel12</th><td class="px-4 py-3"><code>2001:db8:1:ff00::/127</code></td></tr>
+                        <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">HQ-DSW-01 ↔ HQ-EDGE-01</th><td class="px-4 py-3"><code>2001:db8:1:ff01::/127</code></td></tr>
+                        <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">HQ-DSW-02 ↔ HQ-EDGE-01</th><td class="px-4 py-3"><code>2001:db8:1:ff02::/127</code></td></tr>
+                        <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">HQ-ASW-01 ↔ HQ-DSW-01</th><td class="px-4 py-3"><code>2001:db8:1:ff03::/127</code></td></tr>
+                        <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">HQ-ASW-01 ↔ HQ-DSW-02</th><td class="px-4 py-3"><code>2001:db8:1:ff04::/127</code></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <p class="border-t border-slate-200 px-5 py-4 text-sm leading-relaxed text-slate-600">Each <span class="font-mono">/127</span> assigns its two usable addresses consistently to the connected endpoints; the exact interface allocations are recorded in the interface map below.</p>
+                </section>
+
+                <section class="overflow-hidden rounded-lg border border-slate-200 bg-white" aria-labelledby="ipv6-loopback-title">
+                  <div class="border-b border-slate-200 bg-slate-100 px-5 py-4">
+                    <h3 id="ipv6-loopback-title" class="font-semibold text-slate-900">IPv6 loopbacks</h3>
+                    <p class="mt-1 text-sm text-slate-600">HQ reserves <code class="rounded bg-white px-1 py-0.5 text-slate-800">2001:db8:1:ffff::/64</code> for infrastructure loopbacks, using <span class="font-mono font-semibold">/128</span> host routes.</p>
+                  </div>
+                  <div class="overflow-x-auto">
+                    <table class="w-full min-w-[36rem] border-collapse text-left text-sm">
+                      <thead class="bg-slate-100 text-slate-900"><tr><th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Device</th><th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Loopback0 IPv6</th></tr></thead>
+                      <tbody class="divide-y divide-slate-200 text-slate-700">
+                        <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">HQ-DSW-01</th><td class="px-4 py-3"><code>2001:db8:1:ffff::1/128</code></td></tr>
+                        <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">HQ-DSW-02</th><td class="px-4 py-3"><code>2001:db8:1:ffff::2/128</code></td></tr>
+                        <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">HQ-EDGE-01</th><td class="px-4 py-3"><code>2001:db8:1:ffff::10/128</code></td></tr>
+                        <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">HQ-ASW-01</th><td class="px-4 py-3"><code>2001:db8:1:ffff::11/128</code></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <p class="border-t border-slate-200 px-5 py-4 text-sm leading-relaxed text-slate-600">These IPv6 assignments are additive; the existing IPv4 loopback plan remains unchanged.</p>
+                </section>
+
+                <div class="space-y-3">
+                  <h3 class="text-lg font-semibold text-slate-900">IPv4 endpoint host allocation</h3>
+                  <p class="leading-relaxed text-slate-700">Every normal HQ <span class="font-mono font-semibold">/24</span> endpoint subnet uses <span class="font-mono font-semibold">x.x.x.1</span> as its default gateway.</p>
+                </div>
+
+                <section class="overflow-hidden rounded-lg border border-slate-200 bg-white" aria-labelledby="ipv4-host-allocation-title">
+                  <div class="border-b border-slate-200 bg-slate-100 px-5 py-4">
+                    <h3 id="ipv4-host-allocation-title" class="font-semibold text-slate-900">Standard IPv4 endpoint allocation</h3>
+                    <p class="mt-1 text-sm text-slate-600">Applied consistently to IT-USERS, SERVERS, HR-USERS, SALES-USERS, GUEST-WIFI, NETWORK-MGMT, and VOICE.</p>
+                  </div>
+                  <div class="overflow-x-auto">
+                    <table class="w-full min-w-[34rem] border-collapse text-left text-sm">
+                      <thead class="bg-slate-100 text-slate-900"><tr><th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Address range</th><th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Purpose</th></tr></thead>
+                      <tbody class="divide-y divide-slate-200 text-slate-700">
+                        <tr><th class="px-4 py-3 font-mono font-semibold text-slate-900" scope="row">.1</th><td class="px-4 py-3">Default gateway / SVI</td></tr>
+                        <tr><th class="px-4 py-3 font-mono font-semibold text-slate-900" scope="row">.2 – .49</th><td class="px-4 py-3">Fixed/static assignments</td></tr>
+                        <tr><th class="px-4 py-3 font-mono font-semibold text-slate-900" scope="row">.50 – .199</th><td class="px-4 py-3">DHCP client pool</td></tr>
+                        <tr><th class="px-4 py-3 font-mono font-semibold text-slate-900" scope="row">.200 – .239</th><td class="px-4 py-3">Future growth / expansion</td></tr>
+                        <tr><th class="px-4 py-3 font-mono font-semibold text-slate-900" scope="row">.240 – .254</th><td class="px-4 py-3">Reserved infrastructure / special-use addresses</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="border-t border-slate-200 px-5 py-4 text-sm leading-relaxed text-slate-600">
+                    <p class="font-semibold text-slate-900">VLAN 10 example: <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">10.1.10.0/24</code></p>
+                    <p class="mt-2">Network <code>10.1.10.0</code> · Gateway <code>10.1.10.1</code> · Static <code>10.1.10.2–10.1.10.49</code> · DHCP <code>10.1.10.50–10.1.10.199</code> · Growth <code>10.1.10.200–10.1.10.239</code> · Infrastructure reserve <code>10.1.10.240–10.1.10.254</code> · Broadcast <code>10.1.10.255</code></p>
+                    <p class="mt-2">The <code>.254</code> address remains in the infrastructure reserve; default gateways use only <code>.1</code>.</p>
+                  </div>
+                </section>
+              </section>
 
               <div class="space-y-3">
                 <h3 class="text-lg font-semibold text-slate-900">&#x1F454; Management Addresses Identify Devices</h3>
@@ -549,12 +697,13 @@ line vty 0 6
                     Show complete device and interface map
                   </summary>
                   <div class="overflow-x-auto border-t border-slate-200">
-                    <table class="min-w-[68rem] border-collapse text-left text-sm">
+                    <table class="w-full min-w-[84rem] border-collapse text-left text-sm">
                     <colgroup>
+                      <col class="w-[16%]" />
                       <col class="w-[20%]" />
-                      <col class="w-[26%]" />
-                      <col class="w-[26%]" />
-                      <col class="w-[28%]" />
+                      <col class="w-[20%]" />
+                      <col class="w-[20%]" />
+                      <col class="w-[24%]" />
                     </colgroup>
                     <thead class="bg-slate-100 text-slate-900">
                       <tr>
@@ -562,16 +711,17 @@ line vty 0 6
                         <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Endpoint A</th>
                         <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Endpoint B</th>
                         <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Purpose</th>
+                        <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">IPv6 /127 allocation</th>
                       </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-200 text-slate-700">
-                      <tr class="align-top"><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Access uplink 1</th><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-ASW-01</span><br>GigabitEthernet0/0</td><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-DSW-01</span><br>GigabitEthernet0/0</td><td class="px-4 py-3">Explicit Layer 2 802.1Q trunk from access to distribution.</td></tr>
-                      <tr class="align-top"><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Access uplink 2</th><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-ASW-01</span><br>GigabitEthernet0/1</td><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-DSW-02</span><br>GigabitEthernet0/0</td><td class="px-4 py-3">Separate explicit Layer 2 802.1Q trunk; not a cross-switch EtherChannel.</td></tr>
-                      <tr class="align-top"><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Po12 member 1</th><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-DSW-01</span><br>GigabitEthernet0/1</td><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-DSW-02</span><br>GigabitEthernet0/1</td><td class="px-4 py-3">First member of the two-link Layer 3 LACP Port-Channel between the distribution switches.</td></tr>
-                      <tr class="align-top"><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Po12 member 2</th><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-DSW-01</span><br>GigabitEthernet0/2</td><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-DSW-02</span><br>GigabitEthernet0/2</td><td class="px-4 py-3">Second member of the Layer 3 LACP Port-Channel, providing a resilient distribution-to-distribution path.</td></tr>
-                      <tr class="align-top"><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Distribution uplink 1</th><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-DSW-01</span><br>GigabitEthernet0/3</td><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-EDGE-01</span><br>GigabitEthernet0/0</td><td class="px-4 py-3">Routed Layer 3 uplink from the first distribution switch to the HQ edge.</td></tr>
-                      <tr class="align-top"><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Distribution uplink 2</th><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-DSW-02</span><br>GigabitEthernet0/3</td><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-EDGE-01</span><br>GigabitEthernet0/1</td><td class="px-4 py-3">Routed Layer 3 uplink from the second distribution switch to the HQ edge.</td></tr>
-                      <tr class="align-top"><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Provider link</th><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-EDGE-01</span><br>GigabitEthernet0/2</td><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">ISP-01</span><br>GigabitEthernet0/0</td><td class="px-4 py-3">Routed Layer 3 connection to the isolated ISP simulation.</td></tr>
+                      <tr class="align-top"><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Access uplink 1</th><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-ASW-01</span><br>GigabitEthernet0/0</td><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-DSW-01</span><br>GigabitEthernet0/0</td><td class="px-4 py-3">Routed Layer 3 access-to-distribution uplink; existing IPv4 /31 remains.</td><td class="px-4 py-3">ASW-01: <code>2001:db8:1:ff03::0/127</code><br>DSW-01: <code>2001:db8:1:ff03::1/127</code></td></tr>
+                      <tr class="align-top"><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Access uplink 2</th><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-ASW-01</span><br>GigabitEthernet0/1</td><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-DSW-02</span><br>GigabitEthernet0/0</td><td class="px-4 py-3">Routed Layer 3 access-to-distribution uplink; existing IPv4 /31 remains.</td><td class="px-4 py-3">ASW-01: <code>2001:db8:1:ff04::0/127</code><br>DSW-02: <code>2001:db8:1:ff04::1/127</code></td></tr>
+                      <tr class="align-top"><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Po12 member 1</th><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-DSW-01</span><br>GigabitEthernet0/1</td><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-DSW-02</span><br>GigabitEthernet0/1</td><td class="px-4 py-3">First member of routed Port-Channel12; the address is assigned to the logical Port-Channel interface.</td><td class="px-4 py-3">DSW-01 Po12: <code>2001:db8:1:ff00::0/127</code><br>DSW-02 Po12: <code>2001:db8:1:ff00::1/127</code></td></tr>
+                      <tr class="align-top"><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Po12 member 2</th><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-DSW-01</span><br>GigabitEthernet0/2</td><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-DSW-02</span><br>GigabitEthernet0/2</td><td class="px-4 py-3">Second member of the same routed Port-Channel12 logical link.</td><td class="px-4 py-3">Addressed on <code>Port-Channel12</code> above</td></tr>
+                      <tr class="align-top"><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Distribution uplink 1</th><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-DSW-01</span><br>GigabitEthernet0/3</td><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-EDGE-01</span><br>GigabitEthernet0/0</td><td class="px-4 py-3">Routed Layer 3 uplink from the first distribution switch to the HQ edge; existing IPv4 /31 remains.</td><td class="px-4 py-3">DSW-01: <code>2001:db8:1:ff01::0/127</code><br>EDGE-01: <code>2001:db8:1:ff01::1/127</code></td></tr>
+                      <tr class="align-top"><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Distribution uplink 2</th><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-DSW-02</span><br>GigabitEthernet0/3</td><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-EDGE-01</span><br>GigabitEthernet0/1</td><td class="px-4 py-3">Routed Layer 3 uplink from the second distribution switch to the HQ edge; existing IPv4 /31 remains.</td><td class="px-4 py-3">DSW-02: <code>2001:db8:1:ff02::0/127</code><br>EDGE-01: <code>2001:db8:1:ff02::1/127</code></td></tr>
+                      <tr class="align-top"><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Provider link</th><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">HQ-EDGE-01</span><br>GigabitEthernet0/2</td><td class="px-4 py-3"><span class="whitespace-nowrap font-semibold text-slate-900">ISP-01</span><br>GigabitEthernet0/0</td><td class="px-4 py-3">Routed Layer 3 connection to the isolated ISP simulation.</td><td class="px-4 py-3">Not allocated in this HQ IPv6 plan</td></tr>
                     </tbody>
                   </table>
                   </div>
