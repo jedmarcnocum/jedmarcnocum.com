@@ -333,6 +333,9 @@ vlan 120
                 <p class="leading-relaxed text-slate-700">
                   The next part was completely re-designing the addressing convention. Now, I will admit that what I've come up with is a chaotic combination of lots of research, AI prompts, and plenty of arguing with AI about why X is better than Y 😂—but I'm honestly still super proud of the outcome!
                 </p>
+                <p class="leading-relaxed text-slate-700">
+                  PS: Feel-free to give me tips on how to improve this plan in the LinkedIn comments or PM me. I know it can be better, and I want to learn from you all! 🙏
+                </p>
               </div>
 
               <div class="space-y-3">
@@ -402,30 +405,56 @@ vlan 120
                 Each site gets its very own shiny <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">/16</code> block. This makes a site immediately identifiable and gives us a beautifully clean route-summary boundary for when the lab eventually goes multi-site! 🌍
               </p>
 
-              <div class="overflow-x-auto rounded-lg border border-slate-200">
-                <table class="w-full min-w-[44rem] border-collapse text-left text-sm">
-                  <thead class="bg-slate-100 text-slate-900">
-                    <tr>
-                      <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Third-octet range</th>
-                      <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Reserved function</th>
-                      <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Initial Site 1 example</th>
-                    </tr>
-                  </thead>
-                  <tbody class="divide-y divide-slate-200 text-slate-700">
-                    <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">10-19</th><td class="px-4 py-3">HR</td><td class="px-4 py-3"><code>10.1.10.0/24</code></td></tr>
-                    <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">20-29</th><td class="px-4 py-3">Sales</td><td class="px-4 py-3"><code>10.1.20.0/24</code></td></tr>
-                    <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">30-39</th><td class="px-4 py-3">IT / Users</td><td class="px-4 py-3"><code>10.1.30.0/24</code></td></tr>
-                    <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">40-49</th><td class="px-4 py-3">Servers</td><td class="px-4 py-3"><code>10.1.40.0/24</code></td></tr>
-                    <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">50-59</th><td class="px-4 py-3">Guest</td><td class="px-4 py-3"><code>10.1.50.0/24</code></td></tr>
-                    <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">90-99</th><td class="px-4 py-3">Management / infrastructure</td><td class="px-4 py-3"><code>10.1.99.0/24</code></td></tr>
-                    <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">100-109</th><td class="px-4 py-3">Voice</td><td class="px-4 py-3"><code>10.1.100.0/24</code></td></tr>
-                  </tbody>
-                </table>
-              </div>
+              <section class="overflow-hidden rounded-lg border border-slate-200 bg-white" aria-labelledby="vlan-subnet-plan-title">
+                <div class="border-b border-slate-200 bg-slate-100 px-5 py-4">
+                  <h4 id="vlan-subnet-plan-title" class="font-semibold text-slate-900">Site 1 VLAN subnet plan</h4>
+                  <p class="mt-1 text-sm text-slate-600">Each function receives a dedicated third-octet range. The first subnet in each range is ready for the initial VLAN.</p>
+                </div>
+                <dl class="grid gap-3 p-5 sm:grid-cols-2">
+                  <div class="rounded-lg border border-slate-200 px-4 py-3">
+                    <div class="flex items-baseline justify-between gap-3"><dt class="font-semibold text-slate-900">HR</dt><dd class="font-mono text-sm font-semibold text-amber-300">10–19</dd></div>
+                    <dd class="mt-2 font-mono text-sm"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">10</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></dd>
+                  </div>
+                  <div class="rounded-lg border border-slate-200 px-4 py-3">
+                    <div class="flex items-baseline justify-between gap-3"><dt class="font-semibold text-slate-900">Sales</dt><dd class="font-mono text-sm font-semibold text-amber-300">20–29</dd></div>
+                    <dd class="mt-2 font-mono text-sm"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">20</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></dd>
+                  </div>
+                  <div class="rounded-lg border border-slate-200 px-4 py-3">
+                    <div class="flex items-baseline justify-between gap-3"><dt class="font-semibold text-slate-900">IT / Users</dt><dd class="font-mono text-sm font-semibold text-amber-300">30–39</dd></div>
+                    <dd class="mt-2 font-mono text-sm"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">30</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></dd>
+                  </div>
+                  <div class="rounded-lg border border-slate-200 px-4 py-3">
+                    <div class="flex items-baseline justify-between gap-3"><dt class="font-semibold text-slate-900">Servers</dt><dd class="font-mono text-sm font-semibold text-amber-300">40–49</dd></div>
+                    <dd class="mt-2 font-mono text-sm"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">40</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></dd>
+                  </div>
+                  <div class="rounded-lg border border-slate-200 px-4 py-3">
+                    <div class="flex items-baseline justify-between gap-3"><dt class="font-semibold text-slate-900">Guest</dt><dd class="font-mono text-sm font-semibold text-amber-300">50–59</dd></div>
+                    <dd class="mt-2 font-mono text-sm"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">50</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></dd>
+                  </div>
+                  <div class="rounded-lg border border-slate-200 px-4 py-3">
+                    <div class="flex items-baseline justify-between gap-3"><dt class="font-semibold text-slate-900">Management</dt><dd class="font-mono text-sm font-semibold text-amber-300">90–99</dd></div>
+                    <dd class="mt-2 font-mono text-sm"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">99</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></dd>
+                  </div>
+                  <div class="rounded-lg border border-slate-200 px-4 py-3 sm:col-span-2">
+                    <div class="flex items-baseline justify-between gap-3"><dt class="font-semibold text-slate-900">Voice</dt><dd class="font-mono text-sm font-semibold text-amber-300">100–109</dd></div>
+                    <dd class="mt-2 font-mono text-sm"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">100</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></dd>
+                  </div>
+                </dl>
+              </section>
 
-              <p class="leading-relaxed text-slate-700">
-                The third octet represents a function range, not just a permanent, rigid copy of the VLAN ID. For example, Site 1 HR kicks off at <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.1.10.0/24</code>. If that department goes on a hiring spree, <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.1.11.0/24</code> through <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.1.19.0/24</code> are patiently waiting to be used for additional HR VLANs and subnets! 🤝 They would be spun up as separate VLANs, rather than awkwardly cramming multiple <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">/24</code> networks into one VLAN.
-              </p>
+              <div class="space-y-3 leading-relaxed text-slate-700">
+                <p>
+                  The third octet represents a function range, not a permanent, rigid copy of the VLAN ID. Site 1 HR starts at <span class="whitespace-nowrap font-mono"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">10</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></span>.
+                </p>
+                <p>When HR needs more capacity, create a new, separate HR VLAN and subnet:</p>
+                <ul class="list-disc space-y-2 pl-6">
+                  <li>First expansion: <span class="whitespace-nowrap font-mono"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">11</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></span></li>
+                  <li>Further HR VLANs: <span class="whitespace-nowrap font-mono"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">12</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></span> through <span class="whitespace-nowrap font-mono"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">19</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></span></li>
+                </ul>
+                <p>
+                  Each remains its own VLAN and <span class="font-mono text-violet-300">/24</span> subnet, so expansion stays predictable instead of cramming multiple networks into one VLAN. 🤝
+                </p>
+              </div>
 
               <div class="space-y-3">
                 <h3 class="text-lg font-semibold text-slate-900">&#x1F454; Management Addresses Identify Devices</h3>
@@ -440,47 +469,83 @@ vlan 120
                     <h4 id="management-addresses-title" class="font-semibold text-slate-900">HQ management addresses</h4>
                     <p class="mt-1 text-sm text-slate-600">One predictable address per device in the Site 1 management network.</p>
                   </div>
-                  <p class="font-mono text-sm font-semibold text-slate-700">10.1.99.0/24</p>
+                  <p class="font-mono text-sm font-semibold" aria-label="10.1.99.0/24"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">99</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></p>
                 </div>
                 <dl class="divide-y divide-slate-200 px-5">
                   <div class="flex flex-col gap-1 py-3 sm:flex-row sm:items-center sm:justify-between">
                     <dt class="font-semibold text-slate-900">HQ-ASW-01</dt>
-                    <dd class="font-mono text-sm text-slate-600">10.1.99.11</dd>
+                    <dd class="font-mono text-sm" aria-label="10.1.99.11"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">99</span><span class="text-slate-500">.</span><span class="text-violet-300">11</span></dd>
                   </div>
                   <div class="flex flex-col gap-1 py-3 sm:flex-row sm:items-center sm:justify-between">
                     <dt class="font-semibold text-slate-900">HQ-DSW-01</dt>
-                    <dd class="font-mono text-sm text-slate-600">10.1.99.21</dd>
+                    <dd class="font-mono text-sm" aria-label="10.1.99.21"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">99</span><span class="text-slate-500">.</span><span class="text-violet-300">21</span></dd>
                   </div>
                   <div class="flex flex-col gap-1 py-3 sm:flex-row sm:items-center sm:justify-between">
                     <dt class="font-semibold text-slate-900">HQ-DSW-02</dt>
-                    <dd class="font-mono text-sm text-slate-600">10.1.99.22</dd>
+                    <dd class="font-mono text-sm" aria-label="10.1.99.22"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">99</span><span class="text-slate-500">.</span><span class="text-violet-300">22</span></dd>
                   </div>
                   <div class="flex flex-col gap-1 py-3 sm:flex-row sm:items-center sm:justify-between">
                     <dt class="font-semibold text-slate-900">HQ-EDGE-01</dt>
-                    <dd class="font-mono text-sm text-slate-600">10.1.99.31</dd>
+                    <dd class="font-mono text-sm" aria-label="10.1.99.31"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">99</span><span class="text-slate-500">.</span><span class="text-violet-300">31</span></dd>
                   </div>
                 </dl>
               </section>
 
               <p class="leading-relaxed text-slate-700">
-                An address like <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.1.99.21</code> practically reads itself: <strong>10</strong> for private enterprise addressing, <strong>1</strong> for Site 1, <strong>99</strong> for management, and <strong>21</strong> to identify HQ-DSW-01.
+                An address like <span class="whitespace-nowrap font-mono"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">99</span><span class="text-slate-500">.</span><span class="text-violet-300">21</span></span> practically reads itself: the private range, Site 1, and the management subnet stay consistent, while the purple <span class="font-mono text-violet-300">21</span> is the device identifier for HQ-DSW-01.
               </p>
 
               <div class="space-y-3">
                 <h3 class="text-lg font-semibold text-slate-900">&#x1F501; Loopbacks &amp; &#x1F6E3;&#xFE0F; Routed Transits</h3>
-                <ul class="list-disc space-y-2 pl-6 leading-relaxed text-slate-700">
-                  <li><strong>Loopbacks:</strong> <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.255.0.0/16</code> is reserved for device loopbacks, formatted as <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.255.&lt;SITE&gt;.&lt;DEVICE-ID&gt;/32</code>.</li>
-                  <li><strong>Routed transits:</strong> <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.254.0.0/16</code> is dedicated to transit infrastructure. We will use efficient <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">/31</code> point-to-point links wherever supported, with room reserved later for inter-site WAN links.</li>
-                </ul>
+                <p class="leading-relaxed text-slate-700">
+                  Infrastructure loopbacks use a site-aware format, so every router and switch receives a stable identity that stays predictable as the lab expands.
+                </p>
+                <section class="overflow-hidden rounded-lg border border-slate-200 bg-white" aria-labelledby="loopback-plan-title">
+                  <div class="flex flex-col gap-1 border-b border-slate-200 bg-slate-100 px-5 py-4 sm:flex-row sm:items-baseline sm:justify-between">
+                    <div>
+                      <h4 id="loopback-plan-title" class="font-semibold text-slate-900">Site-aware loopback plan</h4>
+                      <p class="mt-1 text-sm text-slate-600">Reserved infrastructure loopback space.</p>
+                    </div>
+                    <p class="font-mono text-sm font-semibold" aria-label="10.255.0.0/16"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-amber-300">255</span><span class="text-slate-500">.</span><span class="text-sky-300">0</span><span class="text-slate-500">.</span><span class="text-violet-300">0/16</span></p>
+                  </div>
+                  <div class="space-y-4 p-5">
+                    <p class="font-mono text-sm" aria-label="10.255 dot site dot device ID slash 32"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-amber-300">255</span><span class="text-slate-500">.</span><span class="text-sky-300">&lt;SITE&gt;</span><span class="text-slate-500">.</span><span class="text-violet-300">&lt;DEVICE-ID&gt;/32</span></p>
+                    <dl class="divide-y divide-slate-200 border-y border-slate-200">
+                      <div class="grid gap-1 py-3 sm:grid-cols-[1fr_5rem_auto] sm:items-center sm:gap-4">
+                        <dt class="font-semibold text-slate-900">HQ-DSW-01</dt>
+                        <dd class="font-mono text-sm text-violet-300">ID 1</dd>
+                        <dd class="font-mono text-sm"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-amber-300">255</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-violet-300">1/32</span></dd>
+                      </div>
+                      <div class="grid gap-1 py-3 sm:grid-cols-[1fr_5rem_auto] sm:items-center sm:gap-4">
+                        <dt class="font-semibold text-slate-900">HQ-DSW-02</dt>
+                        <dd class="font-mono text-sm text-violet-300">ID 2</dd>
+                        <dd class="font-mono text-sm"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-amber-300">255</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-violet-300">2/32</span></dd>
+                      </div>
+                      <div class="grid gap-1 py-3 sm:grid-cols-[1fr_5rem_auto] sm:items-center sm:gap-4">
+                        <dt class="font-semibold text-slate-900">HQ-EDGE-01</dt>
+                        <dd class="font-mono text-sm text-violet-300">ID 10</dd>
+                        <dd class="font-mono text-sm"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-amber-300">255</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-violet-300">10/32</span></dd>
+                      </div>
+                      <div class="grid gap-1 py-3 sm:grid-cols-[1fr_5rem_auto] sm:items-center sm:gap-4">
+                        <dt class="font-semibold text-slate-900">HQ-ASW-01</dt>
+                        <dd class="font-mono text-sm text-violet-300">ID 11</dd>
+                        <dd class="font-mono text-sm"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-amber-300">255</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-violet-300">11/32</span></dd>
+                      </div>
+                    </dl>
+                  </div>
+                </section>
+                <p class="leading-relaxed text-slate-700">
+                  <strong>Routed transits:</strong> <span class="whitespace-nowrap font-mono"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-amber-300">254</span><span class="text-slate-500">.</span><span class="text-sky-300">0</span><span class="text-slate-500">.</span><span class="text-violet-300">0/16</span></span> is dedicated to transit infrastructure. We will use efficient <span class="font-mono text-violet-300">/31</span> point-to-point links wherever supported, with room reserved later for inter-site WAN links.
+                </p>
               </div>
 
               <div class="space-y-3">
                 <h3 class="text-lg font-semibold text-slate-900">&#x1F4DD; Addressing Summary</h3>
                 <ul class="list-disc space-y-2 pl-6 leading-relaxed text-slate-700">
-                  <li><strong>LAN / VLAN networks:</strong> <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.&lt;SITE&gt;.&lt;FUNCTION/SUBNET&gt;.&lt;HOST&gt;</code></li>
-                  <li><strong>Management:</strong> <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.&lt;SITE&gt;.99.&lt;DEVICE&gt;</code></li>
-                  <li><strong>Loopbacks:</strong> <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.255.&lt;SITE&gt;.&lt;DEVICE-ID&gt;/32</code></li>
-                  <li><strong>Routed transits:</strong> <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.254.&lt;SITE&gt;.&lt;LINK&gt;/31</code></li>
+                  <li><strong>LAN / VLAN networks:</strong> <span class="whitespace-nowrap font-mono"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">&lt;SITE&gt;</span><span class="text-slate-500">.</span><span class="text-amber-300">&lt;FUNCTION/SUBNET&gt;</span><span class="text-slate-500">.</span><span class="text-violet-300">&lt;HOST&gt;</span></span></li>
+                  <li><strong>Management:</strong> <span class="whitespace-nowrap font-mono"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">&lt;SITE&gt;</span><span class="text-slate-500">.</span><span class="text-amber-300">99</span><span class="text-slate-500">.</span><span class="text-violet-300">&lt;DEVICE&gt;</span></span></li>
+                  <li><strong>Loopbacks:</strong> <span class="whitespace-nowrap font-mono"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-amber-300">255</span><span class="text-slate-500">.</span><span class="text-sky-300">&lt;SITE&gt;</span><span class="text-slate-500">.</span><span class="text-violet-300">&lt;DEVICE-ID&gt;/32</span></span></li>
+                  <li><strong>Routed transits:</strong> <span class="whitespace-nowrap font-mono"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-amber-300">254</span><span class="text-slate-500">.</span><span class="text-sky-300">&lt;SITE&gt;</span><span class="text-slate-500">.</span><span class="text-violet-300">&lt;LINK&gt;/31</span></span></li>
                 </ul>
               </div>
 

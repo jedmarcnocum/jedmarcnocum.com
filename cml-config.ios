@@ -36,4 +36,14 @@ name PARKING
 vlan 999
 name NATIVE-VLAN
 
+no vlan 10
+no vlan 20
+no vlan 30
+no vlan 40
+no vlan 50
+no vlan 99
+no vlan 100
+no vlan 998
+no vlan 999
+
 spanning-tree mode rapid-pvst

@@ -756,10 +756,6 @@ body {
   width: 100%;
 }
 
-.min-w-\[44rem\] {
-  min-width: 44rem;
-}
-
 .min-w-\[48rem\] {
   min-width: 48rem;
 }
@@ -839,6 +835,10 @@ body {
 
 .items-center {
   align-items: center;
+}
+
+.items-baseline {
+  align-items: baseline;
 }
 
 .justify-center {
@@ -2379,6 +2379,10 @@ body {
     right: -1.5rem;
   }
 
+  .sm\:col-span-2 {
+    grid-column: span 2 / span 2;
+  }
+
   .sm\:mt-0 {
     margin-top: 0px;
   }
@@ -2397,6 +2401,10 @@ body {
 
   .sm\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sm\:grid-cols-\[1fr_5rem_auto\] {
+    grid-template-columns: 1fr 5rem auto;
   }
 
   .sm\:grid-cols-\[5rem_1fr_auto\] {
