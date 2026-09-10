@@ -44,13 +44,13 @@
             <header class="space-y-4">
               <time class="block text-sm text-slate-500" datetime="2026-09">September 2026</time>
               <h1 class="text-3xl font-bold tracking-tight text-slate-900">
-                🏗️ CML Lab Rebuild, Part 2: The Five-Node Foundation
+                🏗️ CML Lab Rebuild, Part 2: The Five-Node Foundation (and a Plot Twist!)
               </h1>
             </header>
 
             <section class="space-y-5 border-t border-slate-200 pt-6">
               <p class="leading-relaxed text-slate-700">
-                Hello there! 👋 As promised, we're keeping the momentum going with Part 2 of our CML rebuild blog series! As planned, I’ve spun up five nodes in our CML lab, connected the links, and named the devices using a clean format: <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">AREA-DEVICE_TYPE-NUMBER</code>. 🚀
+                Hello there! 👋 Welcome back to Part 2 of the CML rebuild blog series. As planned, I’ve spun up five nodes in our CML lab, connected the links, and named the devices using a clean format: <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">AREA-DEVICE_TYPE-NUMBER</code>. 🚀
               </p>
 
               <figure class="space-y-3">
@@ -67,21 +67,32 @@
 
             <section class="space-y-5 border-t border-slate-200 pt-6">
               <div class="space-y-3">
-                <h2 class="text-xl font-semibold text-slate-900">🤔 Why these five nodes?</h2>
+                <h2 class="text-xl font-semibold text-slate-900">🤔 The Original Plan vs. The Plot Twist</h2>
                 <p class="leading-relaxed text-slate-700">
-                  These five nodes form a compact HQ design with a collapsed core: the distribution switches provide Layer 2 toward access and Layer 3 toward the edge.
+                  I’ll admit, I was so excited to start labbing that I completely jumped the gun right after adding the nodes! My original plan was to just copy the exact same layout and VLAN scheme from my old CCNA lab and build a classic compact HQ with a collapsed core. That old lab was basically built like a Lego set—completely unplanned and snapped together piece by piece as I progressed through my lectures (with lots of AI help... thanks, AI! 😉). I managed to build it, and while it wasn't perfect, hey, everyone starts somewhere! 🤷‍♂️
+                </p>
+
+                <p class="leading-relaxed text-slate-700">
+                  It was a very happy-go-lucky approach back then, and while it was great for getting my feet wet, I realized that for this rebuild, I need to actually plan in advance instead of just winging it. I didn't want to just copy-paste my past work; I wanted a genuine learning experience. So, after taking a step back and doing some research on modern network topologies, I decided to rip up the original plan and pivot to a Routed Campus Design! 🔄
+                </p>
+           
+                <p class="leading-relaxed text-slate-700">
+                  Instead of dealing with Spanning Tree (STP) blocking ports and stretching Layer 2 domains, we are pushing Layer 3 routing all the way down. STP still sticks around for local Layer 2 protection, but it's officially fired from its job of controlling upstream routed paths! 🛑 Instead, OSPF ECMP steps in to handle load balancing and failure resilience.
+                </p>
+                <p class="leading-relaxed text-slate-700">
+                  Here is how our five nodes fit into this new, modernized architecture:
                 </p>
               </div>
 
               <ul class="list-disc space-y-3 pl-5 leading-relaxed text-slate-700">
-                <li><strong>HQ-ASW-01 (Access):</strong> The foundation for redundant access paths, VLAN trunks, and Rapid-PVST.</li>
-                <li><strong>HQ-DSW-01 &amp; 02 (Distribution):</strong> Form the collapsed core. They provide inter-VLAN routing and will eventually load-balance HSRP and spanning-tree roles.</li>
+                <li><strong>HQ-ASW-01 (Access):</strong> Instead of just Layer 2 VLAN trunks, this switch will now participate in routing, eliminating the need for STP to manage redundant uplinks.</li>
+                <li><strong>HQ-DSW-01 &amp; 02 (Distribution):</strong> These act as our routed core/distribution layer. No more HSRP or complex Layer 2 load balancing—we'll rely on OSPF ECMP!</li>
                 <li><strong>HQ-EDGE-01 (Edge Router):</strong> The Layer 3 boundary between HQ and the simulated provider.</li>
                 <li><strong>ISP-01 (ISP Router):</strong> An isolated provider simulation to test a proper external routing boundary.</li>
               </ul>
 
               <p class="leading-relaxed text-slate-700">
-                Keeping it to five nodes lets us concentrate fully on the switching and dual-stack foundation for now. 🧱 The broader multi-access, voice, and wireless campus will arrive later!
+                Even though the logical design shifted halfway through, the physical topology and foundational setups remain exactly the same. Let's look at how we built that foundation. 🧱
               </p>
             </section>
 
@@ -89,7 +100,7 @@
               <div class="space-y-3">
                 <h2 class="text-xl font-semibold text-slate-900">⚙️ Base Device Configuration</h2>
                 <p class="leading-relaxed text-slate-700">
-                  With the nodes linked up, I applied a consistent starting configuration. This establishes local administrative access, protects privileged mode, enables SSH, and kills unused HTTP services before we even touch the network-specific config. 🔒
+                  Whether you are building a Layer 2 or Layer 3 topology, the baseline is identical. With the nodes linked up, I applied a consistent starting configuration to establish local administrative access, protect privileged mode, enable SSH, and kill unused HTTP services before touching the routing config. 🔒
                 </p>
               </div>
 
@@ -122,10 +133,10 @@ line vty 0 6
               <div class="space-y-2">
                 <h2 class="text-xl font-semibold text-slate-900">🗺️ Device and Interface Map</h2>
                 <p class="leading-relaxed text-slate-700">
-                  While wiring up each link, I made sure to add interface descriptions. I didn't practice this much in my original CCNA lab, but I want to build the habit early! Clear descriptions make the cabling map infinitely easier to review and troubleshoot. 💡
+                  Because the physical links didn't change during my pivot to a routed design, my interface mappings stayed intact. While wiring up each link, I made sure to add interface descriptions—a habit I didn't practice much in my original CCNA lab, but want to build early on here! 💡
                 </p>
                 <p class="leading-relaxed text-slate-700">
-                  Instead of relying on the CML GUI, I used <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">show lldp neighbors</code> to confirm the local interface, neighbouring device, and remote port. I know GUIs are fast, but I want to keep my manual CLI skills sharp. 🥷
+                  Instead of relying on the CML GUI, I used <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">show lldp neighbors</code> to confirm the local interface, neighboring device, and remote port. GUIs are fast, but keeping manual CLI skills sharp is crucial. 🥷
                 </p>
               </div>
 
@@ -314,16 +325,13 @@ vlan 120
               <div class="space-y-3">
                 <h2 class="text-xl font-semibold text-slate-900">🚦 Getting Started with VLANs and Subnetting</h2>
                 <p class="leading-relaxed text-slate-700">
-                  I was so excited to start labbing that I completely forgot to plan extensively for the VLAN names, subnetting/addressing, and the future expansion of the lab! 🤦‍♂️ So, naturally, I just copied the whole VLAN naming and addressing scheme from my old topology and slapped it onto CML.
+                  With the physical links wired up, mapped out, and the routed architecture officially decided, it was time to tackle the logical side: IP addressing.
                 </p>
                 <p class="leading-relaxed text-slate-700">
-                  Now, as I was starting to configure STP and potentially HSRP, I remembered reading an article about a different approach to designing network topologies. I didn't mind it too much at the time since my main focus was just studying the CCNA objectives, and I honestly had no idea how to design a topology from scratch yet. My old CCNA lab was basically built like a Lego set - completely unplanned and snapped together piece by piece as I progressed through my lectures (with lots of AI help... thanks, AI! 😉). I managed to build the topology, and while it wasn't perfect, hey, everyone starts somewhere! 🤷‍♂️
+                  Because VLANs and SVIs will now live right on the access switches with purely routed upstream links, my old CCNA addressing scheme wasn't going to cut it. I needed a clean, scalable subnetting plan that would play nicely with our new routed design and give this rebuild a much cleaner path forward.
                 </p>
                 <p class="leading-relaxed text-slate-700">
-                  Anyway, after doing some research, I decided to pivot to a <strong>Routed Campus Design</strong>. In this model, VLANs and SVIs live right on the access switches, and the upstream uplinks are purely routed links. STP still sticks around for local Layer 2 protection, but it's officially fired from its job of controlling upstream routed paths! 🛑 Instead, OSPF ECMP steps in to handle load balancing and failure resilience. It gives this rebuild a much cleaner path forward than just copy-pasting the past.
-                </p>
-                <p class="leading-relaxed text-slate-700">
-                  The next part was re-designing the addressing convention. Now, I will admit that what I've come up with is a chaotic combination of lots of research, AI prompts, and plenty of arguing with AI about why X is better than Y 😂 - but I'm honestly still super proud of the outcome!
+                  The next part was completely re-designing the addressing convention. Now, I will admit that what I've come up with is a chaotic combination of lots of research, AI prompts, and plenty of arguing with AI about why X is better than Y 😂—but I'm honestly still super proud of the outcome!
                 </p>
               </div>
 
