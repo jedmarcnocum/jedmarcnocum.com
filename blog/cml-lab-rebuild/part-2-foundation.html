@@ -44,13 +44,13 @@
             <header class="space-y-4">
               <time class="block text-sm text-slate-500" datetime="2026-09">September 2026</time>
               <h1 class="text-3xl font-bold tracking-tight text-slate-900">
-                CML Lab Rebuild, Part 2: The Five-Node Foundation
+                🏗️ CML Lab Rebuild, Part 2: The Five-Node Foundation
               </h1>
             </header>
 
             <section class="space-y-5 border-t border-slate-200 pt-6">
               <p class="leading-relaxed text-slate-700">
-                Hello there! As promised, we're now continuing with Part 2 of our CML rebuild blog series! As planned, I have added five nodes in our CML lab, added the links, and named the devices in this format: <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">AREA-DEVICE_TYPE-NUMBER</code>.
+                Hello there! 👋 As promised, we're keeping the momentum going with Part 2 of our CML rebuild blog series! As planned, I’ve spun up five nodes in our CML lab, connected the links, and named the devices using a clean format: <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">AREA-DEVICE_TYPE-NUMBER</code>. 🚀
               </p>
 
               <figure class="space-y-3">
@@ -67,41 +67,29 @@
 
             <section class="space-y-5 border-t border-slate-200 pt-6">
               <div class="space-y-3">
-                <h2 class="text-xl font-semibold text-slate-900">Why these five nodes?</h2>
+                <h2 class="text-xl font-semibold text-slate-900">🤔 Why these five nodes?</h2>
                 <p class="leading-relaxed text-slate-700">
                   These five nodes form a compact HQ design with a collapsed core: the distribution switches provide Layer 2 toward access and Layer 3 toward the edge.
                 </p>
               </div>
 
-              <div class="overflow-x-auto rounded-lg border border-slate-200">
-                <table class="min-w-full border-collapse text-left text-sm">
-                  <thead class="bg-slate-100 text-slate-900">
-                    <tr>
-                      <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Node</th>
-                      <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Node type</th>
-                      <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Why it is in the topology</th>
-                    </tr>
-                  </thead>
-                  <tbody class="divide-y divide-slate-200 text-slate-700">
-                    <tr class="align-top"><th class="px-4 py-3 font-semibold text-slate-900" scope="row">HQ-ASW-01</th><td class="px-4 py-3">IOL-L2 Layer 2 switch</td><td class="px-4 py-3">Represents the access layer where clients connect. Its two separate uplinks to the distribution pair establish the foundation for redundant access paths, VLAN trunks, and Rapid-PVST.</td></tr>
-                    <tr class="align-top"><th class="px-4 py-3 font-semibold text-slate-900" scope="row">HQ-DSW-01</th><td class="px-4 py-3">IOL-L2 multilayer distribution switch</td><td class="px-4 py-3">Forms one half of the collapsed core. It will provide SVIs and inter-VLAN routing, then share gateway and spanning-tree duties with HQ-DSW-02 as the lab grows.</td></tr>
-                    <tr class="align-top"><th class="px-4 py-3 font-semibold text-slate-900" scope="row">HQ-DSW-02</th><td class="px-4 py-3">IOL-L2 multilayer distribution switch</td><td class="px-4 py-3">Creates a second distribution path without inventing a larger campus too early. Later, the pair will load-balance HSRP and Rapid-PVST roles by VLAN rather than using a permanent active/backup design.</td></tr>
-                    <tr class="align-top"><th class="px-4 py-3 font-semibold text-slate-900" scope="row">HQ-EDGE-01</th><td class="px-4 py-3">IOL router</td><td class="px-4 py-3">Creates the Layer 3 boundary between HQ and the simulated provider. It gives the distribution layer routed upstream links now and becomes the IPv4 PAT point in a later security phase.</td></tr>
-                    <tr class="align-top"><th class="px-4 py-3 font-semibold text-slate-900" scope="row">ISP-01</th><td class="px-4 py-3">IOL router</td><td class="px-4 py-3">Acts as an isolated provider simulation, so the lab can test a proper external routing boundary without placing the ISP inside HQ OSPF or relying on the public Internet.</td></tr>
-                  </tbody>
-                </table>
-              </div>
+              <ul class="list-disc space-y-3 pl-5 leading-relaxed text-slate-700">
+                <li><strong>HQ-ASW-01 (Access):</strong> The foundation for redundant access paths, VLAN trunks, and Rapid-PVST.</li>
+                <li><strong>HQ-DSW-01 &amp; 02 (Distribution):</strong> Form the collapsed core. They provide inter-VLAN routing and will eventually load-balance HSRP and spanning-tree roles.</li>
+                <li><strong>HQ-EDGE-01 (Edge Router):</strong> The Layer 3 boundary between HQ and the simulated provider.</li>
+                <li><strong>ISP-01 (ISP Router):</strong> An isolated provider simulation to test a proper external routing boundary.</li>
+              </ul>
 
               <p class="leading-relaxed text-slate-700">
-                Keeping five nodes for now lets Part 2 concentrate on the switching and dual-stack foundation. The next phases add dynamic routing and HSRP, then external endpoints and services; the broader multi-access, voice, and wireless campus arrives later in the series.
+                Keeping it to five nodes lets us concentrate fully on the switching and dual-stack foundation for now. 🧱 The broader multi-access, voice, and wireless campus will arrive later!
               </p>
             </section>
 
             <section class="space-y-5 border-t border-slate-200 pt-6">
               <div class="space-y-3">
-                <h2 class="text-xl font-semibold text-slate-900">Base device configuration</h2>
+                <h2 class="text-xl font-semibold text-slate-900">⚙️ Base Device Configuration</h2>
                 <p class="leading-relaxed text-slate-700">
-                  With the five nodes named and linked, I applied a consistent starting configuration to each device. This establishes local administrative access, protects privileged mode, enables SSH, and disables the unused HTTP services before the network-specific configuration begins.
+                  With the nodes linked up, I applied a consistent starting configuration. This establishes local administrative access, protects privileged mode, enables SSH, and kills unused HTTP services before we even touch the network-specific config. 🔒
                 </p>
               </div>
 
@@ -126,27 +114,18 @@ line vty 0 6
               </div>
 
               <p class="leading-relaxed text-slate-700">
-                The secret values are intentionally omitted here. Each device uses its own secure values, while the shared baseline keeps console sessions tidy and permits remote management through SSH only.
-              </p>
-              <p class="leading-relaxed text-slate-700">
-                These local accounts are a lab baseline; centralized AAA and management filtering are later hardening work.
+                Each device gets its own secure secret values, while the shared baseline keeps our console sessions tidy. 🤫
               </p>
             </section>
 
             <section class="space-y-5 border-t border-slate-200 pt-6">
               <div class="space-y-2">
-                <h2 class="text-xl font-semibold text-slate-900">Device and interface map</h2>
+                <h2 class="text-xl font-semibold text-slate-900">🗺️ Device and Interface Map</h2>
                 <p class="leading-relaxed text-slate-700">
-                  While connecting each link, I am also adding interface descriptions. I did not practise this in my original CCNA lab, but I want to build the habit early: clear descriptions make the cabling map easier to understand, review, and troubleshoot.
+                  While wiring up each link, I made sure to add interface descriptions. I didn't practice this much in my original CCNA lab, but I want to build the habit early! Clear descriptions make the cabling map infinitely easier to review and troubleshoot. 💡
                 </p>
                 <p class="leading-relaxed text-slate-700">
-                  One thing I learned while studying for the CCNA is to use the available <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">show</code> commands to reach the goal in front of me, whether that means debugging an issue or simply working out which interface connects to which device.
-                </p>
-                <p class="leading-relaxed text-slate-700">
-                  While writing these descriptions, I did not rely on the CML GUI to read the interface labels on each link. Instead, I used LLDP to confirm the local interface, neighbouring device, and remote port before documenting the connection. I know that GUI's and automation are useful and faster to use, but I want to keep my manual CLI skills sharp. :)
-                </p>
-                <p class="leading-relaxed text-slate-700">
-                  Beyond being a best practice, descriptions keep the intent of each interface clear even when a discovery protocol is unavailable. They also make a mismatched or rogue connection easier to spot when the documented link does not match the device actually connected, and they provide useful context for future alerts and logging.
+                  Instead of relying on the CML GUI, I used <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">show lldp neighbors</code> to confirm the local interface, neighbouring device, and remote port. I know GUIs are fast, but I want to keep my manual CLI skills sharp. 🥷
                 </p>
               </div>
 
@@ -174,7 +153,7 @@ line vty 0 6
                 </figcaption>
               </figure>
               <p class="leading-relaxed text-slate-700">
-                The current physical layout is available below for readers who want to inspect the exact ports and the role of each connection before the configuration work begins.
+                Open the table below to inspect the exact ports and the role of each connection.
               </p>
               <details class="rounded-lg border border-slate-200">
                 <summary class="cursor-pointer px-4 py-3 font-semibold text-indigo-600 marker:text-slate-500 hover:text-indigo-700">
@@ -208,6 +187,236 @@ line vty 0 6
                 </table>
                 </div>
               </details>
+            </section>
+
+            <section class="hidden space-y-5 border-t border-slate-200 pt-6" aria-hidden="true">
+              <div class="space-y-3">
+                <h2 class="text-xl font-semibold text-slate-900">🚦 Getting Started with VLANs</h2>
+                <p class="leading-relaxed text-slate-700">
+                  Now that the groundwork is done, it’s time to get our hands dirty with VLANs and Subnetting! 🙌
+                </p>
+                <p class="leading-relaxed text-slate-700">
+                  The VLANs are identical to my original CCNA lab, but with two awesome additions for a deliberate security baseline:
+                </p>
+                <ul class="list-disc space-y-2 pl-5 leading-relaxed text-slate-700">
+                  <li><strong>VLAN 998:</strong> The “parking” or black-hole VLAN for unused ports. 🕳️</li>
+                  <li><strong>VLAN 999:</strong> The native VLAN for trunks, moving away from the default VLAN 1. 🛡️</li>
+                </ul>
+
+                <p class="leading-relaxed text-slate-700">
+                  For the subnets, I’m using the same /24 IPv4 subnets and /64 IPv6 prefixes from my original CCNA lab. This keeps the addressing simple and allows for expansion later.
+                </p>
+              </div>
+
+              <div class="overflow-x-auto rounded-lg border border-slate-200">
+                <table class="w-full min-w-[48rem] border-collapse text-left text-sm">
+                  <thead class="bg-slate-100 text-slate-900">
+                    <tr>
+                      <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">VLAN</th>
+                      <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Name</th>
+                      <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">IPv4 subnet</th>
+                      <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">IPv6 prefix</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-200 text-slate-700">
+                    <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">10</th><td class="px-4 py-3"><code>HR-USERS</code></td><td class="px-4 py-3"><code>192.168.10.0<span class="font-semibold">/24</span></code></td><td class="px-4 py-3"><code>2001:db8:1:10::<span class="font-semibold">/64</span></code></td></tr>
+                    <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">20</th><td class="px-4 py-3"><code>SALES-USERS</code></td><td class="px-4 py-3"><code>192.168.20.0<span class="font-semibold">/24</span></code></td><td class="px-4 py-3"><code>2001:db8:1:20::<span class="font-semibold">/64</span></code></td></tr>
+                    <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">30</th><td class="px-4 py-3"><code>IT-USERS</code></td><td class="px-4 py-3"><code>192.168.30.0<span class="font-semibold">/24</span></code></td><td class="px-4 py-3"><code>2001:db8:1:30::<span class="font-semibold">/64</span></code></td></tr>
+                    <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">40</th><td class="px-4 py-3"><code>SERVERS</code></td><td class="px-4 py-3"><code>192.168.40.0<span class="font-semibold">/24</span></code></td><td class="px-4 py-3"><code>2001:db8:1:40::<span class="font-semibold">/64</span></code></td></tr>
+                    <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">50</th><td class="px-4 py-3"><code>GUEST-WIFI</code></td><td class="px-4 py-3"><code>192.168.50.0<span class="font-semibold">/24</span></code></td><td class="px-4 py-3"><code>2001:db8:1:50::<span class="font-semibold">/64</span></code></td></tr>
+                    <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">99</th><td class="px-4 py-3"><code>NETWORK-MGMT</code></td><td class="px-4 py-3"><code>192.168.99.0<span class="font-semibold">/24</span></code></td><td class="px-4 py-3"><code>2001:db8:1:99::<span class="font-semibold">/64</span></code></td></tr>
+                    <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">100</th><td class="px-4 py-3"><code>VOICE</code></td><td class="px-4 py-3"><code>192.168.100.0<span class="font-semibold">/24</span></code></td><td class="px-4 py-3"><code>2001:db8:1:100::<span class="font-semibold">/64</span></code></td></tr>
+                    <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">998</th><td class="px-4 py-3"><code>PARKING</code></td><td class="px-4 py-3">None - no SVI</td><td class="px-4 py-3">None - no SVI</td></tr>
+                    <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">999</th><td class="px-4 py-3"><code>NATIVE-VLAN</code></td><td class="px-4 py-3">None - no SVI</td><td class="px-4 py-3">None - no SVI</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </section>
+
+            <section class="hidden space-y-5 border-t border-slate-200 pt-6" aria-hidden="true">
+              <div class="space-y-3">
+                <h2 class="text-xl font-semibold text-slate-900">Rethinking the spanning-tree plan</h2>
+                <p class="leading-relaxed text-slate-700">
+                  After creating the VLANs and moving on to STP, I reviewed my CCNA lab topology to work out how I could reproduce the same steps here. My CCNA lab uses a traditional campus design, so I asked AI (thanks, AI!) to evaluate the topology, identify improvements, and show me other design options. That led me to the routed campus design.
+                </p>
+                <p class="leading-relaxed text-slate-700">
+                  Before configuring STP on the switches, I decided to learn how a routed design differs from my current topology. A routed campus reduces reliance on STP to solve upstream loop issues and on FHRP for gateway redundancy: routed links can use OSPF equal-cost multipath (ECMP) for load balancing and failure resilience. The VLANs and SVIs move to the access switches instead of staying on the distribution switches as they did in my old CCNA lab.
+                </p>
+                <p class="leading-relaxed text-slate-700">
+                  I had already configured the spanning-tree priorities in CML and started writing this section 😅, but no worries! I can revert the distribution-switch VLAN work with the matching <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">no</code> commands and retain the VLANs on the access switch. 😉
+                </p>
+              </div>
+
+              <div class="space-y-3">
+                <h3 class="text-lg font-semibold text-slate-900">The block-of-100 method</h3>
+                <p class="leading-relaxed text-slate-700">
+                  After lots of coffee and chats with AI, I landed on the block-of-100 method for the new VLAN naming and subnetting plan. Instead of assigning VLAN IDs to HR, IT, and voice at random as the network grows, each access switch receives its own block of 100 VLAN IDs and a corresponding larger address allocation, such as a <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">/16</code> or <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">/20</code> supernet.
+                </p>
+              </div>
+
+              <div class="overflow-x-auto rounded-lg border border-slate-200">
+                <table class="w-full min-w-[57rem] border-collapse text-left text-sm">
+                  <thead class="bg-slate-100 text-slate-900">
+                    <tr>
+                      <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Access switch</th>
+                      <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Department or service</th>
+                      <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">VLAN</th>
+                      <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Subnet</th>
+                      <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">VLAN name</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-200 text-slate-700">
+                    <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="rowgroup" rowspan="3">Access Switch 1<br><span class="font-normal text-slate-500">Building A / Block 100</span></th><td class="px-4 py-3">HR</td><td class="px-4 py-3"><code>110</code></td><td class="px-4 py-3"><code>192.168.110.0/24</code></td><td class="px-4 py-3"><code>AS1-HR</code></td></tr>
+                    <tr><td class="px-4 py-3">IT</td><td class="px-4 py-3"><code>120</code></td><td class="px-4 py-3"><code>192.168.120.0/24</code></td><td class="px-4 py-3"><code>AS1-IT</code></td></tr>
+                    <tr><td class="px-4 py-3">Voice</td><td class="px-4 py-3"><code>130</code></td><td class="px-4 py-3"><code>192.168.130.0/24</code></td><td class="px-4 py-3"><code>AS1-VOICE</code></td></tr>
+                    <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="rowgroup" rowspan="3">Access Switch 2<br><span class="font-normal text-slate-500">Building B / Block 200</span></th><td class="px-4 py-3">HR</td><td class="px-4 py-3"><code>210</code></td><td class="px-4 py-3"><code>192.168.210.0/24</code></td><td class="px-4 py-3"><code>AS2-HR</code></td></tr>
+                    <tr><td class="px-4 py-3">IT</td><td class="px-4 py-3"><code>220</code></td><td class="px-4 py-3"><code>192.168.220.0/24</code></td><td class="px-4 py-3"><code>AS2-IT</code></td></tr>
+                    <tr><td class="px-4 py-3">Voice</td><td class="px-4 py-3"><code>230</code></td><td class="px-4 py-3"><code>192.168.230.0/24</code></td><td class="px-4 py-3"><code>AS2-VOICE</code></td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="space-y-3">
+                <h3 class="text-lg font-semibold text-slate-900">Leaving room to grow</h3>
+                <p class="leading-relaxed text-slate-700">
+                  The gap between <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">VLAN 110</code> and <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">VLAN 120</code> is intentional. HR starts with <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">192.168.110.0/24</code>, which provides 254 usable addresses, while <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">192.168.111.0/24</code> through <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">192.168.119.0/24</code> remain reserved for HR expansion on the same switch. IT then owns the next block, <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">.120</code> through <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">.129</code>, followed by voice at <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">.130</code> through <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">.139</code>. Each service block can therefore grow across ten <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">/24</code> VLANs - up to 2,540 usable addresses - without rewriting the addressing scheme.
+                </p>
+              </div>
+
+              <p class="leading-relaxed text-slate-700">
+                This makes the schema predictable. If I see a syslog message or an address such as <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">192.168.210.45</code>, I can immediately tell that it is an HR device on Access Switch 2 in VLAN 210, without checking a spreadsheet.
+              </p>
+
+              <div class="overflow-x-auto rounded-lg border border-neutral-700 bg-neutral-800 shadow-sm">
+                <div class="border-b border-neutral-700 px-4 py-2 font-mono text-xs text-neutral-400">On Access Switch 1</div>
+                <pre class="min-w-max p-5 font-mono text-sm leading-7 text-emerald-200"><code>vlan 110
+ name AS1-HR-NET
+!
+vlan 120
+ name AS1-IT-MGMT</code></pre>
+              </div>
+
+              <div class="space-y-3">
+                <h3 class="text-lg font-semibold text-slate-900">Design checks as the lab scales</h3>
+                <ul class="list-disc space-y-2 pl-5 leading-relaxed text-slate-700">
+                  <li><strong>Include a location anchor:</strong> Do not name a local Layer 3 switch VLAN only <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">HR</code>. Include the switch or floor identifier, such as <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">AS1-HR</code> or <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">FL1-HR</code>, so routing tables stay unambiguous.</li>
+                  <li><strong>Watch the octet limit:</strong> The third octet of an IPv4 address stops at 255. A direct VLAN-to-octet convention eventually needs a different plan as VLAN counts grow.</li>
+                  <li><strong>Plan for larger environments:</strong> Beyond 255 VLANs, use a <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">/23</code> or <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">/22</code> allocation per switch, or use a <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.BuildingID.VLAN.0/24</code> scheme that uses the last two octets for the VLAN ID.</li>
+                </ul>
+                <p class="leading-relaxed text-slate-700">
+                  We may not reach the 255-VLAN limit in this lab, but it is a useful scaling consideration to take into future work. :)
+                </p>
+              </div>
+            </section>
+
+            <section class="space-y-6 border-t border-slate-200 pt-6">
+              <div class="space-y-3">
+                <h2 class="text-xl font-semibold text-slate-900">🚦 Getting Started with VLANs and Subnetting</h2>
+                <p class="leading-relaxed text-slate-700">
+                  I was so excited to start labbing that I completely forgot to plan extensively for the VLAN names, subnetting/addressing, and the future expansion of the lab! 🤦‍♂️ So, naturally, I just copied the whole VLAN naming and addressing scheme from my old topology and slapped it onto CML.
+                </p>
+                <p class="leading-relaxed text-slate-700">
+                  Now, as I was starting to configure STP and potentially HSRP, I remembered reading an article about a different approach to designing network topologies. I didn't mind it too much at the time since my main focus was just studying the CCNA objectives, and I honestly had no idea how to design a topology from scratch yet. My old CCNA lab was basically built like a Lego set - completely unplanned and snapped together piece by piece as I progressed through my lectures (with lots of AI help... thanks, AI! 😉). I managed to build the topology, and while it wasn't perfect, hey, everyone starts somewhere! 🤷‍♂️
+                </p>
+                <p class="leading-relaxed text-slate-700">
+                  Anyway, after doing some research, I decided to pivot to a <strong>Routed Campus Design</strong>. In this model, VLANs and SVIs live right on the access switches, and the upstream uplinks are purely routed links. STP still sticks around for local Layer 2 protection, but it's officially fired from its job of controlling upstream routed paths! 🛑 Instead, OSPF ECMP steps in to handle load balancing and failure resilience. It gives this rebuild a much cleaner path forward than just copy-pasting the past.
+                </p>
+                <p class="leading-relaxed text-slate-700">
+                  The next part was re-designing the addressing convention. Now, I will admit that what I've come up with is a chaotic combination of lots of research, AI prompts, and plenty of arguing with AI about why X is better than Y 😂 - but I'm honestly still super proud of the outcome!
+                </p>
+              </div>
+
+              <div class="space-y-3">
+                <h3 class="text-lg font-semibold text-slate-900">📈 A Scalable Private Addressing Plan</h3>
+                <p class="leading-relaxed text-slate-700">
+                  Instead of sticking with the tired old <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">192.168.x.x</code> layout, our rebuilt enterprise topology is graduating to the massive private <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.0.0.0/8</code> space! This format makes the site and network function instantly readable just by glancing at the address, and it leaves <em>plenty</em> of room for future branches.
+                </p>
+              </div>
+
+              <div class="overflow-x-auto rounded-lg border border-neutral-700 bg-neutral-800 shadow-sm">
+                <div class="border-b border-neutral-700 px-4 py-2 font-mono text-xs text-neutral-400">Core convention</div>
+                <pre class="min-w-max p-5 font-mono text-sm leading-7 text-emerald-200"><code>10.&lt;SITE&gt;.&lt;FUNCTION/SUBNET&gt;.&lt;HOST&gt;
+
+10.1.0.0/16 = Site 1 / HQ
+10.2.0.0/16 = Site 2 / Branch
+10.3.0.0/16 = Site 3 / Future branch</code></pre>
+              </div>
+
+              <p class="leading-relaxed text-slate-700">
+                Each site gets its very own shiny <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">/16</code> block. This makes a site immediately identifiable and gives us a beautifully clean route-summary boundary for when the lab eventually goes multi-site! 🌍
+              </p>
+
+              <div class="overflow-x-auto rounded-lg border border-slate-200">
+                <table class="w-full min-w-[44rem] border-collapse text-left text-sm">
+                  <thead class="bg-slate-100 text-slate-900">
+                    <tr>
+                      <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Third-octet range</th>
+                      <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Reserved function</th>
+                      <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Initial Site 1 example</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-200 text-slate-700">
+                    <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">10-19</th><td class="px-4 py-3">HR</td><td class="px-4 py-3"><code>10.1.10.0/24</code></td></tr>
+                    <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">20-29</th><td class="px-4 py-3">Sales</td><td class="px-4 py-3"><code>10.1.20.0/24</code></td></tr>
+                    <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">30-39</th><td class="px-4 py-3">IT / Users</td><td class="px-4 py-3"><code>10.1.30.0/24</code></td></tr>
+                    <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">40-49</th><td class="px-4 py-3">Servers</td><td class="px-4 py-3"><code>10.1.40.0/24</code></td></tr>
+                    <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">50-59</th><td class="px-4 py-3">Guest</td><td class="px-4 py-3"><code>10.1.50.0/24</code></td></tr>
+                    <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">90-99</th><td class="px-4 py-3">Management / infrastructure</td><td class="px-4 py-3"><code>10.1.99.0/24</code></td></tr>
+                    <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">100-109</th><td class="px-4 py-3">Voice</td><td class="px-4 py-3"><code>10.1.100.0/24</code></td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <p class="leading-relaxed text-slate-700">
+                The third octet represents a function range, not just a permanent, rigid copy of the VLAN ID. For example, Site 1 HR kicks off at <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.1.10.0/24</code>. If that department goes on a hiring spree, <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.1.11.0/24</code> through <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.1.19.0/24</code> are patiently waiting to be used for additional HR VLANs and subnets! 🤝 They would be spun up as separate VLANs, rather than awkwardly cramming multiple <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">/24</code> networks into one VLAN.
+              </p>
+
+              <div class="space-y-3">
+                <h3 class="text-lg font-semibold text-slate-900">&#x1F454; Management Addresses Identify Devices</h3>
+                <p class="leading-relaxed text-slate-700">
+                  A switch obviously does not need to hog an entire user subnet such as <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.1.10.0/24</code>. Instead, devices get predictable, organized addresses neatly tucked inside the management subnet.
+                </p>
+              </div>
+
+              <div class="overflow-x-auto rounded-lg border border-neutral-700 bg-neutral-800 shadow-sm">
+                <div class="border-b border-neutral-700 px-4 py-2 font-mono text-xs text-neutral-400">Management convention</div>
+                <pre class="min-w-max p-5 font-mono text-sm leading-7 text-emerald-200"><code>10.1.99.0/24 = Site 1 / HQ management
+
+10.1.99.11 = HQ-ASW-01
+10.1.99.21 = HQ-DSW-01
+10.1.99.22 = HQ-DSW-02
+10.1.99.31 = HQ-EDGE-01</code></pre>
+              </div>
+
+              <p class="leading-relaxed text-slate-700">
+                An address like <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.1.99.21</code> practically reads itself: <strong>10</strong> for private enterprise addressing, <strong>1</strong> for Site 1, <strong>99</strong> for management, and <strong>21</strong> to identify HQ-DSW-01.
+              </p>
+
+              <div class="space-y-3">
+                <h3 class="text-lg font-semibold text-slate-900">&#x1F501; Loopbacks &amp; &#x1F6E3;&#xFE0F; Routed Transits</h3>
+                <ul class="list-disc space-y-2 pl-6 leading-relaxed text-slate-700">
+                  <li><strong>Loopbacks:</strong> <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.255.0.0/16</code> is reserved for device loopbacks, formatted as <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.255.&lt;SITE&gt;.&lt;DEVICE-ID&gt;/32</code>.</li>
+                  <li><strong>Routed transits:</strong> <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.254.0.0/16</code> is dedicated to transit infrastructure. We will use efficient <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">/31</code> point-to-point links wherever supported, with room reserved later for inter-site WAN links.</li>
+                </ul>
+              </div>
+
+              <div class="space-y-3">
+                <h3 class="text-lg font-semibold text-slate-900">&#x1F4DD; Addressing Summary</h3>
+                <ul class="list-disc space-y-2 pl-6 leading-relaxed text-slate-700">
+                  <li><strong>LAN / VLAN networks:</strong> <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.&lt;SITE&gt;.&lt;FUNCTION/SUBNET&gt;.&lt;HOST&gt;</code></li>
+                  <li><strong>Management:</strong> <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.&lt;SITE&gt;.99.&lt;DEVICE&gt;</code></li>
+                  <li><strong>Loopbacks:</strong> <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.255.&lt;SITE&gt;.&lt;DEVICE-ID&gt;/32</code></li>
+                  <li><strong>Routed transits:</strong> <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.254.&lt;SITE&gt;.&lt;LINK&gt;/31</code></li>
+                </ul>
+              </div>
+
+              <p class="leading-relaxed text-slate-700">
+                Do we <em>need</em> this massive amount of address space for just five tiny CML nodes? Absolutely not. &#x1F602; But we are intentionally designing it this way so the topology can organically grow without forcing us to rip up the floorboards and redesign the entire addressing scheme later!
+              </p>
+              <p class="leading-relaxed text-slate-700">
+                The next stage is to actually apply this shiny new convention to the Site 1 VLANs, SVIs, routed uplinks, and OSPF configuration. Let's get to it! &#x1F680;
+              </p>
             </section>
           </article>
         </main>

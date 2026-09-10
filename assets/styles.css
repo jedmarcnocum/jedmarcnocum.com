@@ -756,16 +756,24 @@ body {
   width: 100%;
 }
 
+.min-w-\[44rem\] {
+  min-width: 44rem;
+}
+
+.min-w-\[48rem\] {
+  min-width: 48rem;
+}
+
 .min-w-\[52rem\] {
   min-width: 52rem;
 }
 
-.min-w-\[68rem\] {
-  min-width: 68rem;
+.min-w-\[57rem\] {
+  min-width: 57rem;
 }
 
-.min-w-full {
-  min-width: 100%;
+.min-w-\[68rem\] {
+  min-width: 68rem;
 }
 
 .min-w-max {
@@ -803,6 +811,10 @@ body {
 
 .shrink-0 {
   flex-shrink: 0;
+}
+
+.grow {
+  flex-grow: 1;
 }
 
 .border-collapse {
@@ -1164,6 +1176,10 @@ body {
   padding-left: 1.25rem;
 }
 
+.pl-6 {
+  padding-left: 1.5rem;
+}
+
 .pt-5 {
   padding-top: 1.25rem;
 }
@@ -1242,6 +1258,10 @@ body {
 
 .font-medium {
   font-weight: 500;
+}
+
+.font-normal {
+  font-weight: 400;
 }
 
 .font-semibold {

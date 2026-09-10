@@ -1,0 +1,39 @@
+ip domain name hq.jmcn.test
+username labadmin privilege 15 secret <secret>
+enable secret <secret>
+crypto key generate rsa modulus 2048
+ip ssh version 2
+
+no ip http server
+no ip http secure-server
+
+line console 0
+  exec-timeout 30 0
+  logging synchronous
+
+line vty 0 6
+ login local
+ transport input ssh
+ exec-timeout 10 0
+
+
+vlan 10
+name HR-USERS
+vlan 20
+name SALES-USERS
+vlan 30
+name IT-USERS
+vlan 40
+name SERVERS
+vlan 50
+name GUESTS-WIFI
+vlan 99
+name NETWORK-MGMT
+vlan 100
+name VOICE
+vlan 998
+name PARKING
+vlan 999
+name NATIVE-VLAN
+
+spanning-tree mode rapid-pvst
