@@ -342,14 +342,61 @@ vlan 120
                 </p>
               </div>
 
-              <div class="overflow-x-auto rounded-lg border border-neutral-700 bg-neutral-800 shadow-sm">
-                <div class="border-b border-neutral-700 px-4 py-2 font-mono text-xs text-neutral-400">Core convention</div>
-                <pre class="min-w-max p-5 font-mono text-sm leading-7 text-emerald-200"><code>10.&lt;SITE&gt;.&lt;FUNCTION/SUBNET&gt;.&lt;HOST&gt;
+              <section class="overflow-hidden rounded-lg border border-slate-200 bg-white" aria-labelledby="address-structure-title">
+                <div class="border-b border-slate-200 bg-slate-100 px-5 py-4">
+                  <h4 id="address-structure-title" class="font-semibold text-slate-900">Addressing structure</h4>
+                  <p class="mt-1 text-sm text-slate-600">A single private range, divided first by site and then by network function.</p>
+                </div>
+                <div class="space-y-5 p-5">
+                  <div>
+                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Worked HQ example</p>
+                    <p class="mt-1 text-sm text-slate-600">An HR device at Site 1 uses this address:</p>
+                    <p class="mt-3 font-mono text-xl font-semibold tracking-wide sm:text-2xl" aria-label="10.1.10.25">
+                      <span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">10</span><span class="text-slate-500">.</span><span class="text-violet-300">25</span>
+                    </p>
+                  </div>
 
-10.1.0.0/16 = Site 1 / HQ
-10.2.0.0/16 = Site 2 / Branch
-10.3.0.0/16 = Site 3 / Future branch</code></pre>
-              </div>
+                  <dl class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                    <div class="border-l-2 border-emerald-300 pl-3">
+                      <dt class="text-xs font-semibold uppercase tracking-wide text-emerald-300">Private range</dt>
+                      <dd class="mt-1 text-sm text-slate-700"><span class="font-mono font-semibold text-emerald-300">10</span> = private enterprise space</dd>
+                    </div>
+                    <div class="border-l-2 border-sky-300 pl-3">
+                      <dt class="text-xs font-semibold uppercase tracking-wide text-sky-300">Site</dt>
+                      <dd class="mt-1 text-sm text-slate-700"><span class="font-mono font-semibold text-sky-300">1</span> = Site 1 / HQ</dd>
+                    </div>
+                    <div class="border-l-2 border-amber-300 pl-3">
+                      <dt class="text-xs font-semibold uppercase tracking-wide text-amber-300">Function / subnet</dt>
+                      <dd class="mt-1 text-sm text-slate-700"><span class="font-mono font-semibold text-amber-300">10</span> = HR network</dd>
+                    </div>
+                    <div class="border-l-2 border-violet-300 pl-3">
+                      <dt class="text-xs font-semibold uppercase tracking-wide text-violet-300">Host</dt>
+                      <dd class="mt-1 text-sm text-slate-700"><span class="font-mono font-semibold text-violet-300">25</span> = individual device</dd>
+                    </div>
+                  </dl>
+
+                  <div>
+                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Site allocations</p>
+                    <dl class="mt-2 divide-y divide-slate-200 border-y border-slate-200">
+                      <div class="grid gap-1 py-3 sm:grid-cols-[5rem_1fr_auto] sm:items-center sm:gap-4">
+                        <dt class="font-semibold text-slate-900">Site 1</dt>
+                        <dd class="text-slate-700">HQ</dd>
+                        <dd class="font-mono text-sm"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">0</span><span class="text-slate-500">.</span><span class="text-violet-300">0/16</span></dd>
+                      </div>
+                      <div class="grid gap-1 py-3 sm:grid-cols-[5rem_1fr_auto] sm:items-center sm:gap-4">
+                        <dt class="font-semibold text-slate-900">Site 2</dt>
+                        <dd class="text-slate-700">Branch</dd>
+                        <dd class="font-mono text-sm"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">2</span><span class="text-slate-500">.</span><span class="text-amber-300">0</span><span class="text-slate-500">.</span><span class="text-violet-300">0/16</span></dd>
+                      </div>
+                      <div class="grid gap-1 py-3 sm:grid-cols-[5rem_1fr_auto] sm:items-center sm:gap-4">
+                        <dt class="font-semibold text-slate-900">Site 3</dt>
+                        <dd class="text-slate-700">Future branch</dd>
+                        <dd class="font-mono text-sm"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">3</span><span class="text-slate-500">.</span><span class="text-amber-300">0</span><span class="text-slate-500">.</span><span class="text-violet-300">0/16</span></dd>
+                      </div>
+                    </dl>
+                  </div>
+                </div>
+              </section>
 
               <p class="leading-relaxed text-slate-700">
                 Each site gets its very own shiny <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">/16</code> block. This makes a site immediately identifiable and gives us a beautifully clean route-summary boundary for when the lab eventually goes multi-site! 🌍
@@ -387,15 +434,33 @@ vlan 120
                 </p>
               </div>
 
-              <div class="overflow-x-auto rounded-lg border border-neutral-700 bg-neutral-800 shadow-sm">
-                <div class="border-b border-neutral-700 px-4 py-2 font-mono text-xs text-neutral-400">Management convention</div>
-                <pre class="min-w-max p-5 font-mono text-sm leading-7 text-emerald-200"><code>10.1.99.0/24 = Site 1 / HQ management
-
-10.1.99.11 = HQ-ASW-01
-10.1.99.21 = HQ-DSW-01
-10.1.99.22 = HQ-DSW-02
-10.1.99.31 = HQ-EDGE-01</code></pre>
-              </div>
+              <section class="overflow-hidden rounded-lg border border-slate-200 bg-white" aria-labelledby="management-addresses-title">
+                <div class="flex flex-col gap-1 border-b border-slate-200 bg-slate-100 px-5 py-4 sm:flex-row sm:items-baseline sm:justify-between">
+                  <div>
+                    <h4 id="management-addresses-title" class="font-semibold text-slate-900">HQ management addresses</h4>
+                    <p class="mt-1 text-sm text-slate-600">One predictable address per device in the Site 1 management network.</p>
+                  </div>
+                  <p class="font-mono text-sm font-semibold text-slate-700">10.1.99.0/24</p>
+                </div>
+                <dl class="divide-y divide-slate-200 px-5">
+                  <div class="flex flex-col gap-1 py-3 sm:flex-row sm:items-center sm:justify-between">
+                    <dt class="font-semibold text-slate-900">HQ-ASW-01</dt>
+                    <dd class="font-mono text-sm text-slate-600">10.1.99.11</dd>
+                  </div>
+                  <div class="flex flex-col gap-1 py-3 sm:flex-row sm:items-center sm:justify-between">
+                    <dt class="font-semibold text-slate-900">HQ-DSW-01</dt>
+                    <dd class="font-mono text-sm text-slate-600">10.1.99.21</dd>
+                  </div>
+                  <div class="flex flex-col gap-1 py-3 sm:flex-row sm:items-center sm:justify-between">
+                    <dt class="font-semibold text-slate-900">HQ-DSW-02</dt>
+                    <dd class="font-mono text-sm text-slate-600">10.1.99.22</dd>
+                  </div>
+                  <div class="flex flex-col gap-1 py-3 sm:flex-row sm:items-center sm:justify-between">
+                    <dt class="font-semibold text-slate-900">HQ-EDGE-01</dt>
+                    <dd class="font-mono text-sm text-slate-600">10.1.99.31</dd>
+                  </div>
+                </dl>
+              </section>
 
               <p class="leading-relaxed text-slate-700">
                 An address like <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.1.99.21</code> practically reads itself: <strong>10</strong> for private enterprise addressing, <strong>1</strong> for Site 1, <strong>99</strong> for management, and <strong>21</strong> to identify HQ-DSW-01.
