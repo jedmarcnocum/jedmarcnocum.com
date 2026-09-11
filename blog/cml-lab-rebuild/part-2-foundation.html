@@ -73,11 +73,11 @@
                 </p>
 
                 <p class="leading-relaxed text-slate-700">
-                  It was a very happy-go-lucky approach back then, and while it was great for getting my feet wet, I realized that for this rebuild, I need to actually plan in advance instead of just winging it. I didn't want to just copy-paste my past work; I wanted a genuine learning experience and enjoy the process. So, after taking a step back and doing some research on modern network topologies, I decided to rip up the original plan and pivot to a Routed Campus Design! 🔄
+                  It was a very happy-go-lucky approach back then, and while it was great for getting my feet wet, I realized that for this rebuild, I need to actually plan in advance instead of just winging it. I didn't want to just copy-paste my past work; I wanted a genuine learning experience and enjoy the process. So, after taking a step back and doing some research on modern network topologies, I decided to rip up the original plan and pivot to a Routed Campus Design. 🔄
                 </p>
            
                 <p class="leading-relaxed text-slate-700">
-                  Instead of dealing with Spanning Tree (STP) blocking ports and stretching Layer 2 domains, we are pushing Layer 3 routing all the way down. STP still sticks around for local Layer 2 protection, but it's officially fired from its job of controlling upstream routed paths! 🛑 Instead, OSPF ECMP steps in to handle load balancing and failure resilience.
+                  Instead of dealing with Spanning Tree (STP) blocking ports and stretching Layer 2 domains, we are pushing Layer 3 routing all the way down. STP still sticks around for local Layer 2 protection, but it's officially fired from its job of controlling upstream routed paths! 🛑 Instead, OSPF ECMP steps in to handle load balancing and failure resilience, so we can actually utilize all our uplink bandwidth simultaneously instead of having ports sitting idle in a blocking state.
                 </p>
                 <p class="leading-relaxed text-slate-700">
                   Here is how our five nodes fit into this new, modernized architecture:
@@ -221,16 +221,13 @@ vlan 120
               <div class="space-y-3">
                 <h2 class="text-xl font-semibold text-slate-900">🚦 Getting Started with VLANs and Subnetting</h2>
                 <p class="leading-relaxed text-slate-700">
-                  With the physical links wired up, mapped out, and the routed architecture officially decided, it was time to tackle the logical side: IP addressing.
+                  Now that the routed architecture is officially decided, it was time to tackle the logical side: IP addressing.
                 </p>
                 <p class="leading-relaxed text-slate-700">
-                  Because VLANs and SVIs will now live right on the access switches with purely routed upstream links, my old CCNA addressing scheme wasn't going to cut it. I needed a clean, scalable subnetting plan that would play nicely with our new routed design and give this rebuild a much cleaner path forward.
+                  Because VLANs and SVIs will now live right on the access switches with purely routed upstream links, my old CCNA addressing scheme wasn't going to cut it. I needed a clean, scalable subnetting plan that would play nicely with our new routed design and give this rebuild a much cleaner path forward. I will admit that what I've come up with is a chaotic combination of lots of research, AI prompts, and plenty of arguing with AI about why X is better than Y 😂—but I'm honestly still proud of the outcome!
                 </p>
                 <p class="leading-relaxed text-slate-700">
-                  The next part was completely re-designing the addressing convention. Now, I will admit that what I've come up with is a chaotic combination of lots of research, AI prompts, and plenty of arguing with AI about why X is better than Y 😂—but I'm honestly still super proud of the outcome!
-                </p>
-                <p class="leading-relaxed text-slate-700">
-                  PS: Feel-free to give me tips on how to improve this plan in the LinkedIn comments or PM me. I know it can be better, and I want to learn from you all! 🙏
+                  P.S.: Feel free to give me tips on how to improve this plan in the LinkedIn comments or PM me. I know it can be better, and I want to learn from you all! 🙏
                 </p>
               </div>
 
@@ -238,6 +235,10 @@ vlan 120
                 <h3 class="text-lg font-semibold text-slate-900">📈 A Scalable Private Addressing Plan</h3>
                 <p class="leading-relaxed text-slate-700">
                   Instead of sticking with the tired old <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">192.168.x.x</code> layout, our rebuilt enterprise topology is graduating to the massive private <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.0.0.0/8</code> space! This format makes the site and network function instantly readable just by glancing at the address, and it leaves <em>plenty</em> of room for future branches.
+                </p>
+
+                <p class="leading-relaxed text-slate-700">
+                  <span class="font-semibold">Fair warning:</span> we are about to dive deep into the subnetting weeds! 🌿 But by making every single octet actually mean something, this network will effectively document itself. Let's break down the logic:
                 </p>
               </div>
 
@@ -341,12 +342,11 @@ vlan 120
                   <p class="mt-2 whitespace-nowrap font-mono text-sm font-semibold sm:text-base" aria-label="2001 db8 site VLAN ID double colon host">
                     <span class="text-emerald-300">2001:db8</span><span class="text-slate-500">:</span><span class="text-sky-300">&lt;SITE&gt;</span><span class="text-slate-500">:</span><span class="text-amber-300">&lt;VLAN_ID&gt;</span><span class="text-slate-500">::</span><span class="text-violet-300">&lt;HOST&gt;</span>
                   </p>
-                  <p class="mt-2 text-sm leading-relaxed text-slate-600"><code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">::1</code> is reserved for the SVI default gateway, so endpoint hosts begin at <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">::2</code>.</p>
-                </div>
+    </div>
               </section>
 
               <div class="space-y-3 leading-relaxed text-slate-700">
-                <h4 class="text-lg font-semibold text-slate-900">HR-USERS expansion</h4>
+                <h4 class="text-lg font-semibold text-slate-900">How expansion works</h4>
                 <p>
                   The third octet reserves a function range rather than copying the VLAN ID forever. <span class="font-mono font-semibold">VLAN 30</span>, <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">HR-USERS</code>, starts at <span class="whitespace-nowrap font-mono"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">30</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></span>.
                 </p>
@@ -360,6 +360,45 @@ vlan 120
                 </p>
               </div>
 
+              <div class="space-y-3">
+                <h3 class="text-lg font-semibold text-slate-900">IPv4 host allocation within the dual-stack VLANs</h3>
+                <p class="leading-relaxed text-slate-700">For consistency, every standard <span class="font-mono font-semibold">/24</span> endpoint subnet at HQ uses <span class="font-mono font-semibold">x.x.x.1</span> as its default gateway.</p>
+              </div>
+
+              <section class="overflow-hidden rounded-lg border border-slate-200 bg-white" aria-labelledby="ipv4-host-allocation-title">
+                <div class="border-b border-slate-200 bg-slate-100 px-5 py-4">
+                  <h3 id="ipv4-host-allocation-title" class="font-semibold text-slate-900">Standard IPv4 endpoint allocation</h3>
+                  <p class="mt-1 text-sm text-slate-600">Applied consistently to IT-USERS, SERVERS, HR-USERS, SALES-USERS, GUEST-WIFI, NETWORK-MGMT, and VOICE.</p>
+                </div>
+                <div class="overflow-x-auto">
+                  <table class="w-full min-w-[34rem] border-collapse text-left text-sm">
+                    <thead class="bg-slate-100 text-slate-900"><tr><th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Address range</th><th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Purpose</th></tr></thead>
+                    <tbody class="divide-y divide-slate-200 text-slate-700">
+                      <tr><th class="px-4 py-3 font-mono font-semibold text-slate-900" scope="row">.1</th><td class="px-4 py-3">Default gateway / SVI</td></tr>
+                      <tr><th class="px-4 py-3 font-mono font-semibold text-slate-900" scope="row">.2 – .49</th><td class="px-4 py-3">Fixed/static assignments</td></tr>
+                      <tr><th class="px-4 py-3 font-mono font-semibold text-slate-900" scope="row">.50 – .199</th><td class="px-4 py-3">DHCP client pool</td></tr>
+                      <tr><th class="px-4 py-3 font-mono font-semibold text-slate-900" scope="row">.200 – .239</th><td class="px-4 py-3">Future growth / expansion</td></tr>
+                      <tr><th class="px-4 py-3 font-mono font-semibold text-slate-900" scope="row">.240 – .254</th><td class="px-4 py-3">Reserved infrastructure / special-use addresses</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="border-t border-slate-200 px-5 py-5">
+                  <div class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
+                    <p class="font-semibold text-slate-900">VLAN 10 / IT-USERS example</p>
+                    <code class="w-fit rounded bg-slate-100 px-2 py-1 text-sm font-semibold text-slate-800">10.1.10.0/24</code>
+                  </div>
+                  <dl class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    <div class="rounded-md border border-slate-200 px-3 py-3"><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Network</dt><dd class="mt-1 font-mono text-sm font-semibold text-slate-900">10.1.10.0</dd></div>
+                    <div class="rounded-md border border-slate-200 px-3 py-3"><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Gateway / SVI</dt><dd class="mt-1 font-mono text-sm font-semibold text-slate-900">10.1.10.1</dd></div>
+                    <div class="rounded-md border border-slate-200 px-3 py-3"><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Fixed / static</dt><dd class="mt-1 font-mono text-sm font-semibold text-slate-900">.2 – .49</dd></div>
+                    <div class="rounded-md border border-slate-200 px-3 py-3"><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">DHCP pool</dt><dd class="mt-1 font-mono text-sm font-semibold text-slate-900">.50 – .199</dd></div>
+                    <div class="rounded-md border border-slate-200 px-3 py-3"><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Future growth</dt><dd class="mt-1 font-mono text-sm font-semibold text-slate-900">.200 – .239</dd></div>
+                    <div class="rounded-md border border-slate-200 px-3 py-3"><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Infrastructure reserve</dt><dd class="mt-1 font-mono text-sm font-semibold text-slate-900">.240 – .254</dd></div>
+                  </dl>
+                  <p class="mt-4 text-sm leading-relaxed text-slate-600">Broadcast is <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">10.1.10.255</code>. The <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">.254</code> address remains reserved; default gateways use only <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">.1</code>.</p>
+                </div>
+              </section>
+
               <section class="overflow-hidden rounded-lg border border-slate-200 bg-white" aria-labelledby="final-hq-vlan-table-title">
                 <div class="flex flex-col gap-1 border-b border-slate-200 bg-slate-100 px-5 py-4 sm:flex-row sm:items-baseline sm:justify-between">
                   <div>
@@ -369,7 +408,7 @@ vlan 120
                   <p class="text-sm font-semibold text-slate-700">Site 1 / HQ</p>
                 </div>
                 <div class="overflow-x-auto">
-                  <table class="w-full min-w-[78rem] border-collapse text-left text-sm">
+                  <table class="w-full min-w-[78rem] border-collapse text-left text-sm [&_code]:rounded [&_code]:bg-slate-100 [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-sm [&_code]:text-slate-800">
                     <thead class="bg-slate-100 text-slate-900">
                       <tr>
                         <th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">VLAN</th>
@@ -403,7 +442,7 @@ vlan 120
                 <div class="space-y-3">
                   <h2 id="ipv6-allocation-title" class="text-xl font-semibold text-slate-900">Dual-Stack Endpoint &amp; Infrastructure Addressing</h2>
                   <p class="leading-relaxed text-slate-700">
-                    HQ uses the documentation prefix <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">2001:db8:1::/48</code>. IPv6 subnet IDs mirror the functional VLAN or network identifier wherever practical, while normal endpoint VLANs use <span class="font-mono font-semibold">/64</span> prefixes.
+                    Now for the fun (and sometimes intimidating) part: IPv6! 🌐 To keep us from going cross-eyed, we are keeping the logic exactly the same. HQ uses the documentation prefix <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">2001:db8:1::/48</code>, and we are going to mirror the IPv4 functional VLAN IDs right into the IPv6 subnets wherever practical.
                   </p>
                   <p class="leading-relaxed text-slate-700">The Final HQ VLAN table above places every IPv4 subnet and gateway beside its IPv6 prefix and gateway. The tables below apply that same paired view to routed links and loopbacks.</p>
                 </div>
@@ -414,7 +453,7 @@ vlan 120
                     <p class="mt-1 text-sm text-slate-600">IPv4 reserves <code class="rounded bg-white px-1 py-0.5 text-slate-800">10.254.0.0/16</code> for efficient <span class="font-mono font-semibold">/31</span> links. Dedicated IPv6 <span class="font-mono font-semibold">/127</span> networks begin at <code class="rounded bg-white px-1 py-0.5 text-slate-800">2001:db8:1:ff00::/127</code>.</p>
                   </div>
                   <div class="overflow-x-auto">
-                    <table class="w-full min-w-[68rem] border-collapse text-left text-sm">
+                    <table class="w-full min-w-[68rem] border-collapse text-left text-sm [&_code]:rounded [&_code]:bg-slate-100 [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-sm [&_code]:text-slate-800">
                       <thead class="bg-slate-100 text-slate-900">
                         <tr><th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Link</th><th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">IPv4 transit</th><th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">IPv6 transit</th></tr>
                       </thead>
@@ -430,50 +469,12 @@ vlan 120
                   <p class="border-t border-slate-200 px-5 py-4 text-sm leading-relaxed text-slate-600">Each <span class="font-mono">/127</span> assigns its two usable addresses consistently to the connected endpoints; the exact interface allocations are recorded in the interface map below.</p>
                 </section>
 
-                <div class="space-y-3">
-                  <h3 class="text-lg font-semibold text-slate-900">IPv4 host allocation within the dual-stack VLANs</h3>
-                  <p class="leading-relaxed text-slate-700">Every normal HQ <span class="font-mono font-semibold">/24</span> endpoint subnet uses <span class="font-mono font-semibold">x.x.x.1</span> as its default gateway.</p>
-                </div>
-
-                <section class="overflow-hidden rounded-lg border border-slate-200 bg-white" aria-labelledby="ipv4-host-allocation-title">
-                  <div class="border-b border-slate-200 bg-slate-100 px-5 py-4">
-                    <h3 id="ipv4-host-allocation-title" class="font-semibold text-slate-900">Standard IPv4 endpoint allocation</h3>
-                    <p class="mt-1 text-sm text-slate-600">Applied consistently to IT-USERS, SERVERS, HR-USERS, SALES-USERS, GUEST-WIFI, NETWORK-MGMT, and VOICE.</p>
-                  </div>
-                  <div class="overflow-x-auto">
-                    <table class="w-full min-w-[34rem] border-collapse text-left text-sm">
-                      <thead class="bg-slate-100 text-slate-900"><tr><th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Address range</th><th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Purpose</th></tr></thead>
-                      <tbody class="divide-y divide-slate-200 text-slate-700">
-                        <tr><th class="px-4 py-3 font-mono font-semibold text-slate-900" scope="row">.1</th><td class="px-4 py-3">Default gateway / SVI</td></tr>
-                        <tr><th class="px-4 py-3 font-mono font-semibold text-slate-900" scope="row">.2 – .49</th><td class="px-4 py-3">Fixed/static assignments</td></tr>
-                        <tr><th class="px-4 py-3 font-mono font-semibold text-slate-900" scope="row">.50 – .199</th><td class="px-4 py-3">DHCP client pool</td></tr>
-                        <tr><th class="px-4 py-3 font-mono font-semibold text-slate-900" scope="row">.200 – .239</th><td class="px-4 py-3">Future growth / expansion</td></tr>
-                        <tr><th class="px-4 py-3 font-mono font-semibold text-slate-900" scope="row">.240 – .254</th><td class="px-4 py-3">Reserved infrastructure / special-use addresses</td></tr>
-                      </tbody>
-                    </table>
-                  </div>
-                  <div class="border-t border-slate-200 px-5 py-5">
-                    <div class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
-                      <p class="font-semibold text-slate-900">VLAN 10 / IT-USERS example</p>
-                      <code class="w-fit rounded bg-slate-100 px-2 py-1 text-sm font-semibold text-slate-800">10.1.10.0/24</code>
-                    </div>
-                    <dl class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                      <div class="rounded-md border border-slate-200 px-3 py-3"><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Network</dt><dd class="mt-1 font-mono text-sm font-semibold text-slate-900">10.1.10.0</dd></div>
-                      <div class="rounded-md border border-slate-200 px-3 py-3"><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Gateway / SVI</dt><dd class="mt-1 font-mono text-sm font-semibold text-slate-900">10.1.10.1</dd></div>
-                      <div class="rounded-md border border-slate-200 px-3 py-3"><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Fixed / static</dt><dd class="mt-1 font-mono text-sm font-semibold text-slate-900">.2 – .49</dd></div>
-                      <div class="rounded-md border border-slate-200 px-3 py-3"><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">DHCP pool</dt><dd class="mt-1 font-mono text-sm font-semibold text-slate-900">.50 – .199</dd></div>
-                      <div class="rounded-md border border-slate-200 px-3 py-3"><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Future growth</dt><dd class="mt-1 font-mono text-sm font-semibold text-slate-900">.200 – .239</dd></div>
-                      <div class="rounded-md border border-slate-200 px-3 py-3"><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Infrastructure reserve</dt><dd class="mt-1 font-mono text-sm font-semibold text-slate-900">.240 – .254</dd></div>
-                    </dl>
-                    <p class="mt-4 text-sm leading-relaxed text-slate-600">Broadcast is <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">10.1.10.255</code>. The <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">.254</code> address remains reserved; default gateways use only <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">.1</code>.</p>
-                  </div>
-                </section>
               </section>
 
               <div class="space-y-3">
                 <h3 class="text-lg font-semibold text-slate-900">&#x1F501; Loopback allocation plan</h3>
                 <p class="leading-relaxed text-slate-700">
-                  Infrastructure loopbacks use one consistent format across every site. Independent of physical interfaces and user VLANs, they give every router and switch a stable identity for SSH, SNMP, logging, automation, monitoring, and other management services as the lab expands.
+                  Think of loopbacks as a device's permanent nametag. &#x1F3F7;&#xFE0F; By using one consistent format across every site, we give every router and switch a stable, unbreakable identity for SSH and management, completely independent of whatever physical interfaces are bouncing up and down.
                 </p>
                 <section class="overflow-hidden rounded-lg border border-slate-200 bg-white" aria-labelledby="loopback-plan-title">
                   <div class="flex flex-col gap-1 border-b border-slate-200 bg-slate-100 px-5 py-4 sm:flex-row sm:items-baseline sm:justify-between">
@@ -505,26 +506,26 @@ vlan 120
                       <div class="grid gap-1 py-3 sm:grid-cols-[1fr_5rem_1fr_1fr] sm:items-center sm:gap-4">
                         <dt class="font-semibold text-slate-900">HQ-DSW-01</dt>
                         <dd class="font-mono text-sm text-violet-300">ID 1</dd>
-                        <dd class="font-mono text-sm"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-amber-300">255</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-violet-300">1/32</span></dd>
-                        <dd class="font-mono text-sm"><code>2001:db8:1:ffff::1/128</code></dd>
+                        <dd><code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.255.1.1/32</code></dd>
+                        <dd><code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">2001:db8:1:ffff::1/128</code></dd>
                       </div>
                       <div class="grid gap-1 py-3 sm:grid-cols-[1fr_5rem_1fr_1fr] sm:items-center sm:gap-4">
                         <dt class="font-semibold text-slate-900">HQ-DSW-02</dt>
                         <dd class="font-mono text-sm text-violet-300">ID 2</dd>
-                        <dd class="font-mono text-sm"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-amber-300">255</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-violet-300">2/32</span></dd>
-                        <dd class="font-mono text-sm"><code>2001:db8:1:ffff::2/128</code></dd>
+                        <dd><code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.255.1.2/32</code></dd>
+                        <dd><code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">2001:db8:1:ffff::2/128</code></dd>
                       </div>
                       <div class="grid gap-1 py-3 sm:grid-cols-[1fr_5rem_1fr_1fr] sm:items-center sm:gap-4">
                         <dt class="font-semibold text-slate-900">HQ-EDGE-01</dt>
                         <dd class="font-mono text-sm text-violet-300">ID 10</dd>
-                        <dd class="font-mono text-sm"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-amber-300">255</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-violet-300">10/32</span></dd>
-                        <dd class="font-mono text-sm"><code>2001:db8:1:ffff::10/128</code></dd>
+                        <dd><code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.255.1.10/32</code></dd>
+                        <dd><code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">2001:db8:1:ffff::10/128</code></dd>
                       </div>
                       <div class="grid gap-1 py-3 sm:grid-cols-[1fr_5rem_1fr_1fr] sm:items-center sm:gap-4">
                         <dt class="font-semibold text-slate-900">HQ-ASW-01</dt>
                         <dd class="font-mono text-sm text-violet-300">ID 20</dd>
-                        <dd class="font-mono text-sm"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-amber-300">255</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-violet-300">20/32</span></dd>
-                        <dd class="font-mono text-sm"><code>2001:db8:1:ffff::20/128</code></dd>
+                        <dd><code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.255.1.20/32</code></dd>
+                        <dd><code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">2001:db8:1:ffff::20/128</code></dd>
                       </div>
                     </dl>
                   </div>
@@ -544,45 +545,39 @@ vlan 120
               <p class="leading-relaxed text-slate-700">
                 Do we <em>need</em> this massive amount of address space for just five tiny CML nodes? Absolutely not. &#x1F602; But we are intentionally designing it this way so the topology can organically grow without forcing us to rip up the floorboards and redesign the entire addressing scheme later!
               </p>
-              <p class="leading-relaxed text-slate-700">
-                The next stage is to actually apply this shiny new convention to the Site 1 VLANs, SVIs, routed uplinks, and OSPF configuration. Let's get to it! &#x1F680;
-              </p>
             </section>
 
             <section class="space-y-6 border-t border-slate-200 pt-6">
-              <div class="space-y-3">
-                <h2 class="text-xl font-semibold text-slate-900">🧱 Lab Setup &amp; Foundation</h2>
-                <p class="leading-relaxed text-slate-700">
-                  Before applying the routed design, I established a consistent device baseline and documented every physical connection in the five-node topology.
-                </p>
-              </div>
-
               <div class="space-y-5">
                 <div class="space-y-3">
                   <h3 class="text-lg font-semibold text-slate-900">⚙️ Base Device Configuration</h3>
-                  <p class="leading-relaxed text-slate-700">
-                    Whether you are building a Layer 2 or Layer 3 topology, the baseline is identical. With the nodes linked up, I applied a consistent starting configuration to establish local administrative access, protect privileged mode, enable SSH, and kill unused HTTP services before touching the routing config. 🔒
-                  </p>
                 </div>
 
-                <div class="overflow-x-auto rounded-lg border border-neutral-700 bg-neutral-800 shadow-sm">
-                  <div class="border-b border-neutral-700 px-4 py-2 font-mono text-xs text-neutral-400">Base configuration</div>
-                  <pre class="min-w-max p-5 font-mono text-sm leading-7 text-emerald-200"><code>ip domain name hq.jmcn.test
-username labadmin privilege 15 secret &lt;secret&gt;
-enable secret &lt;secret&gt;
-crypto key generate rsa modulus 2048
-ip ssh version 2
-no ip http server
-no ip http secure-server
+              <div class="space-y-3">
+                <p class="leading-relaxed text-slate-700">Before applying the shiny new routed design, I needed to establish a consistent device baseline across the topology.</p>
+                <p class="leading-relaxed text-slate-700">Whether you are building a Layer 2 or Layer 3 network, this baseline is always identical. Before getting to the exciting routing stuff, we have to lock the doors. With the nodes linked up, I applied a consistent starting configuration to establish local administrative access, protect privileged mode, enable SSH, and kill unused HTTP services. 🔒</p>
+              </div>
 
-line console 0
- exec-timeout 30 0
- logging synchronous
+                <div class="overflow-x-auto rounded-lg border border-slate-200">
+                  <div class="border-b border-slate-200 px-4 py-2 font-mono text-xs text-slate-500">Cisco IOS baseline</div>
+                  <pre class="min-w-max p-5 font-mono text-sm leading-7"><code class="!bg-transparent"><span class="text-sky-300">ip</span> <span class="text-amber-300">domain name</span> <span class="text-slate-100">hq.example.test</span>
+<span class="text-slate-500">! Lab baseline only: centralized AAA and management filtering come later</span>
+<span class="text-sky-300">username</span> <span class="text-slate-100">admin</span> <span class="text-amber-300">privilege</span> <span class="text-violet-300">15</span> <span class="text-amber-300">secret</span> <span class="text-rose-300">&lt;secret&gt;</span>
+<span class="text-sky-300">enable</span> <span class="text-amber-300">secret</span> <span class="text-rose-300">&lt;secret&gt;</span>
+<span class="text-sky-300">crypto</span> <span class="text-amber-300">key generate rsa modulus</span> <span class="text-violet-300">2048</span>
+<span class="text-sky-300">ip</span> <span class="text-amber-300">ssh version</span> <span class="text-violet-300">2</span>
+<span class="text-rose-300">no</span> <span class="text-sky-300">ip</span> <span class="text-amber-300">http server</span>
+<span class="text-rose-300">no</span> <span class="text-sky-300">ip</span> <span class="text-amber-300">http secure-server</span>
 
-line vty 0 6
- login local
- transport input ssh
- exec-timeout 10 0</code></pre>
+<span class="text-slate-500">! Timeouts are extended for labbing purposes</span>
+<span class="text-sky-300">line</span> <span class="text-amber-300">console</span> <span class="text-violet-300">0</span>
+<span class="text-sky-300">exec-timeout</span> <span class="text-violet-300">30 0</span>
+ <span class="text-sky-300">logging</span> <span class="text-amber-300">synchronous</span>
+
+<span class="text-sky-300">line</span> <span class="text-amber-300">vty</span> <span class="text-violet-300">0 6</span>
+ <span class="text-sky-300">login</span> <span class="text-amber-300">local</span>
+ <span class="text-sky-300">transport</span> <span class="text-amber-300">input ssh</span>
+ <span class="text-sky-300">exec-timeout</span> <span class="text-violet-300">10 0</span></code></pre>
                 </div>
 
                 <p class="leading-relaxed text-slate-700">
@@ -633,7 +628,7 @@ line vty 0 6
                     Show complete device and interface map
                   </summary>
                   <div class="overflow-x-auto border-t border-slate-200">
-                    <table class="w-full min-w-[100rem] border-collapse text-left text-sm">
+                    <table class="w-full min-w-[100rem] border-collapse text-left text-sm [&_code]:rounded [&_code]:bg-slate-100 [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-sm [&_code]:text-slate-800">
                     <colgroup>
                       <col class="w-[14%]" />
                       <col class="w-[17%]" />
@@ -665,6 +660,50 @@ line vty 0 6
                   </div>
                 </details>
               </div>
+            </section>
+
+            <section class="space-y-3 border-t border-slate-200 pt-6">
+              <h2 class="text-xl font-semibold text-slate-900">&#x1F4CB; Part 2 Summary</h2>
+              <p class="leading-relaxed text-slate-700">To wrap things up, Part 2 turned our initial five-node CML lab into a documented, scalable foundation:</p>
+              <ul class="list-disc space-y-2 pl-5 leading-relaxed text-slate-700">
+                <li>Built and mapped the five-node HQ and ISP topology, with a consistent device baseline and interface descriptions.</li>
+                <li>Pivoted from the old collapsed-core idea to a routed campus design with Layer 3 uplinks and future OSPF ECMP.</li>
+                <li>Defined predictable dual-stack VLAN, endpoint, loopback, and routed-transit allocations that can grow beyond HQ.</li>
+              </ul>
+
+              <p class="leading-relaxed text-slate-700">
+                Phew! That was intense, and this post is getting a bit long, so I'll continue with the implementation details in Part 3!</p>
+            </section>
+
+            <section class="space-y-3 border-t border-slate-200 pt-6">
+              <h2 class="text-xl font-semibold text-slate-900">&#x1F5FA;&#xFE0F; What&rsquo;s Next? (Coming Up in Part 3!)</h2>
+              <p class="leading-relaxed text-slate-700">The five-node foundation and address plan are ready. The next stage is to actually apply this shiny new convention to the Site 1 VLANs, SVIs, routed uplinks, and OSPF configuration. Let's get to it in Part 3! 🚀</p>
+              <ul class="list-disc space-y-2 pl-5 leading-relaxed text-slate-700">
+                <li><span class="font-semibold">HQ access services:</span> Create the Site 1 VLANs and dual-stack SVIs on HQ-ASW-01.</li>
+                <li><span class="font-semibold">Routed infrastructure:</span> Apply the IPv4 <span class="font-mono">/31</span> and IPv6 <span class="font-mono">/127</span> allocations to the uplinks and configure the infrastructure loopbacks.</li>
+                <li><span class="font-semibold">Dynamic routing:</span> Bring up OSPF for IPv4 and IPv6, then validate ECMP and resilient paths through the routed core.</li>
+              </ul>
+            </section>
+
+            <section class="space-y-3 border-t border-slate-200 pt-6">
+              <h2 class="text-xl font-semibold text-slate-900">&#x1F4CD; The Full Series Roadmap</h2>
+              <p class="leading-relaxed text-slate-700">Here is the current roadmap for the rest of this CML rebuild series (subject to change if I get distracted by another cool technology 😂):</p>
+              <ul class="list-disc space-y-2 pl-5 leading-relaxed text-slate-700">
+                <li>&#x2705; <span class="font-semibold">Part 1:</span> CML Environment Setup &amp; Platform Verification</li>
+                <li>&#x1F535; <span class="font-semibold">Part 2:</span> 5-Node Topology, Dual-Stack Addressing &amp; Routed-Access Foundation <em>(You are here!)</em></li>
+                <li>&#x1F310; <span class="font-semibold">Part 3:</span> Dynamic Dual-Stack Routing, ECMP &amp; Path Resiliency</li>
+                <li>&#x1F50C; <span class="font-semibold">Part 4:</span> External Endpoints, Enterprise Services &amp; VMware Integration</li>
+                <li>&#x1F6E1;&#xFE0F; <span class="font-semibold">Part 5:</span> Segmentation, Management &amp; Edge Security</li>
+                <li>&#x260E;&#xFE0F; <span class="font-semibold">Part 6:</span> Voice, QoS &amp; Unified Communications Integration</li>
+                <li>&#x1F916; <span class="font-semibold">Part 7:</span> Network Automation, Programmability &amp; Monitoring</li>
+                <li>&#x1F680; <span class="font-semibold">Part 8:</span> CML Personal Expansion &mdash; Full Campus, Wireless &amp; Advanced Services</li>
+              </ul>
+            </section>
+
+            <section class="space-y-3 border-t border-slate-200 pt-6">
+              <h2 class="text-xl font-semibold text-slate-900">&#x1F4D3; Why I&rsquo;m documenting the build</h2>
+              <p class="leading-relaxed text-slate-700">This blog is part of my networking portfolio. I want to share my progress, explain what I&rsquo;m trying to achieve, and be transparent about what goes wrong and how I fix it.</p>
+              <p class="leading-relaxed text-slate-700">Stay tuned for Part 3 coming soon!</p>
             </section>
           </article>
         </main>

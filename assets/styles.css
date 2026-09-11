@@ -1089,6 +1089,10 @@ body {
   border-color: rgb(255 255 255 / 0.15);
 }
 
+.\!bg-transparent {
+  background-color: transparent !important;
+}
+
 .bg-\[\#07110e\] {
   --tw-bg-opacity: 1;
   background-color: rgb(7 17 14 / var(--tw-bg-opacity, 1));
@@ -1464,9 +1468,19 @@ body {
   color: rgb(251 146 60 / var(--tw-text-opacity, 1));
 }
 
+.text-rose-300 {
+  --tw-text-opacity: 1;
+  color: rgb(253 164 175 / var(--tw-text-opacity, 1));
+}
+
 .text-sky-300 {
   --tw-text-opacity: 1;
   color: rgb(125 211 252 / var(--tw-text-opacity, 1));
+}
+
+.text-slate-100 {
+  --tw-text-opacity: 1;
+  color: rgb(241 245 249 / var(--tw-text-opacity, 1));
 }
 
 .text-slate-500 {
@@ -2603,4 +2617,33 @@ body {
   .lg\:text-\[5\.5rem\] {
     font-size: 5.5rem;
   }
+}
+
+.\[\&_code\]\:rounded code {
+  border-radius: 0.25rem;
+}
+
+.\[\&_code\]\:bg-slate-100 code {
+  --tw-bg-opacity: 1;
+  background-color: rgb(241 245 249 / var(--tw-bg-opacity, 1));
+}
+
+.\[\&_code\]\:px-1 code {
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+}
+
+.\[\&_code\]\:py-0\.5 code {
+  padding-top: 0.125rem;
+  padding-bottom: 0.125rem;
+}
+
+.\[\&_code\]\:text-sm code {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.\[\&_code\]\:text-slate-800 code {
+  --tw-text-opacity: 1;
+  color: rgb(30 41 59 / var(--tw-text-opacity, 1));
 }
