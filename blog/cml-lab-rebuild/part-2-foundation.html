@@ -69,7 +69,7 @@
               <div class="space-y-3">
                 <h2 class="text-xl font-semibold text-slate-900">🤔 The Original Plan vs. The Plot Twist</h2>
                 <p class="leading-relaxed text-slate-700">
-                  I’ll admit, I was so excited to start labbing that I completely jumped the gun right after adding the nodes! My original plan was to just copy the exact same layout and VLAN scheme from my old CCNA lab and build a classic compact HQ with a collapsed core. That old lab was basically built like a Lego set—completely unplanned and snapped together piece by piece as I progressed through my lectures (with lots of AI help... thanks, AI! 😉). I managed to build it, and while it wasn't perfect, hey, everyone starts somewhere! 🤷‍♂️
+                  I’ll admit, I was so excited to start labbing that I completely jumped the gun right after adding the nodes! My original plan was to just copy the exact same layout and VLAN scheme from my old CCNA lab and build a classic compact HQ with a collapsed core. That old lab was basically built like a Lego set — completely unplanned and snapped together piece by piece as I progressed through my lectures. I managed to build it, and while it wasn't perfect, hey, everyone starts somewhere! 🤷‍♂️
                 </p>
 
                 <p class="leading-relaxed text-slate-700">
@@ -86,7 +86,7 @@
 
               <ul class="list-disc space-y-3 pl-5 leading-relaxed text-slate-700">
                 <li><strong>HQ-ASW-01 (Access):</strong> Instead of just Layer 2 VLAN trunks, this switch will now participate in routing, eliminating the need for STP to manage redundant uplinks.</li>
-                <li><strong>HQ-DSW-01 &amp; 02 (Distribution):</strong> These act as our routed core/distribution layer. No more HSRP or complex Layer 2 load balancing—we'll rely on OSPF ECMP!</li>
+                <li><strong>HQ-DSW-01 &amp; 02 (Distribution):</strong> These act as our routed core/distribution layer. No more HSRP or complex Layer 2 load balancing — we'll rely on OSPF ECMP!</li>
                 <li><strong>HQ-EDGE-01 (Edge Router):</strong> The Layer 3 boundary between HQ and the simulated provider.</li>
                 <li><strong>ISP-01 (ISP Router):</strong> An isolated provider simulation to test a proper external routing boundary.</li>
               </ul>
@@ -224,7 +224,7 @@ vlan 120
                   Now that the routed architecture is officially decided, it was time to tackle the logical side: IP addressing.
                 </p>
                 <p class="leading-relaxed text-slate-700">
-                  Because VLANs and SVIs will now live right on the access switches with purely routed upstream links, my old CCNA addressing scheme wasn't going to cut it. I needed a clean, scalable subnetting plan that would play nicely with our new routed design and give this rebuild a much cleaner path forward. I will admit that what I've come up with is a chaotic combination of lots of research, AI prompts, and plenty of arguing with AI about why X is better than Y 😂—but I'm honestly still proud of the outcome!
+                  Because VLANs and SVIs will now live right on the access switches with purely routed upstream links, my old CCNA addressing scheme wasn't going to cut it. I needed a clean, scalable subnetting plan that would play nicely with our new routed design and give this rebuild a much cleaner path forward. I will admit that what I've come up with is a chaotic combination of lots of research, and plenty of arguing with AI about why X is better than Y 😂 — but I'm honestly still proud of the outcome!
                 </p>
                 <p class="leading-relaxed text-slate-700">
                   P.S.: Feel free to give me tips on how to improve this plan in the LinkedIn comments or PM me. I know it can be better, and I want to learn from you all! 🙏
@@ -338,11 +338,34 @@ vlan 120
                   </div>
                 </dl>
                 <div class="border-t border-slate-200 px-5 py-4">
-                  <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">IPv6 endpoint pattern</p>
-                  <p class="mt-2 whitespace-nowrap font-mono text-sm font-semibold sm:text-base" aria-label="2001 db8 site VLAN ID double colon host">
-                    <span class="text-emerald-300">2001:db8</span><span class="text-slate-500">:</span><span class="text-sky-300">&lt;SITE&gt;</span><span class="text-slate-500">:</span><span class="text-amber-300">&lt;VLAN_ID&gt;</span><span class="text-slate-500">::</span><span class="text-violet-300">&lt;HOST&gt;</span>
-                  </p>
-    </div>
+                  <p class="leading-relaxed text-slate-700">Now for the fun (and sometimes intimidating) part: IPv6! 🌐 To keep us from going cross-eyed, we are keeping the logic exactly the same. HQ uses the documentation prefix <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">2001:db8:1::/48</code>, and we are going to mirror the IPv4 functional VLAN IDs right into the IPv6 subnets wherever practical.</p>
+                  <section class="mt-5" aria-labelledby="ipv6-endpoint-pattern-title">
+                    <p id="ipv6-endpoint-pattern-title" class="text-xs font-semibold uppercase tracking-wide text-slate-500">IPv6 endpoint pattern</p>
+                    <p class="mt-2 text-sm text-slate-600">Worked HQ example: an IT user device in VLAN 10.</p>
+                    <p class="mt-3 whitespace-nowrap font-mono text-xl font-semibold tracking-wide sm:text-2xl" aria-label="2001 db8 1 10 double colon 25 slash 64">
+                      <span class="text-emerald-300">2001:db8</span><span class="text-slate-500">:</span><span class="text-sky-300">1</span><span class="text-slate-500">:</span><span class="text-amber-300">10</span><span class="text-slate-500">::</span><span class="text-violet-300">25/64</span>
+                    </p>
+                    <dl class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                      <div class="border-l-2 border-emerald-300 pl-3">
+                        <dt class="text-xs font-semibold uppercase tracking-wide text-emerald-300">Documentation prefix</dt>
+                        <dd class="mt-1 text-sm text-slate-700"><span class="font-mono font-semibold text-emerald-300">2001:db8</span> = lab-only documentation space</dd>
+                      </div>
+                      <div class="border-l-2 border-sky-300 pl-3">
+                        <dt class="text-xs font-semibold uppercase tracking-wide text-sky-300">Site</dt>
+                        <dd class="mt-1 text-sm text-slate-700"><span class="font-mono font-semibold text-sky-300">1</span> = Site 1 / HQ</dd>
+                      </div>
+                      <div class="border-l-2 border-amber-300 pl-3">
+                        <dt class="text-xs font-semibold uppercase tracking-wide text-amber-300">VLAN ID</dt>
+                        <dd class="mt-1 text-sm text-slate-700"><span class="font-mono font-semibold text-amber-300">10</span> = IT-USERS network</dd>
+                      </div>
+                      <div class="border-l-2 border-violet-300 pl-3">
+                        <dt class="text-xs font-semibold uppercase tracking-wide text-violet-300">Host</dt>
+                        <dd class="mt-1 text-sm text-slate-700"><span class="font-mono font-semibold text-violet-300">::25</span> = individual device</dd>
+                      </div>
+                    </dl>
+                    <p class="mt-4 text-sm leading-relaxed text-slate-600">Every endpoint VLAN receives a <span class="font-mono font-semibold">/64</span> prefix. The address ending in <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">::1</code> is reserved for its SVI default gateway; the full paired IPv4 and IPv6 host-allocation convention is documented below.</p>
+                  </section>
+                </div>
               </section>
 
               <div class="space-y-3 leading-relaxed text-slate-700">
@@ -361,47 +384,30 @@ vlan 120
               </div>
 
               <div class="space-y-3">
-                <h3 class="text-lg font-semibold text-slate-900">IPv4 host allocation</h3>
-                <p class="leading-relaxed text-slate-700">For consistency, every standard <span class="font-mono font-semibold">/24</span> endpoint subnet at HQ uses <span class="font-mono font-semibold">x.x.x.1</span> as its default gateway.</p>
+                <h3 class="text-lg font-semibold text-slate-900">Dual-stack host allocation</h3>
+                <p class="leading-relaxed text-slate-700">Every standard HQ endpoint VLAN follows the same paired convention: an IPv4 <span class="font-mono font-semibold">/24</span> and IPv6 <span class="font-mono font-semibold">/64</span>, with <span class="font-mono font-semibold">.1</span> and <span class="font-mono font-semibold">::1</span> reserved for the SVI default gateways.</p>
               </div>
 
-              <section class="overflow-hidden rounded-lg border border-slate-200 bg-white" aria-labelledby="ipv4-host-allocation-title">
+              <section class="overflow-hidden rounded-lg border border-slate-200 bg-white" aria-labelledby="dual-stack-host-allocation-title">
                 <div class="border-b border-slate-200 bg-slate-100 px-5 py-4">
-                  <h3 id="ipv4-host-allocation-title" class="font-semibold text-slate-900">Standard IPv4 endpoint allocation</h3>
-                  <p class="mt-1 text-sm text-slate-600">Applied consistently to IT-USERS, SERVERS, HR-USERS, SALES-USERS, GUEST-WIFI, NETWORK-MGMT, and VOICE.</p>
+                  <h3 id="dual-stack-host-allocation-title" class="font-semibold text-slate-900">Standard dual-stack endpoint allocation</h3>
+                  <p class="mt-1 text-sm text-slate-600">VLAN 10 / IT-USERS is the worked example; apply the same host roles to every endpoint VLAN&rsquo;s own IPv4 subnet and IPv6 prefix.</p>
                 </div>
                 <div class="overflow-x-auto">
-                  <table class="w-full min-w-[34rem] border-collapse text-left text-sm">
-                    <thead class="bg-slate-100 text-slate-900"><tr><th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Address range</th><th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Purpose</th></tr></thead>
+                  <table class="w-full min-w-[66rem] border-collapse text-left text-sm [&_code]:rounded [&_code]:bg-slate-100 [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-sm [&_code]:text-slate-800">
+                    <thead class="bg-slate-100 text-slate-900"><tr><th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Allocation</th><th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">IPv4 &mdash; VLAN 10</th><th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">IPv6 &mdash; VLAN 10</th><th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Purpose</th></tr></thead>
                     <tbody class="divide-y divide-slate-200 text-slate-700">
-                      <tr><th class="px-4 py-3 font-mono font-semibold text-slate-900" scope="row">.1</th><td class="px-4 py-3">Default gateway / SVI</td></tr>
-                      <tr><th class="px-4 py-3 font-mono font-semibold text-slate-900" scope="row">.2 – .49</th><td class="px-4 py-3">Fixed/static assignments</td></tr>
-                      <tr><th class="px-4 py-3 font-mono font-semibold text-slate-900" scope="row">.50 – .199</th><td class="px-4 py-3">DHCP client pool</td></tr>
-                      <tr><th class="px-4 py-3 font-mono font-semibold text-slate-900" scope="row">.200 – .239</th><td class="px-4 py-3">Future growth / expansion</td></tr>
-                      <tr><th class="px-4 py-3 font-mono font-semibold text-slate-900" scope="row">.240 – .254</th><td class="px-4 py-3">Reserved infrastructure / special-use addresses</td></tr>
+                      <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Network / prefix</th><td class="px-4 py-3"><code><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">0/24</span></code></td><td class="px-4 py-3"><code><span class="text-slate-900">2001:db8:1:10</span><span class="text-violet-300">::/64</span></code></td><td class="px-4 py-3">Endpoint network boundary</td></tr>
+                      <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Gateway / SVI</th><td class="px-4 py-3"><code><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">1</span></code></td><td class="px-4 py-3"><code><span class="text-slate-900">2001:db8:1:10</span><span class="text-violet-300">::1</span></code></td><td class="px-4 py-3">Default gateway</td></tr>
+                      <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Fixed / static</th><td class="px-4 py-3"><code><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">2</span></code> &ndash; <code><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">49</span></code></td><td class="px-4 py-3"><code><span class="text-slate-900">2001:db8:1:10</span><span class="text-violet-300">::2</span></code> &ndash; <code><span class="text-slate-900">2001:db8:1:10</span><span class="text-violet-300">::49</span></code></td><td class="px-4 py-3">Fixed devices and infrastructure</td></tr>
+                      <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Client pool</th><td class="px-4 py-3"><code><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">50</span></code> &ndash; <code><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">199</span></code></td><td class="px-4 py-3"><code><span class="text-slate-900">2001:db8:1:10</span><span class="text-violet-300">::50</span></code> &ndash; <code><span class="text-slate-900">2001:db8:1:10</span><span class="text-violet-300">::199</span></code></td><td class="px-4 py-3">DHCP / DHCPv6 client pool</td></tr>
+                      <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Future growth</th><td class="px-4 py-3"><code><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">200</span></code> &ndash; <code><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">239</span></code></td><td class="px-4 py-3"><code><span class="text-slate-900">2001:db8:1:10</span><span class="text-violet-300">::200</span></code> &ndash; <code><span class="text-slate-900">2001:db8:1:10</span><span class="text-violet-300">::239</span></code></td><td class="px-4 py-3">Reserved expansion space</td></tr>
+                      <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Infrastructure reserve</th><td class="px-4 py-3"><code><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">240</span></code> &ndash; <code><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">254</span></code></td><td class="px-4 py-3"><code><span class="text-slate-900">2001:db8:1:10</span><span class="text-violet-300">::240</span></code> &ndash; <code><span class="text-slate-900">2001:db8:1:10</span><span class="text-violet-300">::254</span></code></td><td class="px-4 py-3">Special-use addresses</td></tr>
+                      <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Broadcast</th><td class="px-4 py-3"><code><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">255</span></code></td><td class="px-4 py-3">None &mdash; IPv6 uses multicast</td><td class="px-4 py-3">IPv4 broadcast boundary</td></tr>
                     </tbody>
                   </table>
                 </div>
-                  <div class="border-t border-slate-200 px-5 py-5">
-                    <div class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
-                      <p class="font-semibold text-slate-900">VLAN 10 / IT-USERS example</p>
-                      <span class="w-fit rounded bg-slate-100 px-2 py-1 font-mono text-sm font-semibold" aria-label="10.1.10.0/24"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">10</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></span>
-                    </div>
-                    <dl class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                      <div class="rounded-md border border-slate-200 px-3 py-3"><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Network</dt><dd class="mt-1 whitespace-nowrap font-mono text-sm font-semibold" aria-label="10.1.10.0"><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">0</span></dd></div>
-                      <div class="rounded-md border border-slate-200 px-3 py-3"><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Gateway / SVI</dt><dd class="mt-1 whitespace-nowrap font-mono text-sm font-semibold" aria-label="10.1.10.1"><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">1</span></dd></div>
-                      <div class="rounded-md border border-slate-200 px-3 py-3"><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Fixed / static</dt><dd class="mt-1 font-mono text-sm font-semibold" aria-label="10.1.10.2 through 10.1.10.49"><span class="whitespace-nowrap text-slate-900">10.1.10.<span class="text-violet-300">2</span></span> <span class="text-slate-500">–</span> <span class="whitespace-nowrap text-slate-900">10.1.10.<span class="text-violet-300">49</span></span></dd></div>
-                      <div class="rounded-md border border-slate-200 px-3 py-3"><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">DHCP pool</dt><dd class="mt-1 font-mono text-sm font-semibold" aria-label="10.1.10.50 through 10.1.10.199"><span class="whitespace-nowrap text-slate-900">10.1.10.<span class="text-violet-300">50</span></span> <span class="text-slate-500">–</span> <span class="whitespace-nowrap text-slate-900">10.1.10.<span class="text-violet-300">199</span></span></dd></div>
-                      <div class="rounded-md border border-slate-200 px-3 py-3"><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Future growth</dt><dd class="mt-1 font-mono text-sm font-semibold" aria-label="10.1.10.200 through 10.1.10.239"><span class="whitespace-nowrap text-slate-900">10.1.10.<span class="text-violet-300">200</span></span> <span class="text-slate-500">–</span> <span class="whitespace-nowrap text-slate-900">10.1.10.<span class="text-violet-300">239</span></span></dd></div>
-                      <div class="rounded-md border border-slate-200 px-3 py-3"><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Infrastructure reserve</dt><dd class="mt-1 font-mono text-sm font-semibold" aria-label="10.1.10.240 through 10.1.10.254"><span class="whitespace-nowrap text-slate-900">10.1.10.<span class="text-violet-300">240</span></span> <span class="text-slate-500">–</span> <span class="whitespace-nowrap text-slate-900">10.1.10.<span class="text-violet-300">254</span></span></dd></div>
-                  </dl>
-                  <p class="mt-4 text-sm leading-relaxed text-slate-600">Broadcast is <span class="whitespace-nowrap rounded bg-slate-100 px-1 py-0.5 font-mono text-sm" aria-label="10.1.10.255"><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">255</span></span>. The <span class="whitespace-nowrap rounded bg-slate-100 px-1 py-0.5 font-mono text-sm" aria-label="10.1.10.254"><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">254</span></span> address remains reserved; the default gateway is <span class="whitespace-nowrap rounded bg-slate-100 px-1 py-0.5 font-mono text-sm" aria-label="10.1.10.1"><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">1</span></span>.</p>
-                </div>
               </section>
-
-                <p class="leading-relaxed text-slate-700">
-                    Now for the fun (and sometimes intimidating) part: IPv4/IPv6 Dual-stacking! 🌐 To keep us from going cross-eyed, we are keeping the logic exactly the same. HQ uses the documentation prefix <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">2001:db8:1::/48</code>, and we are going to mirror the IPv4 functional VLAN IDs right into the IPv6 subnets wherever practical.
-                  </p>
 
               <section class="overflow-hidden rounded-lg border border-slate-200 bg-white" aria-labelledby="final-hq-vlan-table-title">
 
