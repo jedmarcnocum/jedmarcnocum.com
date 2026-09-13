@@ -380,7 +380,7 @@ vlan 120
                       </div>
                     </dl>
                     <p class="mt-4 text-sm leading-relaxed text-slate-600">Every endpoint VLAN receives a <span class="font-mono font-semibold">/64</span> prefix. The address ending in <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">::1</code> is reserved for its SVI default gateway.</p>
-                    <p class="mt-2 text-sm leading-relaxed text-slate-600">IPv6 interface identifiers are hexadecimal. Readable values such as <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">::10</code>, <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">::20</code>, or <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">::25</code> are administrative labels for static devices; they are not decimal equivalents of IPv4 host numbers.</p>
+                    <p class="mt-2 text-sm leading-relaxed text-slate-600">IPv6 interface identifiers are hexadecimal. Readable values such as <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">::10</code>, <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">::20</code>, or <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">::25</code> are administrative labels for static devices; they are not decimal equivalents of IPv4 host numbers and are simply mnemonic labels chosen to make the two addresses easy to associate.</p>
                   </section>
                 </div>
               </section>
@@ -458,21 +458,43 @@ vlan 120
                 <section class="overflow-hidden rounded-lg border border-slate-200 bg-white" aria-labelledby="ipv6-transit-title">
                   <div class="border-b border-slate-200 bg-slate-100 px-5 py-4">
                     <h3 id="ipv6-transit-title" class="font-semibold text-slate-900">Dual-stack routed transit links</h3>
-                    <p class="mt-1 text-sm text-slate-600">IPv4 reserves <code class="rounded bg-white px-1 py-0.5 text-slate-800">10.254.0.0/16</code> for efficient <span class="font-mono font-semibold">/31</span> links. Dedicated IPv6 <span class="font-mono font-semibold">/127</span> networks begin at <code class="rounded bg-white px-1 py-0.5 text-slate-800">2001:db8:1:ff00::/127</code>.</p>
+                    <p class="mt-1 text-sm text-slate-600">Each routed link receives its own paired IPv4 <span class="font-mono font-semibold">/31</span> and IPv6 <span class="font-mono font-semibold">/127</span> network, keeping the routed-access path easy to trace.</p>
                   </div>
-                  <div class="overflow-x-auto">
-                    <table class="w-full min-w-[68rem] border-collapse text-left text-sm [&_code]:rounded [&_code]:bg-slate-100 [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-sm [&_code]:text-slate-800">
-                      <thead class="bg-slate-100 text-slate-900">
-                        <tr><th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Link</th><th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">IPv4 transit</th><th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">IPv6 transit</th></tr>
-                      </thead>
-                      <tbody class="divide-y divide-slate-200 text-slate-700">
-                        <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">HQ-DSW-01 ↔ HQ-DSW-02 routed Port-Channel12</th><td class="px-4 py-3"><code>10.254.1.0/31</code></td><td class="px-4 py-3"><code>2001:db8:1:ff00::/127</code></td></tr>
-                        <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">HQ-DSW-01 ↔ HQ-EDGE-01</th><td class="px-4 py-3"><code>10.254.1.2/31</code></td><td class="px-4 py-3"><code>2001:db8:1:ff01::/127</code></td></tr>
-                        <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">HQ-DSW-02 ↔ HQ-EDGE-01</th><td class="px-4 py-3"><code>10.254.1.4/31</code></td><td class="px-4 py-3"><code>2001:db8:1:ff02::/127</code></td></tr>
-                        <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">HQ-ASW-01 ↔ HQ-DSW-01</th><td class="px-4 py-3"><code>10.254.1.6/31</code></td><td class="px-4 py-3"><code>2001:db8:1:ff03::/127</code></td></tr>
-                        <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">HQ-ASW-01 ↔ HQ-DSW-02</th><td class="px-4 py-3"><code>10.254.1.8/31</code></td><td class="px-4 py-3"><code>2001:db8:1:ff04::/127</code></td></tr>
-                      </tbody>
-                    </table>
+                  <div class="space-y-4 p-5">
+                    <div class="grid gap-4 md:grid-cols-2">
+                      <section class="overflow-hidden rounded-lg border border-slate-200" aria-labelledby="ipv4-transit-example-title">
+                        <h4 id="ipv4-transit-example-title" class="border-b border-slate-200 px-4 py-3 text-sm font-semibold text-slate-900">IPv4 transit example</h4>
+                        <dl class="divide-y divide-slate-200 text-sm">
+                          <div class="px-4 py-3"><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Site 1 / HQ &mdash; distribution Port-Channel12</dt><dd class="mt-1 font-mono font-semibold"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-amber-300">254</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-violet-300">0</span><span class="text-slate-800">/31</span></dd></div>
+                          <div class="px-4 py-3"><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Convention</dt><dd class="mt-1 font-mono text-xs font-semibold sm:text-sm"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-amber-300">254</span><span class="text-slate-500">.</span><span class="text-sky-300">&lt;SITE&gt;</span><span class="text-slate-500">.</span><span class="text-violet-300">&lt;LINK&gt;</span><span class="text-slate-800">/31</span></dd></div>
+                          <div class="px-4 py-3"><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Address breakdown</dt><dd class="mt-1 space-y-1 text-slate-600"><span class="block"><span class="font-mono text-amber-300">254</span> = routed transit function, not a VLAN</span><span class="block"><span class="font-mono text-sky-300">1</span> = Site 1 / HQ</span><span class="block"><span class="font-mono text-violet-300">0</span> = first IPv4 link allocation</span></dd></div>
+                        </dl>
+                      </section>
+                      <section class="overflow-hidden rounded-lg border border-slate-200" aria-labelledby="ipv6-transit-example-title">
+                        <h4 id="ipv6-transit-example-title" class="border-b border-slate-200 px-4 py-3 text-sm font-semibold text-slate-900">IPv6 transit example</h4>
+                        <dl class="divide-y divide-slate-200 text-sm">
+                          <div class="px-4 py-3"><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Site 1 / HQ &mdash; distribution Port-Channel12</dt><dd class="mt-1 font-mono font-semibold"><span class="text-emerald-300">2001:db8</span><span class="text-slate-500">:</span><span class="text-sky-300">1</span><span class="text-slate-500">:</span><span class="text-amber-300">ff</span><span class="text-violet-300">00</span><span class="text-slate-500">::</span><span class="text-slate-800">/127</span></dd></div>
+                          <div class="px-4 py-3"><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Convention</dt><dd class="mt-1 font-mono text-xs font-semibold sm:text-sm"><span class="text-emerald-300">2001:db8</span><span class="text-slate-500">:</span><span class="text-sky-300">&lt;SITE&gt;</span><span class="text-slate-500">:</span><span class="text-amber-300">ff</span><span class="text-violet-300">&lt;LINK&gt;</span><span class="text-slate-500">::</span><span class="text-slate-800">/127</span></dd></div>
+                          <div class="px-4 py-3"><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Address breakdown</dt><dd class="mt-1 space-y-1 text-slate-600"><span class="block"><span class="font-mono text-amber-300">ff</span> = routed transit function, not a VLAN</span><span class="block"><span class="font-mono text-sky-300">1</span> = Site 1 / HQ</span><span class="block"><span class="font-mono text-violet-300">00</span> = first IPv6 link allocation</span></dd></div>
+                        </dl>
+                      </section>
+                    </div>
+                    <p class="text-sm leading-relaxed text-slate-600">IPv4 link values advance by two because each <span class="font-mono font-semibold">/31</span> uses two addresses. The paired IPv6 networks advance from <span class="font-mono text-violet-300">ff00</span> through <span class="font-mono text-violet-300">ff04</span>.</p>
+                    <div class="overflow-x-auto rounded-lg border border-slate-200">
+                      <table class="w-full min-w-[42rem] border-collapse text-left text-sm md:min-w-0 [&_code]:rounded [&_code]:bg-slate-100 [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-sm [&_code]:text-slate-800">
+                        <colgroup><col class="w-[48%]"><col class="w-[22%]"><col class="w-[30%]"></colgroup>
+                        <thead class="bg-slate-100 text-slate-900">
+                          <tr><th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">Routed link</th><th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">IPv4 /31</th><th class="border-b border-slate-200 px-4 py-3 font-semibold" scope="col">IPv6 /127</th></tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 text-slate-700">
+                          <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">HQ-DSW-01 ↔ HQ-DSW-02 <span class="font-normal text-slate-600">(Port-Channel12)</span></th><td class="px-4 py-3"><code><span class="text-emerald-300">10</span>.<span class="text-amber-300">254</span>.<span class="text-sky-300">1</span>.<span class="text-violet-300">0</span>/31</code></td><td class="px-4 py-3"><code><span class="text-emerald-300">2001:db8</span>:<span class="text-sky-300">1</span>:<span class="text-amber-300">ff</span><span class="text-violet-300">00</span>::/127</code></td></tr>
+                          <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">HQ-DSW-01 ↔ HQ-EDGE-01</th><td class="px-4 py-3"><code><span class="text-emerald-300">10</span>.<span class="text-amber-300">254</span>.<span class="text-sky-300">1</span>.<span class="text-violet-300">2</span>/31</code></td><td class="px-4 py-3"><code><span class="text-emerald-300">2001:db8</span>:<span class="text-sky-300">1</span>:<span class="text-amber-300">ff</span><span class="text-violet-300">01</span>::/127</code></td></tr>
+                          <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">HQ-DSW-02 ↔ HQ-EDGE-01</th><td class="px-4 py-3"><code><span class="text-emerald-300">10</span>.<span class="text-amber-300">254</span>.<span class="text-sky-300">1</span>.<span class="text-violet-300">4</span>/31</code></td><td class="px-4 py-3"><code><span class="text-emerald-300">2001:db8</span>:<span class="text-sky-300">1</span>:<span class="text-amber-300">ff</span><span class="text-violet-300">02</span>::/127</code></td></tr>
+                          <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">HQ-ASW-01 ↔ HQ-DSW-01</th><td class="px-4 py-3"><code><span class="text-emerald-300">10</span>.<span class="text-amber-300">254</span>.<span class="text-sky-300">1</span>.<span class="text-violet-300">6</span>/31</code></td><td class="px-4 py-3"><code><span class="text-emerald-300">2001:db8</span>:<span class="text-sky-300">1</span>:<span class="text-amber-300">ff</span><span class="text-violet-300">03</span>::/127</code></td></tr>
+                          <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">HQ-ASW-01 ↔ HQ-DSW-02</th><td class="px-4 py-3"><code><span class="text-emerald-300">10</span>.<span class="text-amber-300">254</span>.<span class="text-sky-300">1</span>.<span class="text-violet-300">8</span>/31</code></td><td class="px-4 py-3"><code><span class="text-emerald-300">2001:db8</span>:<span class="text-sky-300">1</span>:<span class="text-amber-300">ff</span><span class="text-violet-300">04</span>::/127</code></td></tr>
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
           </section>
 
@@ -555,12 +577,40 @@ vlan 120
 
               <div class="space-y-3">
                 <h3 class="text-lg font-semibold text-slate-900">&#x1F4DD; Addressing Summary</h3>
-                <ul class="list-disc space-y-2 pl-6 leading-relaxed text-slate-700">
-                  <li><strong>LAN / VLAN networks:</strong> <span class="whitespace-nowrap font-mono"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">&lt;SITE&gt;</span><span class="text-slate-500">.</span><span class="text-amber-300">&lt;FUNCTION/SUBNET&gt;</span><span class="text-slate-500">.</span><span class="text-violet-300">&lt;HOST&gt;</span></span></li>
-                  <li><strong>Management:</strong> <span class="whitespace-nowrap font-mono"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">&lt;SITE&gt;</span><span class="text-slate-500">.</span><span class="text-amber-300">99</span><span class="text-slate-500">.</span><span class="text-violet-300">&lt;DEVICE&gt;</span></span></li>
-                  <li><strong>Loopbacks:</strong> <span class="whitespace-nowrap font-mono"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-amber-300">255</span><span class="text-slate-500">.</span><span class="text-sky-300">&lt;SITE&gt;</span><span class="text-slate-500">.</span><span class="text-violet-300">&lt;DEVICE-ID&gt;/32</span></span></li>
-                  <li><strong>Routed transits:</strong> <span class="whitespace-nowrap font-mono"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-amber-300">254</span><span class="text-slate-500">.</span><span class="text-sky-300">&lt;SITE&gt;</span><span class="text-slate-500">.</span><span class="text-violet-300">&lt;LINK&gt;/31</span></span></li>
-                </ul>
+                <section class="overflow-hidden rounded-lg border border-slate-200 bg-white" aria-labelledby="addressing-summary-table-title">
+                  <div class="border-b border-slate-200 bg-slate-100 px-5 py-4">
+                    <h4 id="addressing-summary-table-title" class="font-semibold text-slate-900">Dual-stack convention at a glance</h4>
+                    <p class="mt-1 text-sm text-slate-600">The same color key follows every address family: prefix, site, network role, then the device or link identifier.</p>
+                  </div>
+                  <div class="grid gap-3 border-b border-slate-200 px-5 py-4 text-xs sm:grid-cols-2 lg:grid-cols-4">
+                    <p class="border-l-2 border-emerald-300 pl-3"><span class="block font-semibold uppercase tracking-wide text-emerald-300">Green</span><span class="mt-1 block text-slate-600">Private or documentation prefix</span></p>
+                    <p class="border-l-2 border-sky-300 pl-3"><span class="block font-semibold uppercase tracking-wide text-sky-300">Blue</span><span class="mt-1 block text-slate-600">Site identifier</span></p>
+                    <p class="border-l-2 border-amber-300 pl-3"><span class="block font-semibold uppercase tracking-wide text-amber-300">Yellow</span><span class="mt-1 block text-slate-600">Network function or role</span></p>
+                    <p class="border-l-2 border-violet-300 pl-3"><span class="block font-semibold uppercase tracking-wide text-violet-300">Purple</span><span class="mt-1 block text-slate-600">Host, device, or link identifier</span></p>
+                  </div>
+                  <dl class="grid gap-4 p-5 lg:grid-cols-2">
+                    <div class="rounded-lg border border-slate-200 px-4 py-4 [&>dd]:mt-3 md:[&>dd>span:first-child]:!block">
+                      <dt class="font-semibold text-slate-900">LAN / VLAN networks<span class="mt-1 block text-sm font-normal text-slate-600">Endpoint networks</span></dt>
+                      <dd class="font-mono text-xs sm:text-sm"><span class="mb-1 block font-sans text-xs font-semibold uppercase tracking-wide text-slate-500 md:hidden">IPv4</span><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">&lt;SITE&gt;</span><span class="text-slate-500">.</span><span class="text-amber-300">&lt;FUNCTION/SUBNET&gt;</span><span class="text-slate-500">.</span><span class="text-violet-300">&lt;HOST&gt;</span></dd>
+                      <dd class="font-mono text-xs sm:text-sm"><span class="mb-1 block font-sans text-xs font-semibold uppercase tracking-wide text-slate-500 md:hidden">IPv6</span><span class="text-emerald-300">2001:db8</span><span class="text-slate-500">:</span><span class="text-sky-300">&lt;SITE&gt;</span><span class="text-slate-500">:</span><span class="text-amber-300">&lt;VLAN-ID&gt;</span><span class="text-slate-500">::</span><span class="text-violet-300">&lt;IID&gt;/64</span></dd>
+                    </div>
+                    <div class="rounded-lg border border-slate-200 px-4 py-4 [&>dd]:mt-3 md:[&>dd>span:first-child]:!block">
+                      <dt class="font-semibold text-slate-900">Management<span class="mt-1 block text-sm font-normal text-slate-600">Static infrastructure access</span></dt>
+                      <dd class="font-mono text-xs sm:text-sm"><span class="mb-1 block font-sans text-xs font-semibold uppercase tracking-wide text-slate-500 md:hidden">IPv4</span><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">&lt;SITE&gt;</span><span class="text-slate-500">.</span><span class="text-amber-300">99</span><span class="text-slate-500">.</span><span class="text-violet-300">&lt;DEVICE&gt;</span></dd>
+                      <dd class="font-mono text-xs sm:text-sm"><span class="mb-1 block font-sans text-xs font-semibold uppercase tracking-wide text-slate-500 md:hidden">IPv6</span><span class="text-emerald-300">2001:db8</span><span class="text-slate-500">:</span><span class="text-sky-300">&lt;SITE&gt;</span><span class="text-slate-500">:</span><span class="text-amber-300">99</span><span class="text-slate-500">::</span><span class="text-violet-300">&lt;STATIC-IID&gt;/64</span></dd>
+                    </div>
+                    <div class="rounded-lg border border-slate-200 px-4 py-4 [&>dd]:mt-3 md:[&>dd>span:first-child]:!block">
+                      <dt class="font-semibold text-slate-900">Loopbacks<span class="mt-1 block text-sm font-normal text-slate-600">Stable device identity</span></dt>
+                      <dd class="font-mono text-xs sm:text-sm"><span class="mb-1 block font-sans text-xs font-semibold uppercase tracking-wide text-slate-500 md:hidden">IPv4</span><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-amber-300">255</span><span class="text-slate-500">.</span><span class="text-sky-300">&lt;SITE&gt;</span><span class="text-slate-500">.</span><span class="text-violet-300">&lt;DEVICE-ID&gt;/32</span></dd>
+                      <dd class="font-mono text-xs sm:text-sm"><span class="mb-1 block font-sans text-xs font-semibold uppercase tracking-wide text-slate-500 md:hidden">IPv6</span><span class="text-emerald-300">2001:db8</span><span class="text-slate-500">:</span><span class="text-sky-300">&lt;SITE&gt;</span><span class="text-slate-500">:</span><span class="text-amber-300">ffff</span><span class="text-slate-500">::</span><span class="text-violet-300">&lt;DEVICE-ID&gt;/128</span></dd>
+                    </div>
+                    <div class="rounded-lg border border-slate-200 px-4 py-4 [&>dd]:mt-3 md:[&>dd>span:first-child]:!block">
+                      <dt class="font-semibold text-slate-900">Routed transits<span class="mt-1 block text-sm font-normal text-slate-600">Point-to-point infrastructure</span></dt>
+                      <dd class="font-mono text-xs sm:text-sm"><span class="mb-1 block font-sans text-xs font-semibold uppercase tracking-wide text-slate-500 md:hidden">IPv4</span><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-amber-300">254</span><span class="text-slate-500">.</span><span class="text-sky-300">&lt;SITE&gt;</span><span class="text-slate-500">.</span><span class="text-violet-300">&lt;LINK&gt;/31</span></dd>
+                      <dd class="font-mono text-xs sm:text-sm"><span class="mb-1 block font-sans text-xs font-semibold uppercase tracking-wide text-slate-500 md:hidden">IPv6</span><span class="text-emerald-300">2001:db8</span><span class="text-slate-500">:</span><span class="text-sky-300">&lt;SITE&gt;</span><span class="text-slate-500">:</span><span class="text-amber-300">ff</span><span class="text-violet-300">&lt;LINK&gt;</span><span class="text-slate-500">::</span><span class="text-slate-800">/127</span></dd>
+                    </div>
+                  </dl>
+                </section>
               </div>
 
               <p class="leading-relaxed text-slate-700">
