@@ -338,7 +338,23 @@ vlan 120
                   </div>
                 </dl>
                 <div class="border-t border-slate-200 px-5 py-4">
-                  <p class="leading-relaxed text-slate-700">Now for the fun (and sometimes intimidating) part: IPv6! 🌐 To keep us from going cross-eyed, we are keeping the logic exactly the same. HQ uses the documentation prefix <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">2001:db8:1::/48</code>, and we are going to mirror the IPv4 functional VLAN IDs right into the IPv6 subnets wherever practical.</p>
+                  <div class="space-y-3 leading-relaxed text-slate-700">
+                    <h4 class="text-lg font-semibold text-slate-900">How expansion works</h4>
+                    <p>
+                      The third octet reserves a function range rather than copying the VLAN ID forever. <span class="font-mono font-semibold">VLAN 30</span>, <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">HR-USERS</code>, starts at <span class="whitespace-nowrap font-mono"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">30</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></span>.
+                    </p>
+                    <p>When HR needs more capacity, create a new, separate HR user VLAN and subnet:</p>
+                    <ul class="list-disc space-y-2 pl-6">
+                      <li>First expansion: <span class="whitespace-nowrap font-mono"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">31</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></span></li>
+                      <li>Further HR subnets: <span class="whitespace-nowrap font-mono"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">32</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></span> through <span class="whitespace-nowrap font-mono"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">39</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></span></li>
+                    </ul>
+                    <p>
+                      Each remains its own VLAN and <span class="font-mono text-violet-300">/24</span> subnet, so expansion stays predictable instead of cramming multiple networks into one VLAN. 🤝
+                    </p>
+                  </div>
+                </div>
+                <div class="border-t border-slate-200 px-5 py-4">
+                  <p class="leading-relaxed text-slate-700">Now for the fun (and sometimes intimidating) part: IPv6! 🌐 To keep us from going cross-eyed, the IPv6 site and VLAN structure mirrors IPv4 wherever practical. The host/interface identifier portion does not follow the IPv4 decimal host-allocation ranges. HQ uses the documentation prefix <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">2001:db8:1::/48</code>.</p>
                   <section class="mt-5" aria-labelledby="ipv6-endpoint-pattern-title">
                     <p id="ipv6-endpoint-pattern-title" class="text-xs font-semibold uppercase tracking-wide text-slate-500">IPv6 endpoint pattern</p>
                     <p class="mt-2 text-sm text-slate-600">Worked HQ example: an IT user device in VLAN 10.</p>
@@ -359,29 +375,15 @@ vlan 120
                         <dd class="mt-1 text-sm text-slate-700"><span class="font-mono font-semibold text-amber-300">10</span> = IT-USERS network</dd>
                       </div>
                       <div class="border-l-2 border-violet-300 pl-3">
-                        <dt class="text-xs font-semibold uppercase tracking-wide text-violet-300">Host</dt>
-                        <dd class="mt-1 text-sm text-slate-700"><span class="font-mono font-semibold text-violet-300">::25</span> = individual device</dd>
+                        <dt class="text-xs font-semibold uppercase tracking-wide text-violet-300">Static IID / device ID</dt>
+                        <dd class="mt-1 text-sm text-slate-700"><span class="font-mono font-semibold text-violet-300">::25</span> = chosen readable static identifier</dd>
                       </div>
                     </dl>
-                    <p class="mt-4 text-sm leading-relaxed text-slate-600">Every endpoint VLAN receives a <span class="font-mono font-semibold">/64</span> prefix. The address ending in <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">::1</code> is reserved for its SVI default gateway; the full paired IPv4 and IPv6 host-allocation convention is documented below.</p>
+                    <p class="mt-4 text-sm leading-relaxed text-slate-600">Every endpoint VLAN receives a <span class="font-mono font-semibold">/64</span> prefix. The address ending in <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">::1</code> is reserved for its SVI default gateway.</p>
+                    <p class="mt-2 text-sm leading-relaxed text-slate-600">IPv6 interface identifiers are hexadecimal. Readable values such as <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">::10</code>, <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">::20</code>, or <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">::25</code> are administrative labels for static devices; they are not decimal equivalents of IPv4 host numbers.</p>
                   </section>
                 </div>
               </section>
-
-              <div class="space-y-3 leading-relaxed text-slate-700">
-                <h4 class="text-lg font-semibold text-slate-900">How expansion works</h4>
-                <p>
-                  The third octet reserves a function range rather than copying the VLAN ID forever. <span class="font-mono font-semibold">VLAN 30</span>, <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">HR-USERS</code>, starts at <span class="whitespace-nowrap font-mono"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">30</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></span>.
-                </p>
-                <p>When HR needs more capacity, create a new, separate HR user VLAN and subnet:</p>
-                <ul class="list-disc space-y-2 pl-6">
-                  <li>First expansion: <span class="whitespace-nowrap font-mono"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">31</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></span></li>
-                  <li>Further HR subnets: <span class="whitespace-nowrap font-mono"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">32</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></span> through <span class="whitespace-nowrap font-mono"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-amber-300">39</span><span class="text-slate-500">.</span><span class="text-violet-300">0/24</span></span></li>
-                </ul>
-                <p>
-                  Each remains its own VLAN and <span class="font-mono text-violet-300">/24</span> subnet, so expansion stays predictable instead of cramming multiple networks into one VLAN. 🤝
-                </p>
-              </div>
 
               <div class="space-y-3">
                 <h3 class="text-lg font-semibold text-slate-900">Dual-stack host allocation</h3>
@@ -399,14 +401,15 @@ vlan 120
                     <tbody class="divide-y divide-slate-200 text-slate-700">
                       <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Network / prefix</th><td class="px-4 py-3"><code><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">0/24</span></code></td><td class="px-4 py-3"><code><span class="text-slate-900">2001:db8:1:10</span><span class="text-violet-300">::/64</span></code></td><td class="px-4 py-3">Endpoint network boundary</td></tr>
                       <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Gateway / SVI</th><td class="px-4 py-3"><code><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">1</span></code></td><td class="px-4 py-3"><code><span class="text-slate-900">2001:db8:1:10</span><span class="text-violet-300">::1</span></code></td><td class="px-4 py-3">Default gateway</td></tr>
-                      <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Fixed / static</th><td class="px-4 py-3"><code><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">2</span></code> &ndash; <code><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">49</span></code></td><td class="px-4 py-3"><code><span class="text-slate-900">2001:db8:1:10</span><span class="text-violet-300">::2</span></code> &ndash; <code><span class="text-slate-900">2001:db8:1:10</span><span class="text-violet-300">::49</span></code></td><td class="px-4 py-3">Fixed devices and infrastructure</td></tr>
-                      <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Client pool</th><td class="px-4 py-3"><code><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">50</span></code> &ndash; <code><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">199</span></code></td><td class="px-4 py-3"><code><span class="text-slate-900">2001:db8:1:10</span><span class="text-violet-300">::50</span></code> &ndash; <code><span class="text-slate-900">2001:db8:1:10</span><span class="text-violet-300">::199</span></code></td><td class="px-4 py-3">DHCP / DHCPv6 client pool</td></tr>
-                      <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Future growth</th><td class="px-4 py-3"><code><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">200</span></code> &ndash; <code><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">239</span></code></td><td class="px-4 py-3"><code><span class="text-slate-900">2001:db8:1:10</span><span class="text-violet-300">::200</span></code> &ndash; <code><span class="text-slate-900">2001:db8:1:10</span><span class="text-violet-300">::239</span></code></td><td class="px-4 py-3">Reserved expansion space</td></tr>
-                      <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Infrastructure reserve</th><td class="px-4 py-3"><code><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">240</span></code> &ndash; <code><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">254</span></code></td><td class="px-4 py-3"><code><span class="text-slate-900">2001:db8:1:10</span><span class="text-violet-300">::240</span></code> &ndash; <code><span class="text-slate-900">2001:db8:1:10</span><span class="text-violet-300">::254</span></code></td><td class="px-4 py-3">Special-use addresses</td></tr>
+                      <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Fixed / static</th><td class="px-4 py-3"><code><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">2</span></code> &ndash; <code><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">49</span></code></td><td class="px-4 py-3">Selected readable IIDs, e.g. <code>::10</code>, <code>::20</code>, <code>::30</code></td><td class="px-4 py-3">Fixed infrastructure / static device IDs</td></tr>
+                      <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Client pool</th><td class="px-4 py-3"><code><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">50</span></code> &ndash; <code><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">199</span></code></td><td class="px-4 py-3">SLAAC and/or DHCPv6</td><td class="px-4 py-3">Dynamic client addressing</td></tr>
+                      <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Future growth</th><td class="px-4 py-3"><code><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">200</span></code> &ndash; <code><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">239</span></code></td><td class="px-4 py-3">Unallocated within <code>/64</code></td><td class="px-4 py-3">Remaining IPv6 address space</td></tr>
+                      <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Infrastructure reserve</th><td class="px-4 py-3"><code><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">240</span></code> &ndash; <code><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">254</span></code></td><td class="px-4 py-3">Selected reserved IIDs as required</td><td class="px-4 py-3">Reserved static identifiers as required</td></tr>
                       <tr><th class="px-4 py-3 font-semibold text-slate-900" scope="row">Broadcast</th><td class="px-4 py-3"><code><span class="text-slate-900">10.1.10.</span><span class="text-violet-300">255</span></code></td><td class="px-4 py-3">None &mdash; IPv6 uses multicast</td><td class="px-4 py-3">IPv4 broadcast boundary</td></tr>
                     </tbody>
                   </table>
                 </div>
+                <p class="border-t border-slate-200 px-5 py-4 text-sm leading-relaxed text-slate-600">IPv4 uses defined numerical host ranges for static, DHCP, and reserved addresses. IPv6 does not mirror those decimal ranges. Readable IPv6 interface identifiers are used only for selected static infrastructure, while client addresses are assigned dynamically through SLAAC and/or DHCPv6. DHCPv6 does not provide the default gateway; IPv6 clients learn the default router through Router Advertisements.</p>
               </section>
 
               <section class="overflow-hidden rounded-lg border border-slate-200 bg-white" aria-labelledby="final-hq-vlan-table-title">
@@ -444,9 +447,6 @@ vlan 120
                     </tbody>
                   </table>
                 </div>
-                <p class="border-t border-slate-200 px-5 py-4 text-sm leading-relaxed text-slate-600">
-                  IPv4 gateways use <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">.1</code> and IPv6 gateways use <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">::1</code>. The same convention applies to every future site: keep the VLAN function and subnet pattern, then replace the site identifier. For example, Site 2 uses <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">10.2.x.x</code> instead of <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">10.1.x.x</code>.
-                </p>
               </section>
 
               <section class="space-y-6 border-t border-slate-200 pt-6" aria-labelledby="ipv6-allocation-title">
@@ -474,8 +474,7 @@ vlan 120
                       </tbody>
                     </table>
                   </div>
-                  <p class="border-t border-slate-200 px-5 py-4 text-sm leading-relaxed text-slate-600">Each <span class="font-mono">/127</span> assigns its two usable addresses consistently to the connected endpoints; the exact interface allocations are recorded in the interface map below.</p>
-                </section>
+          </section>
 
               </section>
 
@@ -485,16 +484,30 @@ vlan 120
                   Think of loopbacks as a device's permanent nametag. &#x1F3F7;&#xFE0F; By using one consistent format across every site, we give every router and switch a stable, unbreakable identity for SSH and management, completely independent of whatever physical interfaces are bouncing up and down.
                 </p>
                 <section class="overflow-hidden rounded-lg border border-slate-200 bg-white" aria-labelledby="loopback-plan-title">
-                  <div class="flex flex-col gap-1 border-b border-slate-200 bg-slate-100 px-5 py-4 sm:flex-row sm:items-baseline sm:justify-between">
-                    <div>
-                      <h4 id="loopback-plan-title" class="font-semibold text-slate-900">Multi-site loopback plan</h4>
-                      <p class="mt-1 text-sm text-slate-600">Reserved infrastructure loopback space.</p>
-                    </div>
-                    <p class="font-mono text-sm font-semibold" aria-label="10.255.0.0/16"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-amber-300">255</span><span class="text-slate-500">.</span><span class="text-sky-300">0</span><span class="text-slate-500">.</span><span class="text-violet-300">0/16</span></p>
+                  <div class="border-b border-slate-200 bg-slate-100 px-5 py-4">
+                    <h4 id="loopback-plan-title" class="font-semibold text-slate-900">Multi-site loopback plan</h4>
+                    <p class="mt-1 text-sm text-slate-600">Reserved IPv4 and IPv6 infrastructure space, structured by site and device ID.</p>
                   </div>
                   <div class="space-y-4 p-5">
-                    <p class="font-mono text-sm" aria-label="10.255 dot site dot device ID slash 32"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-amber-300">255</span><span class="text-slate-500">.</span><span class="text-sky-300">&lt;SITE&gt;</span><span class="text-slate-500">.</span><span class="text-violet-300">&lt;DEVICE-ID&gt;/32</span></p>
-                    <p class="text-sm leading-relaxed text-slate-600">HQ IPv6 loopbacks use <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">2001:db8:1:ffff::/64</code> with <span class="font-mono font-semibold">/128</span> host routes. Both loopback stacks are listed together below.</p>
+                    <div class="grid gap-4 md:grid-cols-2">
+                      <section class="overflow-hidden rounded-lg border border-slate-200" aria-labelledby="ipv4-loopback-format-title">
+                        <h5 id="ipv4-loopback-format-title" class="border-b border-slate-200 px-4 py-3 text-sm font-semibold text-slate-900">IPv4 loopback example</h5>
+                        <dl class="divide-y divide-slate-200 text-sm">
+                          <div class="px-4 py-3"><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Site 1 / HQ &mdash; HQ-DSW-01</dt><dd class="mt-1 font-mono font-semibold"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-amber-300">255</span><span class="text-slate-500">.</span><span class="text-sky-300">1</span><span class="text-slate-500">.</span><span class="text-violet-300">1/32</span></dd></div>
+                          <div class="px-4 py-3"><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Convention</dt><dd class="mt-1 font-mono text-xs font-semibold sm:text-sm"><span class="text-emerald-300">10</span><span class="text-slate-500">.</span><span class="text-amber-300">255</span><span class="text-slate-500">.</span><span class="text-sky-300">&lt;SITE&gt;</span><span class="text-slate-500">.</span><span class="text-violet-300">&lt;DEVICE-ID&gt;/32</span></dd></div>
+                          <div class="px-4 py-3"><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Address breakdown</dt><dd class="mt-1 space-y-1 text-slate-600"><span class="block"><span class="font-mono text-amber-300">255</span> = loopback function, not a VLAN</span><span class="block"><span class="font-mono text-sky-300">1</span> = Site 1 / HQ</span><span class="block"><span class="font-mono text-violet-300">1</span> = HQ-DSW-01</span></dd></div>
+                        </dl>
+                      </section>
+                      <section class="overflow-hidden rounded-lg border border-slate-200" aria-labelledby="ipv6-loopback-format-title">
+                        <h5 id="ipv6-loopback-format-title" class="border-b border-slate-200 px-4 py-3 text-sm font-semibold text-slate-900">IPv6 loopback example</h5>
+                        <dl class="divide-y divide-slate-200 text-sm">
+                          <div class="px-4 py-3"><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Site 1 / HQ &mdash; HQ-DSW-01</dt><dd class="mt-1 font-mono font-semibold"><span class="text-emerald-300">2001:db8</span><span class="text-slate-500">:</span><span class="text-sky-300">1</span><span class="text-slate-500">:</span><span class="text-amber-300">ffff</span><span class="text-slate-500">::</span><span class="text-violet-300">1/128</span></dd></div>
+                          <div class="px-4 py-3"><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Convention</dt><dd class="mt-1 font-mono text-xs font-semibold sm:text-sm"><span class="text-emerald-300">2001:db8</span><span class="text-slate-500">:</span><span class="text-sky-300">&lt;SITE&gt;</span><span class="text-slate-500">:</span><span class="text-amber-300">ffff</span><span class="text-slate-500">::</span><span class="text-violet-300">&lt;DEVICE-ID&gt;/128</span></dd></div>
+                          <div class="px-4 py-3"><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Address breakdown</dt><dd class="mt-1 space-y-1 text-slate-600"><span class="block"><span class="font-mono text-amber-300">ffff</span> = loopback function, not a VLAN</span><span class="block"><span class="font-mono text-sky-300">1</span> = Site 1 / HQ</span><span class="block"><span class="font-mono text-violet-300">::1</span> = HQ-DSW-01</span></dd></div>
+                        </dl>
+                      </section>
+                    </div>
+                    <p class="text-sm leading-relaxed text-slate-600">Both stacks use the same site and device ID, so a device&rsquo;s IPv4 and IPv6 loopbacks are easy to match.</p>
                     <section class="rounded-lg border border-slate-200 px-4 py-4" aria-labelledby="device-id-allocation-title">
                       <h5 id="device-id-allocation-title" class="text-sm font-semibold text-slate-900">Device ID allocations</h5>
                       <dl class="mt-3 grid gap-x-6 gap-y-2 text-sm sm:grid-cols-2">
@@ -514,26 +527,26 @@ vlan 120
                       <div class="grid gap-1 py-3 sm:grid-cols-[1fr_5rem_1fr_1fr] sm:items-center sm:gap-4">
                         <dt class="font-semibold text-slate-900">HQ-DSW-01</dt>
                         <dd class="font-mono text-sm text-violet-300">ID 1</dd>
-                        <dd><code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.255.1.1/32</code></dd>
-                        <dd><code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">2001:db8:1:ffff::1/128</code></dd>
+                        <dd><code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.255.1.<span class="text-violet-300">1</span>/32</code></dd>
+                        <dd><code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">2001:db8:1:ffff::<span class="text-violet-300">1</span>/128</code></dd>
                       </div>
                       <div class="grid gap-1 py-3 sm:grid-cols-[1fr_5rem_1fr_1fr] sm:items-center sm:gap-4">
                         <dt class="font-semibold text-slate-900">HQ-DSW-02</dt>
                         <dd class="font-mono text-sm text-violet-300">ID 2</dd>
-                        <dd><code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.255.1.2/32</code></dd>
-                        <dd><code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">2001:db8:1:ffff::2/128</code></dd>
+                        <dd><code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.255.1.<span class="text-violet-300">2</span>/32</code></dd>
+                        <dd><code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">2001:db8:1:ffff::<span class="text-violet-300">2</span>/128</code></dd>
                       </div>
                       <div class="grid gap-1 py-3 sm:grid-cols-[1fr_5rem_1fr_1fr] sm:items-center sm:gap-4">
                         <dt class="font-semibold text-slate-900">HQ-EDGE-01</dt>
                         <dd class="font-mono text-sm text-violet-300">ID 10</dd>
-                        <dd><code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.255.1.10/32</code></dd>
-                        <dd><code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">2001:db8:1:ffff::10/128</code></dd>
+                        <dd><code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.255.1.<span class="text-violet-300">10</span>/32</code></dd>
+                        <dd><code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">2001:db8:1:ffff::<span class="text-violet-300">10</span>/128</code></dd>
                       </div>
                       <div class="grid gap-1 py-3 sm:grid-cols-[1fr_5rem_1fr_1fr] sm:items-center sm:gap-4">
                         <dt class="font-semibold text-slate-900">HQ-ASW-01</dt>
                         <dd class="font-mono text-sm text-violet-300">ID 20</dd>
-                        <dd><code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.255.1.20/32</code></dd>
-                        <dd><code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">2001:db8:1:ffff::20/128</code></dd>
+                        <dd><code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.255.1.<span class="text-violet-300">20</span>/32</code></dd>
+                        <dd><code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">2001:db8:1:ffff::<span class="text-violet-300">20</span>/128</code></dd>
                       </div>
                     </dl>
                   </div>
