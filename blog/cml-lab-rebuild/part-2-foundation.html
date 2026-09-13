@@ -354,7 +354,7 @@ vlan 120
                   </div>
                 </div>
                 <div class="border-t border-slate-200 px-5 py-4">
-                  <p class="leading-relaxed text-slate-700">Now for the fun (and sometimes intimidating) part: IPv6! 🌐 To keep us from going cross-eyed, the IPv6 site and VLAN structure mirrors IPv4 wherever practical. The host/interface identifier portion does not follow the IPv4 decimal host-allocation ranges. HQ uses the documentation prefix <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">2001:db8:1::/48</code>.</p>
+                  <p class="leading-relaxed text-slate-700">Now for the fun (and sometimes intimidating) part: IPv6! 🌐 To keep us from going cross-eyed, the IPv6 site and VLAN structure mirrors IPv4 wherever practical. The hexadecimal values at the end of these IPv6 addresses do not mirror IPv4&rsquo;s decimal host numbers. HQ uses the documentation prefix <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">2001:db8:1::/48</code>.</p>
                   <section class="mt-5" aria-labelledby="ipv6-endpoint-pattern-title">
                     <p id="ipv6-endpoint-pattern-title" class="text-xs font-semibold uppercase tracking-wide text-slate-500">IPv6 endpoint pattern</p>
                     <p class="mt-2 text-sm text-slate-600">Worked HQ example: an IT user device in VLAN 10.</p>
@@ -375,12 +375,11 @@ vlan 120
                         <dd class="mt-1 text-sm text-slate-700"><span class="font-mono font-semibold text-amber-300">10</span> = IT-USERS network</dd>
                       </div>
                       <div class="border-l-2 border-violet-300 pl-3">
-                        <dt class="text-xs font-semibold uppercase tracking-wide text-violet-300">Static IID / device ID</dt>
-                        <dd class="mt-1 text-sm text-slate-700"><span class="font-mono font-semibold text-violet-300">::25</span> = chosen readable static identifier</dd>
+                        <dt class="text-xs font-semibold uppercase tracking-wide text-violet-300">Static device label</dt>
+                        <dd class="mt-1 text-sm text-slate-700"><span class="font-mono font-semibold text-violet-300">::25</span> = chosen readable static label</dd>
                       </div>
                     </dl>
-                    <p class="mt-4 text-sm leading-relaxed text-slate-600">Every endpoint VLAN receives a <span class="font-mono font-semibold">/64</span> prefix. The address ending in <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">::1</code> is reserved for its SVI default gateway.</p>
-                    <p class="mt-2 text-sm leading-relaxed text-slate-600">IPv6 interface identifiers are hexadecimal. Readable values such as <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">::10</code>, <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">::20</code>, or <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">::25</code> are administrative labels for static devices; they are not decimal equivalents of IPv4 host numbers and are simply mnemonic labels chosen to make the two addresses easy to associate.</p>
+              
                   </section>
                 </div>
               </section>
