@@ -45,6 +45,7 @@
 
   const links = document.createElement("div");
   links.className = "blog-toc__links";
+  const linksById = new Map();
 
   headings.forEach((heading, index) => {
     const id = makeId(heading, index);
@@ -56,6 +57,7 @@
     link.href = `#${id}`;
     link.textContent = heading.textContent.trim();
     links.append(link);
+    linksById.set(id, link);
   });
 
   inner.append(label, links);
@@ -85,6 +87,7 @@
   if (!siteNav) return;
 
   let queued = false;
+  let activeId;
 
   const syncStickyState = () => {
     const shouldStick = window.scrollY > siteNav.offsetHeight;
@@ -102,10 +105,40 @@
     requestAnimationFrame(() => {
       queued = false;
       syncStickyState();
+      syncActiveSection();
     });
+  };
+
+  const syncActiveSection = () => {
+    const stickyOffset = toc.classList.contains("is-sticky")
+      ? toc.getBoundingClientRect().height + 20
+      : 20;
+    let activeHeading = headings[0];
+
+    headings.forEach((heading) => {
+      if (heading.getBoundingClientRect().top <= stickyOffset) {
+        activeHeading = heading;
+      }
+    });
+
+    if (activeHeading.id === activeId) return;
+
+    const activeLink = linksById.get(activeHeading.id);
+
+    if (!activeLink) return;
+
+    linksById.forEach((link) => {
+      link.classList.remove("is-active");
+      link.removeAttribute("aria-current");
+    });
+    activeId = activeHeading.id;
+    activeLink.classList.add("is-active");
+    activeLink.setAttribute("aria-current", "location");
+    activeLink.scrollIntoView({ block: "nearest", inline: "center" });
   };
 
   window.addEventListener("scroll", queueStickyState, { passive: true });
   window.addEventListener("resize", queueStickyState);
   syncStickyState();
+  syncActiveSection();
 })();

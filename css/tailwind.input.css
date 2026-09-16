@@ -72,7 +72,9 @@
 .blog-toc__label { color: #a7f3d0; display: block; font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace; font-size: .7rem; font-weight: 700; letter-spacing: .13em; margin-bottom: .55rem; text-transform: uppercase; white-space: nowrap; }
 .blog-toc__links { display: flex; flex-wrap: wrap; gap: .45rem; }
 .blog-toc__link { border: 1px solid rgba(110,231,183,.22); border-radius: 999px; color: #d6d3d1; font-size: .78rem; line-height: 1.25rem; padding: .27rem .6rem; text-decoration: none; transition: background .15s ease,border-color .15s ease,color .15s ease; }
-.blog-toc__link:hover, .blog-toc__link:focus-visible { background: rgba(110,231,183,.15); border-color: rgba(110,231,183,.7); color: #ecfdf5; outline: none; }
+.blog-toc__link:hover { background: rgba(110,231,183,.15); border-color: rgba(110,231,183,.7); color: #ecfdf5; }
+.blog-toc__link:focus-visible { background: rgba(110,231,183,.15); border-color: #6ee7b7; color: #ecfdf5; outline: 2px solid #6ee7b7; outline-offset: 2px; }
+.blog-toc__link.is-active, .blog-toc__link[aria-current="location"] { background: #6ee7b7; border-color: #6ee7b7; color: #07110e; font-weight: 700; }
 .blog-section-anchor { scroll-margin-top: 4.5rem; }
 .blog-section-anchor:focus { outline: none; }
 
