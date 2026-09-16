@@ -877,6 +877,10 @@ body {
   cursor: pointer;
 }
 
+.resize {
+  resize: both;
+}
+
 .list-disc {
   list-style-type: disc;
 }
@@ -1706,6 +1710,109 @@ body {
 
 .site-page .site-panel thead {
   background: rgba(110,231,183,.08);
+}
+
+/* Blog section navigation */
+
+.blog-toc {
+  display: none;
+}
+
+.blog-toc__label {
+  color: #a7f3d0;
+  display: block;
+  font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .13em;
+  margin-bottom: .55rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.blog-toc__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+}
+
+.blog-toc__link {
+  border: 1px solid rgba(110,231,183,.22);
+  border-radius: 999px;
+  color: #d6d3d1;
+  font-size: .78rem;
+  line-height: 1.25rem;
+  padding: .27rem .6rem;
+  text-decoration: none;
+  transition: background .15s ease,border-color .15s ease,color .15s ease;
+}
+
+.blog-toc__link:hover, .blog-toc__link:focus-visible {
+  background: rgba(110,231,183,.15);
+  border-color: rgba(110,231,183,.7);
+  color: #ecfdf5;
+  outline: none;
+}
+
+.blog-section-anchor {
+  scroll-margin-top: 4.5rem;
+}
+
+.blog-section-anchor:focus {
+  outline: none;
+}
+
+.blog-toc.is-sticky {
+  -webkit-backdrop-filter: blur(14px);
+          backdrop-filter: blur(14px);
+  background: rgba(7,17,14,.94);
+  border-bottom: 1px solid rgba(110,231,183,.22);
+  box-shadow: 0 .65rem 1.5rem rgba(0,0,0,.2);
+  display: block;
+  left: 0;
+  padding: 0 clamp(1rem, 4vw, 2.5rem);
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 100%;
+  z-index: 30;
+}
+
+.blog-toc.is-sticky .blog-toc__inner {
+  align-items: center;
+  display: flex;
+  gap: .8rem;
+  margin: 0 auto;
+  max-width: 80rem;
+  padding: .6rem 0;
+}
+
+.blog-toc.is-sticky .blog-toc__label {
+  margin: 0;
+}
+
+.blog-toc.is-sticky .blog-toc__links {
+  flex: 1;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-bottom: .15rem;
+  scrollbar-color: rgba(110,231,183,.55) transparent;
+}
+
+.blog-toc.is-sticky .blog-toc__link {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 639px) {
+  .blog-toc.is-sticky .blog-toc__inner {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: .3rem;
+  }
+
+  .blog-toc.is-sticky .blog-toc__links {
+    width: 100%;
+  }
 }
 
 /* Blog image viewer */
