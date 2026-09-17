@@ -251,6 +251,195 @@
               </figure>
             </section>
 
+            <section class="space-y-5 border-t border-slate-200 pt-6">
+              <div class="space-y-3">
+                <h2 class="text-xl font-semibold text-slate-900">&#x1F6E1;&#xFE0F; ECMP resiliency: proving the path survives a failure</h2>
+                <p class="leading-relaxed text-slate-700">ECMP is most useful when it is more than two healthy lines in a routing table. To test the failure path, I took HQ-DSW-01 out of service and watched OSPF remove its links from the topology.</p>
+                <p class="leading-relaxed text-slate-700">The IPv6 traceroute from HQ-ASW-01 to HQ-EDGE-01 still completed through HQ-DSW-02. That is the practical result I wanted: the core degrades to one path, but reachability stays intact without a manual route change.</p>
+              </div>
+              <aside class="packet-flow" data-packet-flow="resiliency" aria-labelledby="packet-resiliency-title">
+                <div class="packet-flow__header">
+                  <p class="packet-flow__eyebrow">Interactive resiliency simulation</p>
+                  <h3 id="packet-resiliency-title">Watch OSPF converge onto the surviving ECMP path</h3>
+                </div>
+                <div class="packet-flow__viewport">
+                  <svg class="packet-flow__diagram" viewBox="0 0 1000 500" role="img" aria-label="Interactive network diagram showing traffic reconverging through HQ-DSW-02 after HQ-DSW-01 is taken down.">
+                    <path class="packet-flow__link" data-packet-flow-link="asw-dsw1" d="M220 194 L345 130" />
+                    <path class="packet-flow__link" data-packet-flow-link="asw-dsw2" d="M220 225 L345 300" />
+                    <path class="packet-flow__link" data-packet-flow-link="dsw1-edge" d="M515 130 L650 194" />
+                    <path class="packet-flow__link" data-packet-flow-link="dsw2-edge" d="M515 300 L650 225" />
+                    <path class="packet-flow__link packet-flow__link--bundle" data-packet-flow-link="dsw1-dsw2" d="M430 150 L430 280" />
+                    <path class="packet-flow__link packet-flow__link--isp" d="M820 209 L875 209" />
+
+                    <g class="packet-flow__node" data-packet-flow-node="asw">
+                      <rect x="50" y="154" width="170" height="110" rx="13" />
+                      <text class="packet-flow__node-role" x="135" y="181" text-anchor="middle">ACCESS / SOURCE</text>
+                      <text class="packet-flow__node-name" x="135" y="207" text-anchor="middle">HQ-ASW-01</text>
+                      <text class="packet-flow__node-address" x="135" y="235" text-anchor="middle">IPv6 traceroute origin</text>
+                    </g>
+                    <g class="packet-flow__node" data-packet-flow-node="dsw1">
+                      <rect x="345" y="45" width="170" height="110" rx="13" />
+                      <text class="packet-flow__node-role" x="430" y="70" text-anchor="middle">DISTRIBUTION</text>
+                      <text class="packet-flow__node-name" x="430" y="95" text-anchor="middle">HQ-DSW-01</text>
+                      <text class="packet-flow__node-address" x="430" y="125" text-anchor="middle">Failure-test target</text>
+                    </g>
+                    <g class="packet-flow__node" data-packet-flow-node="dsw2">
+                      <rect x="345" y="275" width="170" height="110" rx="13" />
+                      <text class="packet-flow__node-role" x="430" y="300" text-anchor="middle">DISTRIBUTION</text>
+                      <text class="packet-flow__node-name" x="430" y="325" text-anchor="middle">HQ-DSW-02</text>
+                      <text class="packet-flow__node-address" x="430" y="355" text-anchor="middle">Hop 1 &middot; 2001:DB8:1:FF04::1</text>
+                    </g>
+                    <g class="packet-flow__node" data-packet-flow-node="edge">
+                      <rect x="650" y="154" width="170" height="110" rx="13" />
+                      <text class="packet-flow__node-role" x="735" y="181" text-anchor="middle">EDGE / DESTINATION</text>
+                      <text class="packet-flow__node-name" x="735" y="207" text-anchor="middle">HQ-EDGE-01</text>
+                      <text class="packet-flow__node-address" x="735" y="229" text-anchor="middle">2001:DB8:1:FFFF::10</text>
+                      <text class="packet-flow__node-address" x="735" y="248" text-anchor="middle">Hop 2 &middot; 2001:DB8:1:FF02::1</text>
+                    </g>
+                    <g class="packet-flow__node" data-packet-flow-node="isp">
+                      <rect x="875" y="164" width="90" height="90" rx="13" />
+                      <text class="packet-flow__node-role" x="920" y="194" text-anchor="middle">ISP</text>
+                      <text class="packet-flow__node-name" x="920" y="222" text-anchor="middle">ISP-01</text>
+                    </g>
+                    <g class="packet-flow__packet" data-packet-flow-packet="resiliency-probe" aria-hidden="true">
+                      <circle r="18" />
+                      <rect x="-11" y="-8" width="22" height="16" rx="2" />
+                      <path d="M-10 -7 L0 1 L10 -7 M-10 7 L-3 0 M10 7 L3 0" />
+                    </g>
+                    <foreignObject class="packet-flow__callout" data-packet-flow-callout width="270" height="210">
+                      <div xmlns="http://www.w3.org/1999/xhtml" class="packet-flow__callout-card" role="status" aria-live="polite">
+                        <p class="packet-flow__status" data-packet-flow-progress></p>
+                        <p class="packet-flow__status" data-packet-flow-phase></p>
+                        <h4 class="packet-flow__callout-title" data-packet-flow-title></h4>
+                        <p class="packet-flow__callout-description" data-packet-flow-description></p>
+                      </div>
+                    </foreignObject>
+                  </svg>
+                </div>
+                <div class="packet-flow__controls packet-flow__controls--below-diagram" role="group" aria-label="Resiliency simulation step controls">
+                  <button class="packet-flow__button" type="button" data-packet-flow-action="reset">Reset</button>
+                  <button class="packet-flow__button" type="button" data-packet-flow-action="previous">&larr; Previous</button>
+                  <button class="packet-flow__button packet-flow__button--play" type="button" data-packet-flow-action="play" aria-pressed="false" aria-label="Play resiliency simulation playback">&#x25B6; Play</button>
+                  <button class="packet-flow__button" type="button" data-packet-flow-action="next">Next step &rarr;</button>
+                </div>
+                <div class="packet-flow__legend" aria-label="Resiliency simulation legend">
+                  <span class="packet-flow__legend-item"><i class="packet-flow__legend-swatch packet-flow__legend-swatch--request" aria-hidden="true"></i>IPv6 traceroute probe</span>
+                  <span class="packet-flow__legend-item"><i class="packet-flow__legend-swatch packet-flow__legend-swatch--reply" aria-hidden="true"></i>ICMP response</span>
+                  <span class="packet-flow__legend-item"><i class="packet-flow__legend-failure" aria-hidden="true"></i>Failed DSW1 path</span>
+                </div>
+              </aside>
+              <div class="grid gap-4 sm:grid-cols-2">
+                <figure class="space-y-3">
+                  <img class="w-full rounded-lg border border-slate-200" src="/assets/blog/cml-lab-rebuild/pt3/dsw1-down-for-testing.png" alt="Network topology showing HQ-DSW-01 down for resiliency testing while HQ-DSW-02 remains online." />
+                  <figcaption class="text-sm leading-relaxed text-slate-500">HQ-DSW-01 is intentionally down for the failover test; the HQ-DSW-02 branch remains available.</figcaption>
+                </figure>
+                <figure class="space-y-3">
+                  <img class="w-full rounded-lg border border-slate-200" src="/assets/blog/cml-lab-rebuild/pt3/asw1-edge1-traceroute-ipv6-dsw2-resiliency.png" alt="HQ-ASW-01 IPv6 traceroute to HQ-EDGE-01 completing through HQ-DSW-02 after the DSW1 failure." />
+                  <figcaption class="text-sm leading-relaxed text-slate-500">The IPv6 traceroute completes through HQ-DSW-02, proving the surviving route still reaches the edge.</figcaption>
+                </figure>
+              </div>
+            </section>
+
+            <section class="space-y-5 border-t border-slate-200 pt-6">
+              <div class="space-y-3">
+                <h2 class="text-xl font-semibold text-slate-900">Validation: LACP Member Resiliency and an Unexpected Lab Behaviour</h2>
+                <p class="leading-relaxed text-slate-700">This check asked a practical question: if one cable inside the inter-distribution bundle is removed, can the rest of the lab keep talking? The answer from the controlled test was yes&mdash;the logical routed link stayed online and the access switch kept reaching HQ-DSW-02.</p>
+                <p class="leading-relaxed text-slate-700">HQ-DSW-01 and HQ-DSW-02 are joined by <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">Port-channel12</code>, a Layer-3 LACP EtherChannel built from <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">GigabitEthernet0/1</code> and <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">GigabitEthernet0/2</code>. OSPFv2 and OSPFv3 run on that logical port-channel, not on its individual physical members. I used a continuous ping from HQ-ASW-01 to HQ-DSW-02 Loopback0 (<code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.255.1.2</code>) to observe the result.</p>
+              </div>
+
+              <figure class="space-y-3">
+                <img class="w-full rounded-lg border border-slate-200" src="/assets/blog/cml-lab-rebuild/pt3/lacp-resiliency-evidence/03-dsw02-stale-lacp-member.png" alt="HQ-DSW-02 showing both GigabitEthernet0/1 and GigabitEthernet0/2 as bundled LACP members after a one-sided shutdown." />
+                <figcaption class="text-sm leading-relaxed text-slate-500">Observed stale remote member state: HQ-DSW-02 temporarily still reports both LACP members as bundled <code>(P)</code> after the one-sided member shutdown.</figcaption>
+              </figure>
+
+              <div class="space-y-3">
+                <p class="leading-relaxed text-slate-700">I began with the CML GUI. First, I stopped the link, but the affected Port-channel member still showed as bundled <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">(P)</code>. I then used the GUI to disconnect the link: the interface status became down, yet the Po12 member still remained <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">(P)</code> on HQ-DSW-02. In other words, the virtual link looked unavailable while the remote switch had not immediately removed it from the bundle.</p>
+                <p class="leading-relaxed text-slate-700">That stale state meant HQ-DSW-02 could still send traffic&mdash;including OSPF Hellos&mdash;toward an unavailable member until the OSPF adjacency reached its dead timer and reconverged.</p>
+                <p class="leading-relaxed text-slate-700">The earlier 88% ping result therefore showed loss, not seamless resiliency, and is not suitable evidence of a clean member failover. This is an observed CML/IOSv emulation behaviour during a one-sided administrative shutdown, not evidence that the Layer-3 port-channel or OSPF configuration was wrong. On physical hardware, a genuine single-link failure normally signals down at both ends and the remaining member continues carrying the bundle.</p>
+                <figure class="space-y-3">
+                  <img class="w-full rounded-lg border border-slate-200" src="/assets/blog/cml-lab-rebuild/pt3/lacp-resiliency-evidence/01-one-sided-test-ping-loss.png" alt="HQ-ASW-01 continuous ping showing packet loss during the one-sided LACP member shutdown test." />
+                  <figcaption class="text-sm leading-relaxed text-slate-500">The one-sided test records the earlier 88% ping outcome. It documents the emulation edge case and is not evidence of seamless member resiliency.</figcaption>
+                </figure>
+                <p class="leading-relaxed text-slate-700">I therefore ran the continuous ping again while manually shutting down the same physical member&mdash;<code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">GigabitEthernet0/2</code>&mdash;on both distribution switches. Both devices immediately agreed on the active bundle membership, while <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">Port-channel12</code> remained operational over the remaining member.</p>
+              </div>
+
+              <figure class="space-y-3">
+                <img class="w-full rounded-lg border border-slate-200" src="/assets/blog/cml-lab-rebuild/pt3/lacp-resiliency-evidence/05-ospf-neighbors-stay-full.png" alt="OSPF neighbor output on both distribution switches showing the Port-channel12 adjacency remains FULL after the controlled member-removal test." />
+                <figcaption class="text-sm leading-relaxed text-slate-500">Control-plane continuity over the logical port-channel: the Po12 OSPF adjacency remains <code>FULL</code> after the controlled test.</figcaption>
+              </figure>
+
+              <aside class="packet-flow" data-packet-flow="lacp-resiliency" aria-labelledby="lacp-resiliency-title">
+                <div class="packet-flow__header">
+                  <p class="packet-flow__eyebrow">Interactive LACP resiliency simulation</p>
+                  <h3 id="lacp-resiliency-title">Follow the member-removal test on Port-channel12</h3>
+                </div>
+                <div class="packet-flow__viewport">
+                  <svg class="packet-flow__diagram" viewBox="0 0 1000 500" role="img" aria-label="Interactive diagram showing Layer-3 Port-channel12 retaining OSPF service when one LACP member is removed from both distribution switches.">
+                    <path class="packet-flow__link" data-packet-flow-link="asw-dsw1" d="M220 210 L350 210" />
+                    <path class="packet-flow__link" data-packet-flow-link="po12-gi01" d="M510 180 L650 180" />
+                    <path class="packet-flow__link" data-packet-flow-link="po12-gi02" d="M510 240 L650 240" />
+                    <text class="packet-flow__path-label" x="580" y="128" text-anchor="middle">Port-channel12 &middot; Layer 3 LACP</text>
+                    <text class="packet-flow__path-label" x="580" y="168" text-anchor="middle">Gi0/1 &middot; active member</text>
+                    <text class="packet-flow__path-label" x="580" y="270" text-anchor="middle">Gi0/2 &middot; removed for test</text>
+
+                    <g class="packet-flow__node" data-packet-flow-node="asw">
+                      <rect x="50" y="155" width="170" height="110" rx="13" />
+                      <text class="packet-flow__node-role" x="135" y="183" text-anchor="middle">PING SOURCE</text>
+                      <text class="packet-flow__node-name" x="135" y="210" text-anchor="middle">HQ-ASW-01</text>
+                      <text class="packet-flow__node-address" x="135" y="238" text-anchor="middle">Target &middot; 10.255.1.2</text>
+                    </g>
+                    <g class="packet-flow__node" data-packet-flow-node="dsw1">
+                      <rect x="350" y="155" width="160" height="110" rx="13" />
+                      <text class="packet-flow__node-role" x="430" y="183" text-anchor="middle">DISTRIBUTION</text>
+                      <text class="packet-flow__node-name" x="430" y="210" text-anchor="middle">HQ-DSW-01</text>
+                      <text class="packet-flow__node-address" x="430" y="238" text-anchor="middle">Po12 L3 LACP</text>
+                    </g>
+                    <g class="packet-flow__node" data-packet-flow-node="dsw2">
+                      <rect x="650" y="155" width="170" height="110" rx="13" />
+                      <text class="packet-flow__node-role" x="735" y="183" text-anchor="middle">DISTRIBUTION / TARGET</text>
+                      <text class="packet-flow__node-name" x="735" y="210" text-anchor="middle">HQ-DSW-02</text>
+                      <text class="packet-flow__node-address" x="735" y="238" text-anchor="middle">Loopback0 &middot; 10.255.1.2</text>
+                    </g>
+                    <g class="packet-flow__packet" data-packet-flow-packet="lacp-probe" aria-hidden="true">
+                      <circle r="18" />
+                      <rect x="-11" y="-8" width="22" height="16" rx="2" />
+                      <path d="M-10 -7 L0 1 L10 -7 M-10 7 L-3 0 M10 7 L3 0" />
+                    </g>
+                    <foreignObject class="packet-flow__callout" data-packet-flow-callout width="270" height="210">
+                      <div xmlns="http://www.w3.org/1999/xhtml" class="packet-flow__callout-card" role="status" aria-live="polite">
+                        <p class="packet-flow__status" data-packet-flow-progress></p>
+                        <p class="packet-flow__status" data-packet-flow-phase></p>
+                        <h4 class="packet-flow__callout-title" data-packet-flow-title></h4>
+                        <p class="packet-flow__callout-description" data-packet-flow-description></p>
+                      </div>
+                    </foreignObject>
+                  </svg>
+                </div>
+                <div class="packet-flow__controls packet-flow__controls--below-diagram" role="group" aria-label="LACP resiliency simulation step controls">
+                  <button class="packet-flow__button" type="button" data-packet-flow-action="reset">Reset</button>
+                  <button class="packet-flow__button" type="button" data-packet-flow-action="previous">&larr; Previous</button>
+                  <button class="packet-flow__button packet-flow__button--play" type="button" data-packet-flow-action="play" aria-pressed="false" aria-label="Play LACP resiliency simulation playback">&#x25B6; Play</button>
+                  <button class="packet-flow__button" type="button" data-packet-flow-action="next">Next step &rarr;</button>
+                </div>
+                <div class="packet-flow__legend" aria-label="LACP resiliency simulation legend">
+                  <span class="packet-flow__legend-item"><i class="packet-flow__legend-swatch packet-flow__legend-swatch--request" aria-hidden="true"></i>Continuous ping</span>
+                  <span class="packet-flow__legend-item"><i class="packet-flow__legend-swatch packet-flow__legend-swatch--reply" aria-hidden="true"></i>Echo reply</span>
+                  <span class="packet-flow__legend-item"><i class="packet-flow__legend-warning" aria-hidden="true"></i>Stale one-sided state</span>
+                  <span class="packet-flow__legend-item"><i class="packet-flow__legend-failure" aria-hidden="true"></i>Controlled removed member</span>
+                </div>
+              </aside>
+
+              <figure class="space-y-3">
+                <img class="w-full rounded-lg border border-slate-200" src="/assets/blog/cml-lab-rebuild/pt3/lacp-resiliency-evidence/06-final-100-percent-ping.png" alt="Three-terminal controlled LACP member-removal test showing HQ-ASW-01 completing 1000 of 1000 pings while GigabitEthernet0/2 is shut down on both distribution switches." />
+                <figcaption class="text-sm leading-relaxed text-slate-500">Final controlled member-removal validation: HQ-ASW-01 completes 1000 of 1000 pings while the same member is shut down on both distribution switches.</figcaption>
+              </figure>
+
+              <aside class="rounded-xl border-l-4 border-emerald-500 px-5 py-4">
+                <h3 class="text-base font-semibold text-slate-900">What this proves</h3>
+                <p class="mt-2 leading-relaxed text-slate-700">Port-channel12 is resilient to the controlled removal of one member: the logical routed link remains up, OSPF stays established, and the access switch retains reachability to HQ-DSW-02. The one-sided test also highlighted an emulation edge case worth recognising when interpreting virtual-lab results.</p>
+              </aside>
+            </section>
+
             <section class="space-y-3 border-t border-slate-200 pt-6">
               <h2 class="text-xl font-semibold text-slate-900">&#x1F4CB; Part 3 summary</h2>
               <p class="leading-relaxed text-slate-700">Part 3 turned the planned topology into a working dual-stack routed campus core:</p>

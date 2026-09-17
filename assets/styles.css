@@ -1084,6 +1084,10 @@ body {
   border-left-width: 2px;
 }
 
+.border-l-4 {
+  border-left-width: 4px;
+}
+
 .border-t {
   border-top-width: 1px;
 }
@@ -1112,6 +1116,11 @@ body {
 
 .border-emerald-300\/40 {
   border-color: rgb(110 231 183 / 0.4);
+}
+
+.border-emerald-500 {
+  --tw-border-opacity: 1;
+  border-color: rgb(16 185 129 / var(--tw-border-opacity, 1));
 }
 
 .border-neutral-700 {
@@ -1178,6 +1187,11 @@ body {
 
 .bg-emerald-300\/\[\.06\] {
   background-color: rgb(110 231 183 / .06);
+}
+
+.bg-emerald-50 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(236 253 245 / var(--tw-bg-opacity, 1));
 }
 
 .bg-neutral-800 {
@@ -1379,6 +1393,11 @@ body {
 
 .text-\[11px\] {
   font-size: 11px;
+}
+
+.text-base {
+  font-size: 1rem;
+  line-height: 1.5rem;
 }
 
 .text-lg {
@@ -1965,6 +1984,20 @@ body {
   stroke: #7dd3fc;
 }
 
+.packet-flow__link.is-failed {
+  filter: none;
+  stroke: #fb7185;
+  stroke-dasharray: 8 7;
+  stroke-width: 4;
+}
+
+.packet-flow__link.is-warning {
+  filter: drop-shadow(0 0 4px rgba(251,191,36,.45));
+  stroke: #fbbf24;
+  stroke-dasharray: 5 5;
+  stroke-width: 4;
+}
+
 .packet-flow__node rect {
   fill: #0c1915;
   stroke: rgba(214,211,209,.3);
@@ -1996,6 +2029,14 @@ body {
   letter-spacing: 0;
 }
 
+.packet-flow__path-label {
+  fill: #d6d3d1;
+  font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+  font-size: 12px;
+  letter-spacing: .4px;
+  pointer-events: none;
+}
+
 .packet-flow__node.is-active rect {
   fill: rgba(110,231,183,.12);
   filter: drop-shadow(0 0 8px rgba(110,231,183,.38));
@@ -2006,6 +2047,35 @@ body {
   fill: rgba(125,211,252,.12);
   filter: drop-shadow(0 0 8px rgba(125,211,252,.38));
   stroke: #7dd3fc;
+}
+
+.packet-flow__node.is-failed rect {
+  fill: rgba(251,113,133,.12);
+  filter: none;
+  stroke: #fb7185;
+  stroke-dasharray: 6 5;
+}
+
+.packet-flow__node.is-failed .packet-flow__node-role, .packet-flow__node.is-failed .packet-flow__node-address {
+  fill: #fda4af;
+}
+
+.packet-flow__node.is-failed .packet-flow__node-name {
+  fill: #ffe4e6;
+}
+
+.packet-flow__node.is-warning rect {
+  fill: rgba(251,191,36,.11);
+  filter: none;
+  stroke: #fbbf24;
+}
+
+.packet-flow__node.is-warning .packet-flow__node-role, .packet-flow__node.is-warning .packet-flow__node-address {
+  fill: #fde68a;
+}
+
+.packet-flow__node.is-warning .packet-flow__node-name {
+  fill: #fef3c7;
 }
 
 .packet-flow__packet {
@@ -2122,6 +2192,18 @@ body {
 
 .packet-flow__legend-line {
   border-top: 2px dashed rgba(214,211,209,.5);
+  display: inline-block;
+  width: 1.25rem;
+}
+
+.packet-flow__legend-failure {
+  border-top: 2px dashed #fb7185;
+  display: inline-block;
+  width: 1.25rem;
+}
+
+.packet-flow__legend-warning {
+  border-top: 2px dashed #fbbf24;
   display: inline-block;
   width: 1.25rem;
 }

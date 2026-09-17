@@ -15,6 +15,8 @@
     const description = simulator.querySelector("[data-packet-flow-description]");
     const svg = simulator.querySelector("svg");
     const callout = simulator.querySelector("[data-packet-flow-callout]");
+    const isResiliencySimulation = simulator.dataset.packetFlow === "resiliency";
+    const isLacpResiliencySimulation = simulator.dataset.packetFlow === "lacp-resiliency";
 
     const coordinates = {
       asw: [{ x: 95, y: 190 }, { x: 95, y: 228 }],
@@ -23,8 +25,160 @@
     };
     const ecmpLinks = ["asw-dsw1", "asw-dsw2"];
     const coreLinks = ["dsw1-edge", "dsw2-edge"];
+    const dsw1FailureLinks = ["asw-dsw1", "dsw1-edge", "dsw1-dsw2"];
+    const resiliencyCoordinates = {
+      asw: [{ x: 95, y: 210 }],
+      dsw2: [{ x: 390, y: 325 }],
+      edge: [{ x: 695, y: 210 }],
+    };
+    const lacpCoordinates = {
+      asw: [{ x: 135, y: 210 }],
+      dsw1: [{ x: 430, y: 210 }],
+      dsw2: [{ x: 735, y: 210 }],
+    };
+    const resiliencySteps = [
+      {
+        phase: "Healthy ECMP topology",
+        title: "Both equal-cost paths are available",
+        description: "Before the test, OSPF has a path through each distribution switch. Traffic can use HQ-DSW-01 or HQ-DSW-02 toward HQ-EDGE-01.",
+        points: resiliencyCoordinates.asw,
+        callout: { x: 20, y: 270 },
+        nodes: ["asw", "dsw1", "dsw2", "edge"],
+        links: [...ecmpLinks, ...coreLinks],
+        reply: false,
+      },
+      {
+        phase: "Failure injected",
+        title: "HQ-DSW-01 is taken down for testing",
+        description: "The DSW1-facing access, core, and peer links are unavailable. OSPF detects the loss and removes that branch from the active topology.",
+        points: resiliencyCoordinates.asw,
+        callout: { x: 535, y: 16 },
+        nodes: ["asw", "dsw2", "edge"],
+        links: ["asw-dsw2", "dsw2-edge"],
+        failedNodes: ["dsw1"],
+        failedLinks: dsw1FailureLinks,
+        reply: false,
+      },
+      {
+        phase: "OSPF convergence",
+        title: "HQ-DSW-02 becomes the surviving next hop",
+        description: "The remaining OSPF route points toward HQ-DSW-02, so the IPv6 traceroute probe leaves HQ-ASW-01 over the live branch.",
+        points: resiliencyCoordinates.dsw2,
+        callout: { x: 535, y: 16 },
+        nodes: ["asw", "dsw2"],
+        links: ["asw-dsw2"],
+        failedNodes: ["dsw1"],
+        failedLinks: dsw1FailureLinks,
+        reply: false,
+      },
+      {
+        phase: "IPv6 traceroute probe",
+        title: "The surviving path reaches HQ-EDGE-01",
+        description: "The probe crosses HQ-DSW-02 to the edge. The observed IPv6 hops confirm that traffic still reaches 2001:DB8:1:FFFF::10 after the DSW1 failure.",
+        points: resiliencyCoordinates.edge,
+        callout: { x: 720, y: 270 },
+        nodes: ["dsw2", "edge"],
+        links: ["dsw2-edge"],
+        failedNodes: ["dsw1"],
+        failedLinks: dsw1FailureLinks,
+        reply: false,
+      },
+      {
+        phase: "ICMP response",
+        title: "The response returns on the live branch",
+        description: "HQ-EDGE-01 returns the response through HQ-DSW-02. The failed DSW1 path remains excluded while the remaining route carries traffic.",
+        points: resiliencyCoordinates.dsw2,
+        callout: { x: 535, y: 16 },
+        nodes: ["edge", "dsw2"],
+        links: ["dsw2-edge"],
+        failedNodes: ["dsw1"],
+        failedLinks: dsw1FailureLinks,
+        reply: true,
+      },
+      {
+        phase: "Resiliency validated",
+        title: "HQ-ASW-01 remains connected",
+        description: "The reply reaches the access layer over HQ-DSW-02. ECMP has degraded to one working path, preserving reachability without a manual route change.",
+        points: resiliencyCoordinates.asw,
+        callout: { x: 20, y: 270 },
+        nodes: ["asw", "dsw2"],
+        links: ["asw-dsw2"],
+        failedNodes: ["dsw1"],
+        failedLinks: dsw1FailureLinks,
+        reply: true,
+      },
+    ];
+    const lacpResiliencySteps = [
+      {
+        phase: "Healthy LACP bundle",
+        title: "Port-channel12 starts with two active members",
+        description: "GigabitEthernet0/1 and GigabitEthernet0/2 form one Layer-3 LACP EtherChannel. OSPFv2 and OSPFv3 run on logical Port-channel12, not on either individual member.",
+        points: lacpCoordinates.asw,
+        callout: { x: 20, y: 270 },
+        nodes: ["asw", "dsw1", "dsw2"],
+        links: ["asw-dsw1", "po12-gi01", "po12-gi02"],
+        reply: false,
+      },
+      {
+        phase: "One-sided shutdown",
+        title: "Gi0/2 is removed only on HQ-DSW-01",
+        description: "HQ-DSW-01 removes the member locally, but HQ-DSW-02 temporarily still reports it as bundled. This is the observed CML/IOSv emulation edge case.",
+        points: lacpCoordinates.dsw1,
+        callout: { x: 300, y: 270 },
+        nodes: ["asw", "dsw1", "dsw2"],
+        warningNodes: ["dsw2"],
+        links: ["asw-dsw1", "po12-gi01"],
+        warningLinks: ["po12-gi02"],
+        reply: false,
+      },
+      {
+        phase: "Delayed reconvergence",
+        title: "The stale remote state is not seamless resiliency",
+        description: "HQ-DSW-02 can still send traffic and OSPF Hellos toward the unavailable member until the adjacency reaches its dead timer. The earlier 88% ping result is loss, not a successful failover test.",
+        points: lacpCoordinates.asw,
+        callout: { x: 20, y: 270 },
+        nodes: ["asw", "dsw1", "dsw2"],
+        warningNodes: ["dsw2"],
+        links: ["asw-dsw1", "po12-gi01"],
+        warningLinks: ["po12-gi02"],
+        reply: false,
+      },
+      {
+        phase: "Controlled member removal",
+        title: "Gi0/2 is removed on both distribution switches",
+        description: "Removing the same member administratively on both ends makes the bundle state agree immediately. Port-channel12 stays up over GigabitEthernet0/1.",
+        points: lacpCoordinates.dsw1,
+        callout: { x: 300, y: 270 },
+        nodes: ["asw", "dsw1", "dsw2"],
+        links: ["asw-dsw1", "po12-gi01"],
+        failedLinks: ["po12-gi02"],
+        reply: false,
+      },
+      {
+        phase: "OSPF remains FULL",
+        title: "The logical routed link keeps carrying service",
+        description: "The ping flow crosses Port-channel12 on its remaining member. The test proves the logical route and OSPF adjacency remain available; it does not prove that any prior flow used the removed member.",
+        points: lacpCoordinates.dsw2,
+        callout: { x: 690, y: 270 },
+        nodes: ["asw", "dsw1", "dsw2"],
+        links: ["asw-dsw1", "po12-gi01"],
+        failedLinks: ["po12-gi02"],
+        reply: false,
+      },
+      {
+        phase: "Controlled test passed",
+        title: "HQ-ASW-01 completes 1000 of 1000 pings",
+        description: "With Gi0/2 removed at both ends, Port-channel12 and OSPF stay established. HQ-ASW-01 retains uninterrupted reachability to HQ-DSW-02 Loopback0 at 10.255.1.2.",
+        points: lacpCoordinates.asw,
+        callout: { x: 20, y: 270 },
+        nodes: ["asw", "dsw1", "dsw2"],
+        links: ["asw-dsw1", "po12-gi01"],
+        failedLinks: ["po12-gi02"],
+        reply: true,
+      },
+    ];
 
-    const steps = [
+    const normalSteps = [
       {
         phase: "Traceroute probes",
         title: "HQ-ASW-01 launches a probe set",
@@ -86,6 +240,7 @@
         reply: true,
       },
     ];
+    const steps = isLacpResiliencySimulation ? lacpResiliencySteps : isResiliencySimulation ? resiliencySteps : normalSteps;
 
     let step = 0;
     let previousPoints;
@@ -155,9 +310,13 @@
 
       nodes.forEach((node) => {
         node.classList.toggle("is-active", current.nodes.includes(node.dataset.packetFlowNode));
+        node.classList.toggle("is-failed", (current.failedNodes || []).includes(node.dataset.packetFlowNode));
+        node.classList.toggle("is-warning", (current.warningNodes || []).includes(node.dataset.packetFlowNode));
       });
       links.forEach((link) => {
         link.classList.toggle("is-active", current.links.includes(link.dataset.packetFlowLink));
+        link.classList.toggle("is-failed", (current.failedLinks || []).includes(link.dataset.packetFlowLink));
+        link.classList.toggle("is-warning", (current.warningLinks || []).includes(link.dataset.packetFlowLink));
       });
 
       progress.textContent = `Step ${step + 1} of ${steps.length}`;

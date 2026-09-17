@@ -146,13 +146,22 @@
 .packet-flow__link--isp { stroke: rgba(214,211,209,.16); stroke-dasharray: 6 8; }
 .packet-flow__link.is-active { filter: drop-shadow(0 0 5px rgba(110,231,183,.8)); stroke: #6ee7b7; stroke-width: 6; }
 .packet-flow.is-reply .packet-flow__link.is-active { filter: drop-shadow(0 0 5px rgba(125,211,252,.8)); stroke: #7dd3fc; }
+.packet-flow__link.is-failed { filter: none; stroke: #fb7185; stroke-dasharray: 8 7; stroke-width: 4; }
+.packet-flow__link.is-warning { filter: drop-shadow(0 0 4px rgba(251,191,36,.45)); stroke: #fbbf24; stroke-dasharray: 5 5; stroke-width: 4; }
 .packet-flow__node rect { fill: #0c1915; stroke: rgba(214,211,209,.3); stroke-width: 2; transition: fill .2s ease,filter .2s ease,stroke .2s ease; }
 .packet-flow__node text { fill: #d6d3d1; font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace; pointer-events: none; }
 .packet-flow__node .packet-flow__node-role { fill: #a8a29e; font-size: 13px; letter-spacing: 1.5px; }
 .packet-flow__node .packet-flow__node-name { fill: #fafaf9; font-size: 18px; font-weight: 700; }
 .packet-flow__node .packet-flow__node-address { fill: #a7f3d0; font-size: 10px; letter-spacing: 0; }
+.packet-flow__path-label { fill: #d6d3d1; font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace; font-size: 12px; letter-spacing: .4px; pointer-events: none; }
 .packet-flow__node.is-active rect { fill: rgba(110,231,183,.12); filter: drop-shadow(0 0 8px rgba(110,231,183,.38)); stroke: #6ee7b7; }
 .packet-flow.is-reply .packet-flow__node.is-active rect { fill: rgba(125,211,252,.12); filter: drop-shadow(0 0 8px rgba(125,211,252,.38)); stroke: #7dd3fc; }
+.packet-flow__node.is-failed rect { fill: rgba(251,113,133,.12); filter: none; stroke: #fb7185; stroke-dasharray: 6 5; }
+.packet-flow__node.is-failed .packet-flow__node-role, .packet-flow__node.is-failed .packet-flow__node-address { fill: #fda4af; }
+.packet-flow__node.is-failed .packet-flow__node-name { fill: #ffe4e6; }
+.packet-flow__node.is-warning rect { fill: rgba(251,191,36,.11); filter: none; stroke: #fbbf24; }
+.packet-flow__node.is-warning .packet-flow__node-role, .packet-flow__node.is-warning .packet-flow__node-address { fill: #fde68a; }
+.packet-flow__node.is-warning .packet-flow__node-name { fill: #fef3c7; }
 .packet-flow__packet { display: none; pointer-events: none; }
 .packet-flow__packet.is-visible { display: block; }
 .packet-flow__packet circle { fill: #6ee7b7; filter: drop-shadow(0 0 8px rgba(110,231,183,.82)); }
@@ -172,6 +181,8 @@
 .packet-flow__legend-swatch--request { background: #6ee7b7; box-shadow: 0 0 7px rgba(110,231,183,.7); }
 .packet-flow__legend-swatch--reply { background: #7dd3fc; box-shadow: 0 0 7px rgba(125,211,252,.7); }
 .packet-flow__legend-line { border-top: 2px dashed rgba(214,211,209,.5); display: inline-block; width: 1.25rem; }
+.packet-flow__legend-failure { border-top: 2px dashed #fb7185; display: inline-block; width: 1.25rem; }
+.packet-flow__legend-warning { border-top: 2px dashed #fbbf24; display: inline-block; width: 1.25rem; }
 .packet-flow__status { color: #a7f3d0; font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace; font-size: .78rem; font-weight: 700; letter-spacing: .08em; margin: 0; text-transform: uppercase; }
 .packet-flow__route-controls, .packet-flow__controls { align-items: center; display: flex; flex-wrap: wrap; gap: .55rem; }
 .packet-flow__controls--below-diagram { border-bottom: 1px solid rgba(110,231,183,.2); justify-content: flex-end; padding: .8rem 1.25rem; }
