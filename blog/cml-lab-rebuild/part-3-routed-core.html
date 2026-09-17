@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DK03RZY5FJ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-DK03RZY5FJ");
+    </script>
+    <title>CML Lab Rebuild Part 3: VLANs, OSPF &amp; a Resilient Routed Core - Jed-Marc Nocum</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Part 3 of a CCNA lab rebuild: dual-stack SVIs, routed /31 and /127 infrastructure, and OSPF ECMP validation in CML." />
+    <link rel="stylesheet" href="/assets/styles.css" />
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png" />
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+  </head>
+  <body class="site-page antialiased">
+    <div class="site-shell">
+      <header class="mx-auto max-w-7xl px-5 pt-5 sm:px-8 lg:px-10">
+        <nav class="site-nav flex items-center justify-between pb-5" aria-label="Main navigation">
+          <a class="group flex items-center" href="/" aria-label="Jed-Marc Nocum, home">
+            <span class="flex h-10 w-10 items-center justify-center rounded-full border border-emerald-300/40 bg-emerald-300/10 font-mono text-sm font-bold text-emerald-300 transition group-hover:bg-emerald-300 group-hover:text-[#07110e]">JN</span>
+          </a>
+          <ul class="flex items-center gap-4 text-xs font-semibold uppercase tracking-[0.16em] text-stone-400 sm:gap-7">
+            <li><a class="transition hover:text-emerald-300" href="/">Home</a></li>
+            <li><a class="transition hover:text-emerald-300" href="/resume.html">Resume</a></li>
+            <li><a class="transition hover:text-emerald-300" href="/portfolio.html">Work</a></li>
+            <li><a class="text-emerald-300" href="/blog.html" aria-current="page">Blog</a></li>
+          </ul>
+        </nav>
+      </header>
+
+      <div class="mx-auto max-w-6xl px-6 py-10">
+        <main class="site-panel rounded-3xl p-5 sm:p-12">
+          <article class="space-y-8">
+            <header class="space-y-4">
+              <time class="block text-sm text-slate-500" datetime="2026-09-16">16 September 2026</time>
+              <h1 class="text-3xl font-bold tracking-tight text-slate-900">&#x1F500; CML Lab Rebuild, Part 3: VLANs, OSPF &amp; a Resilient Routed Core</h1>
+            </header>
+
+            <section class="space-y-5 border-t border-slate-200 pt-6">
+              <p class="leading-relaxed text-slate-700">
+                Welcome back! In <a class="font-semibold text-indigo-600 underline-offset-2 hover:underline" href="/blog/cml-lab-rebuild/part-2-foundation.html">Part 2</a>, I planned the five-node topology and the dual-stack addressing scheme. This time, the lab finally starts behaving like a network: VLAN services go live on the access switch, the routed links get their point-to-point addressing, and OSPF takes over the job of finding the best path. &#x1F680;
+              </p>
+              <p class="leading-relaxed text-slate-700">
+                The goal was deliberately simple: build each layer in a way that I can prove. Rather than stopping at a green topology diagram, I wanted gateway checks, neighbour adjacencies, routing-table evidence, and end-to-end pings for both IPv4 and IPv6.
+              </p>
+              <div class="overflow-x-auto rounded-lg border border-slate-200">
+                <table class="w-full min-w-[42rem] border-collapse text-left text-sm">
+                  <thead>
+                    <tr class="border-b border-slate-200"><th class="px-4 py-3 font-semibold text-slate-900">Build stage</th><th class="px-4 py-3 font-semibold text-slate-900">What changed</th><th class="px-4 py-3 font-semibold text-slate-900">Proof point</th></tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-200 text-slate-700">
+                    <tr><td class="px-4 py-3 font-semibold">Access services</td><td class="px-4 py-3">Site 1 VLANs and dual-stack SVIs on HQ-ASW-01</td><td class="px-4 py-3">IPv4 and IPv6 gateway status</td></tr>
+                    <tr><td class="px-4 py-3 font-semibold">Routed core</td><td class="px-4 py-3">Point-to-point IPv4 <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">/31</code> and IPv6 <code class="rounded bg-slate-100 px-1 py-0.5 text-slate-800">/127</code> links, plus loopbacks</td><td class="px-4 py-3">Transit reachability from the access and distribution layers</td></tr>
+                    <tr><td class="px-4 py-3 font-semibold">Dynamic routing</td><td class="px-4 py-3">OSPF for IPv4 and IPv6</td><td class="px-4 py-3">Neighbours, ECMP routes, and a resilient path to HQ-EDGE-01</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <section class="space-y-5 border-t border-slate-200 pt-6">
+              <div class="grid gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(20rem,.95fr)] lg:items-start">
+                <div class="space-y-4">
+                  <div class="space-y-3">
+                    <h2 class="text-xl font-semibold text-slate-900">&#x1F3E2; HQ access services: VLANs and dual-stack gateways</h2>
+                    <p class="leading-relaxed text-slate-700">
+                      I started at HQ-ASW-01, where the Site 1 VLANs become useful services rather than just rows in an address plan. Each SVI gives its VLAN an IPv4 and IPv6 default-gateway presence, while keeping the naming and addressing conventions from the previous post intact.
+                    </p>
+                    <p class="leading-relaxed text-slate-700">
+                      This is the point where the routed-access design starts to feel real. Endpoints will eventually use these SVIs as their first hop, but the switch itself can already use the dual-stack gateways to participate cleanly in the wider infrastructure.
+                    </p>
+                  </div>
+                </div>
+                <figure class="space-y-3">
+                  <img class="max-h-[22rem] w-full rounded-lg border border-slate-200 object-contain" src="/assets/blog/cml-lab-rebuild/pt3/vlans-asw1.png" alt="HQ-ASW-01 terminal output showing the configured Site 1 VLANs." />
+                  <figcaption class="text-sm leading-relaxed text-slate-500">Site 1 VLANs created on HQ-ASW-01, ready for their SVI gateway services.</figcaption>
+                </figure>
+              </div>
+              <div class="grid gap-4 sm:grid-cols-2">
+                <figure class="space-y-3">
+                  <img class="w-full rounded-lg border border-slate-200" src="/assets/blog/cml-lab-rebuild/pt3/asw1-ipv4-gateway.png" alt="HQ-ASW-01 terminal output showing IPv4 gateway interface status." />
+                  <figcaption class="text-sm leading-relaxed text-slate-500">IPv4 gateway interfaces on the access switch.</figcaption>
+                </figure>
+                <figure class="space-y-3">
+                  <img class="w-full rounded-lg border border-slate-200" src="/assets/blog/cml-lab-rebuild/pt3/asw1-ipv6-gateway.png" alt="HQ-ASW-01 terminal output showing IPv6 gateway interface status." />
+                  <figcaption class="text-sm leading-relaxed text-slate-500">The matching IPv6 gateway state&mdash;same service layer, second protocol stack.</figcaption>
+                </figure>
+              </div>
+            </section>
+
+            <section class="space-y-5 border-t border-slate-200 pt-6">
+              <div class="space-y-3">
+                <h2 class="text-xl font-semibold text-slate-900">&#x1F517; Routed infrastructure: small prefixes, clear boundaries</h2>
+                <p class="leading-relaxed text-slate-700">
+                  Next came the infrastructure links. The point-to-point uplinks use IPv4 <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">/31</code> and IPv6 <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">/127</code> allocations: exactly two usable addresses per link and no wasted space. Loopbacks provide stable infrastructure identities for routing and troubleshooting, even if a physical path changes later.
+                </p>
+                <p class="leading-relaxed text-slate-700">
+                  I also kept the inter-switch bundle visible and verifiable. A neat design on paper is nice; checking the VLAN, LACP state, and port-channel addresses is what makes it something I can confidently build on.
+                </p>
+              </div>
+              <p class="leading-relaxed text-slate-700">On HQ-DSW-01 and HQ-DSW-02, VLAN 998 is created as the parking VLAN for unused ports.</p>
+              <p class="leading-relaxed text-slate-700">Need a refresher before the routed links? <a class="font-semibold text-indigo-600 underline-offset-2 hover:underline" href="/blog/cml-lab-rebuild/part-2-foundation.html#ipv6-allocation-title">Review the dual-stack endpoint allocation from Part 2</a>.</p>
+              <div class="grid gap-4 sm:grid-cols-2">
+                <figure class="space-y-3">
+                  <img class="w-full rounded-lg border border-slate-200" src="/assets/blog/cml-lab-rebuild/pt3/dsw1-lacp.png" alt="HQ-DSW-01 terminal output showing LACP port-channel status." />
+                  <figcaption class="text-sm leading-relaxed text-slate-500">LACP status on HQ-DSW-01.</figcaption>
+                </figure>
+                <figure class="space-y-3">
+                  <img class="w-full rounded-lg border border-slate-200" src="/assets/blog/cml-lab-rebuild/pt3/dsw2-lacp.png" alt="HQ-DSW-02 terminal output showing LACP port-channel status." />
+                  <figcaption class="text-sm leading-relaxed text-slate-500">LACP status on HQ-DSW-02, confirming both sides agree on the bundle.</figcaption>
+                </figure>
+              </div>
+              <figure class="space-y-3">
+                <img class="w-full rounded-lg border border-slate-200" src="/assets/blog/cml-lab-rebuild/pt3/dsw1-po12-ip-addresses.png" alt="HQ-DSW-01 terminal output showing Port-channel12 IP addressing." />
+                <figcaption class="text-sm leading-relaxed text-slate-500">The Layer 3 addressing check for Port-channel12 on HQ-DSW-01.</figcaption>
+              </figure>
+            </section>
+
+            <section class="space-y-5 border-t border-slate-200 pt-6">
+              <div class="space-y-3">
+                <h2 class="text-xl font-semibold text-slate-900">&#x1F500; Dynamic routing: OSPF for IPv4 and IPv6</h2>
+                <p class="leading-relaxed text-slate-700">
+                  With the interfaces addressed and reachable, OSPF was the fun part. I enabled the IPv4 and IPv6 processes across the routed infrastructure, advertised the loopbacks, and let each node learn the rest of the core dynamically. No static-route maze, no manual failover edits&mdash;just a routing protocol doing the bookkeeping.
+                </p>
+                <p class="leading-relaxed text-slate-700">
+                  The neighbour view is my first sanity check. If both protocol families form the expected adjacencies, the routing tables should have enough information to choose paths through either distribution switch.
+                </p>
+              </div>
+              <figure class="space-y-3">
+                <img class="w-full rounded-lg border border-slate-200" src="/assets/blog/cml-lab-rebuild/pt3/asw1-ospf-neighbor-ipv4-6.png" alt="HQ-ASW-01 terminal output showing OSPF IPv4 and IPv6 neighbour adjacencies." />
+                <figcaption class="text-sm leading-relaxed text-slate-500">HQ-ASW-01 sees its OSPF neighbours for both IPv4 and IPv6.</figcaption>
+              </figure>
+              <div class="grid gap-4 sm:grid-cols-2">
+                <figure class="space-y-3">
+                  <img class="w-full rounded-lg border border-slate-200" src="/assets/blog/cml-lab-rebuild/pt3/asw1-ip-route.png" alt="HQ-ASW-01 IPv4 routing table showing learned OSPF routes." />
+                  <figcaption class="text-sm leading-relaxed text-slate-500">IPv4 routes learned by HQ-ASW-01 through OSPF.</figcaption>
+                </figure>
+                <figure class="space-y-3">
+                  <img class="w-full rounded-lg border border-slate-200" src="/assets/blog/cml-lab-rebuild/pt3/asw1-ipv6-route.png" alt="HQ-ASW-01 IPv6 routing table showing learned OSPF routes." />
+                  <figcaption class="text-sm leading-relaxed text-slate-500">The IPv6 routing-table view&mdash;dual stack means validating twice.</figcaption>
+                </figure>
+              </div>
+              <p class="leading-relaxed text-slate-700">
+                This is the payoff for the routed-access pivot from Part 2. The routing tables show the learned OSPF routes, and equal-cost paths can be used through the routed core instead of leaving redundant uplinks idle behind a spanning-tree block. That gives the lab both useful bandwidth and a much cleaner failure story.
+              </p>
+            </section>
+
+            <section class="space-y-5 border-t border-slate-200 pt-6">
+              <div class="space-y-3">
+                <h2 class="text-xl font-semibold text-slate-900">🧪 Validation: Dual-Stack Reachability and ECMP Path Selection</h2>
+                <p class="leading-relaxed text-slate-700">
+                  With OSPFv2 and OSPFv3 established, I validated reachability from HQ-ASW-01 to HQ-EDGE-01’s Loopback0. Successful IPv4 and IPv6 pings, together with the OSPF route tables, confirmed that the routed transit links, learned routes, and return paths were working end to end.
+                </p>
+
+                <p class="leading-relaxed text-slate-700">
+           The traceroute test then made the routing decision visible. Responses were observed through both HQ-DSW-01 and HQ-DSW-02, confirming that OSPF had installed two equal-cost paths to the edge. The simulation below illustrates the same behaviour: separate traceroute probes can be forwarded through either distribution switch on their way to the destination.
+                </p>
+              </div>
+              <aside class="packet-flow" data-packet-flow aria-labelledby="packet-flow-title">
+                <div class="packet-flow__header">
+                  <p class="packet-flow__eyebrow">Interactive packet-flow simulation</p>
+                  <h3 id="packet-flow-title">Follow ECMP traceroute probes through the routed core</h3>
+                </div>
+                <div class="packet-flow__viewport">
+                  <svg class="packet-flow__diagram" viewBox="0 0 1000 500" role="img" aria-label="Interactive network diagram showing traceroute probes from HQ-ASW-01 to HQ-EDGE-01 across both equal-cost distribution paths.">
+                    <path class="packet-flow__link" data-packet-flow-link="asw-dsw1" d="M220 194 L345 130" />
+                    <path class="packet-flow__link" data-packet-flow-link="asw-dsw2" d="M220 225 L345 300" />
+                    <path class="packet-flow__link" data-packet-flow-link="dsw1-edge" d="M515 130 L650 194" />
+                    <path class="packet-flow__link" data-packet-flow-link="dsw2-edge" d="M515 300 L650 225" />
+                    <path class="packet-flow__link packet-flow__link--bundle" data-packet-flow-link="dsw1-dsw2" d="M430 150 L430 280" />
+                    <path class="packet-flow__link packet-flow__link--isp" d="M820 209 L875 209" />
+
+                    <g class="packet-flow__node" data-packet-flow-node="asw">
+                      <rect x="50" y="154" width="170" height="110" rx="13" />
+                      <text class="packet-flow__node-role" x="135" y="181" text-anchor="middle">ACCESS</text>
+                      <text class="packet-flow__node-name" x="135" y="207" text-anchor="middle">HQ-ASW-01</text>
+                      <text class="packet-flow__node-address" x="135" y="229" text-anchor="middle">Gi0/0 &middot; 10.254.1.6</text>
+                      <text class="packet-flow__node-address" x="135" y="248" text-anchor="middle">Gi0/1 &middot; 10.254.1.8</text>
+                    </g>
+                    <g class="packet-flow__node" data-packet-flow-node="dsw1">
+                      <rect x="345" y="45" width="170" height="110" rx="13" />
+                      <text class="packet-flow__node-role" x="430" y="70" text-anchor="middle">DISTRIBUTION</text>
+                      <text class="packet-flow__node-name" x="430" y="95" text-anchor="middle">HQ-DSW-01</text>
+                      <text class="packet-flow__node-address" x="430" y="119" text-anchor="middle">Hop 1 &middot; 10.254.1.7</text>
+                      <text class="packet-flow__node-address" x="430" y="140" text-anchor="middle">Core &middot; 10.254.1.2</text>
+                    </g>
+                    <g class="packet-flow__node" data-packet-flow-node="dsw2">
+                      <rect x="345" y="275" width="170" height="110" rx="13" />
+                      <text class="packet-flow__node-role" x="430" y="300" text-anchor="middle">DISTRIBUTION</text>
+                      <text class="packet-flow__node-name" x="430" y="325" text-anchor="middle">HQ-DSW-02</text>
+                      <text class="packet-flow__node-address" x="430" y="349" text-anchor="middle">Hop 1 &middot; 10.254.1.9</text>
+                      <text class="packet-flow__node-address" x="430" y="370" text-anchor="middle">Core &middot; 10.254.1.4</text>
+                    </g>
+                    <g class="packet-flow__node" data-packet-flow-node="edge">
+                      <rect x="650" y="154" width="170" height="110" rx="13" />
+                      <text class="packet-flow__node-role" x="735" y="181" text-anchor="middle">EDGE / DESTINATION</text>
+                      <text class="packet-flow__node-name" x="735" y="207" text-anchor="middle">HQ-EDGE-01</text>
+                      <text class="packet-flow__node-address" x="735" y="229" text-anchor="middle">Dst &middot; 10.255.1.10</text>
+                      <text class="packet-flow__node-address" x="735" y="248" text-anchor="middle">Hop 2 &middot; 10.254.1.3 / .5</text>
+                    </g>
+                    <g class="packet-flow__node" data-packet-flow-node="isp">
+                      <rect x="875" y="164" width="90" height="90" rx="13" />
+                      <text class="packet-flow__node-role" x="920" y="194" text-anchor="middle">ISP</text>
+                      <text class="packet-flow__node-name" x="920" y="222" text-anchor="middle">ISP-01</text>
+                    </g>
+                    <g class="packet-flow__packet" data-packet-flow-packet="probe-one" aria-hidden="true">
+                      <circle r="18" />
+                      <rect x="-11" y="-8" width="22" height="16" rx="2" />
+                      <path d="M-10 -7 L0 1 L10 -7 M-10 7 L-3 0 M10 7 L3 0" />
+                    </g>
+                    <g class="packet-flow__packet" data-packet-flow-packet="probe-two" aria-hidden="true">
+                      <circle r="18" />
+                      <rect x="-11" y="-8" width="22" height="16" rx="2" />
+                      <path d="M-10 -7 L0 1 L10 -7 M-10 7 L-3 0 M10 7 L3 0" />
+                    </g>
+                    <foreignObject class="packet-flow__callout" data-packet-flow-callout width="270" height="210">
+                      <div xmlns="http://www.w3.org/1999/xhtml" class="packet-flow__callout-card" role="status" aria-live="polite">
+                        <p class="packet-flow__status" data-packet-flow-progress></p>
+                        <p class="packet-flow__status" data-packet-flow-phase></p>
+                        <h4 class="packet-flow__callout-title" data-packet-flow-title></h4>
+                        <p class="packet-flow__callout-description" data-packet-flow-description></p>
+                      </div>
+                    </foreignObject>
+                  </svg>
+                </div>
+                <div class="packet-flow__controls packet-flow__controls--below-diagram" role="group" aria-label="Packet-flow step controls">
+                  <button class="packet-flow__button" type="button" data-packet-flow-action="reset">Reset</button>
+                  <button class="packet-flow__button" type="button" data-packet-flow-action="previous">&larr; Previous</button>
+                  <button class="packet-flow__button packet-flow__button--play" type="button" data-packet-flow-action="play" aria-pressed="false" aria-label="Play packet-flow playback">&#x25B6; Play</button>
+                  <button class="packet-flow__button" type="button" data-packet-flow-action="next">Next step &rarr;</button>
+                </div>
+                <div class="packet-flow__legend" aria-label="Packet-flow legend">
+                  <span class="packet-flow__legend-item"><i class="packet-flow__legend-swatch packet-flow__legend-swatch--request" aria-hidden="true"></i>Traceroute probe</span>
+                  <span class="packet-flow__legend-item"><i class="packet-flow__legend-swatch packet-flow__legend-swatch--reply" aria-hidden="true"></i>ICMP response</span>
+                  <span class="packet-flow__legend-item"><i class="packet-flow__legend-line" aria-hidden="true"></i>Available core link</span>
+                </div>
+              </aside>
+              <figure class="space-y-3">
+                <img class="w-full rounded-lg border border-slate-200" src="/assets/blog/cml-lab-rebuild/pt3/asw1-tracert-edge.png" alt="HQ-ASW-01 traceroute to HQ-EDGE-01 showing alternating first-hop and second-hop addresses across active equal-cost paths." />
+                <figcaption class="text-sm leading-relaxed text-slate-500">The traceroute alternates between both equal-cost paths: 10.254.1.7 and 10.254.1.9 at hop 1, then 10.254.1.5 and 10.254.1.3 at hop 2.</figcaption>
+              </figure>
+              <figure class="space-y-3">
+                <img class="w-full rounded-lg border border-slate-200" src="/assets/blog/cml-lab-rebuild/pt3/asw1-ospf-test-ping-edge-01.png" alt="HQ-ASW-01 ping test output to HQ-EDGE-01 using OSPF-learned routing." />
+                <figcaption class="text-sm leading-relaxed text-slate-500">End-to-end reachability from HQ-ASW-01 to HQ-EDGE-01 over the OSPF-routed core.</figcaption>
+              </figure>
+            </section>
+
+            <section class="space-y-3 border-t border-slate-200 pt-6">
+              <h2 class="text-xl font-semibold text-slate-900">&#x1F4CB; Part 3 summary</h2>
+              <p class="leading-relaxed text-slate-700">Part 3 turned the planned topology into a working dual-stack routed campus core:</p>
+              <ul class="list-disc space-y-2 pl-5 leading-relaxed text-slate-700">
+                <li>Created the Site 1 VLAN services and dual-stack gateway SVIs on HQ-ASW-01.</li>
+                <li>Applied the compact point-to-point addressing approach to the routed infrastructure and checked the inter-switch bundle.</li>
+                <li>Formed OSPF adjacencies for IPv4 and IPv6, then verified learned routes and end-to-end reachability.</li>
+                <li>Set the stage for ECMP-capable paths through the core&mdash;the big reason for choosing routed access in the first place.</li>
+              </ul>
+            </section>
+
+            <section class="space-y-3 border-t border-slate-200 pt-6">
+              <h2 class="text-xl font-semibold text-slate-900">&#x1F50C; What&rsquo;s next?</h2>
+              <p class="leading-relaxed text-slate-700">The core can now move traffic, so the next step is giving it more real-world responsibilities: external endpoints, enterprise services, and the VMware integration work that lets this lab talk to more than itself. Onward to Part 4! &#x1F680;</p>
+            </section>
+
+            <section class="space-y-3 border-t border-slate-200 pt-6">
+              <h2 class="text-xl font-semibold text-slate-900">&#x1F4CD; The full series roadmap</h2>
+              <ul class="list-disc space-y-2 pl-5 leading-relaxed text-slate-700">
+                <li>&#x2705; <span class="font-semibold">Part 1:</span> CML Environment Setup &amp; Platform Verification</li>
+                <li>&#x2705; <span class="font-semibold">Part 2:</span> Five-Node Topology, Dual-Stack Addressing &amp; Routed-Access Foundation</li>
+                <li>&#x2705; <span class="font-semibold">Part 3:</span> Dynamic Dual-Stack Routing, ECMP &amp; Path Resiliency <em>(You are here!)</em></li>
+                <li>&#x1F50C; <span class="font-semibold">Part 4:</span> External Endpoints, Enterprise Services &amp; VMware Integration</li>
+                <li>&#x1F6E1;&#xFE0F; <span class="font-semibold">Part 5:</span> Segmentation, Management &amp; Edge Security</li>
+                <li>&#x260E;&#xFE0F; <span class="font-semibold">Part 6:</span> Voice, QoS &amp; Unified Communications Integration</li>
+                <li>&#x1F916; <span class="font-semibold">Part 7:</span> Network Automation, Programmability &amp; Monitoring</li>
+                <li>&#x1F680; <span class="font-semibold">Part 8:</span> CML Personal Expansion &mdash; Full Campus, Wireless &amp; Advanced Services</li>
+              </ul>
+            </section>
+          </article>
+        </main>
+      </div>
+      <footer class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-5 px-5 pb-8 text-sm text-stone-500 sm:flex-row sm:px-8 lg:px-10">
+        <p class="my-0">&copy; 2026 Jed-Marc Nocum &middot; <a class="font-medium text-indigo-600 underline-offset-2 hover:underline" href="https://www.linkedin.com/in/jed-marc-nocum-367a75b2/" target="_blank" rel="noopener noreferrer">LinkedIn</a> &middot; <a class="font-medium text-indigo-600 underline-offset-2 hover:underline" href="https://github.com/jedmarcnocum" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+        <a class="transition hover:text-emerald-300" href="/blog.html">&larr; Back to blog</a>
+      </footer>
+    </div>
+    <script src="/assets/blog-image-modal.js" defer></script>
+    <script src="/assets/blog-section-nav.js" defer></script>
+    <script src="/assets/blog-back-to-top.js" defer></script>
+    <script src="/assets/packet-flow-simulator.js" defer></script>
+  </body>
+</html>
