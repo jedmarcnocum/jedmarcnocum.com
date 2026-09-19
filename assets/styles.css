@@ -728,6 +728,10 @@ body {
   height: 2.5rem;
 }
 
+.h-11 {
+  height: 2.75rem;
+}
+
 .h-2 {
   height: 0.5rem;
 }
@@ -742,6 +746,10 @@ body {
 
 .h-9 {
   height: 2.25rem;
+}
+
+.h-full {
+  height: 100%;
 }
 
 .h-px {
@@ -762,6 +770,10 @@ body {
 
 .w-10 {
   width: 2.5rem;
+}
+
+.w-11 {
+  width: 2.75rem;
 }
 
 .w-2 {
@@ -1101,6 +1113,11 @@ body {
   border-color: rgb(252 211 77 / var(--tw-border-opacity, 1));
 }
 
+.border-amber-500 {
+  --tw-border-opacity: 1;
+  border-color: rgb(245 158 11 / var(--tw-border-opacity, 1));
+}
+
 .border-emerald-300 {
   --tw-border-opacity: 1;
   border-color: rgb(110 231 183 / var(--tw-border-opacity, 1));
@@ -1155,6 +1172,11 @@ body {
   border-color: rgb(255 255 255 / 0.15);
 }
 
+.border-l-amber-500 {
+  --tw-border-opacity: 1;
+  border-left-color: rgb(245 158 11 / var(--tw-border-opacity, 1));
+}
+
 .\!bg-transparent {
   background-color: transparent !important;
 }
@@ -1189,11 +1211,6 @@ body {
   background-color: rgb(110 231 183 / .06);
 }
 
-.bg-emerald-50 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(236 253 245 / var(--tw-bg-opacity, 1));
-}
-
 .bg-neutral-800 {
   --tw-bg-opacity: 1;
   background-color: rgb(38 38 38 / var(--tw-bg-opacity, 1));
@@ -1221,6 +1238,10 @@ body {
 .object-contain {
   -o-object-fit: contain;
      object-fit: contain;
+}
+
+.p-4 {
+  padding: 1rem;
 }
 
 .p-5 {
@@ -1518,6 +1539,11 @@ body {
   color: rgb(252 211 77 / var(--tw-text-opacity, 1));
 }
 
+.text-amber-600 {
+  --tw-text-opacity: 1;
+  color: rgb(217 119 6 / var(--tw-text-opacity, 1));
+}
+
 .text-emerald-200 {
   --tw-text-opacity: 1;
   color: rgb(167 243 208 / var(--tw-text-opacity, 1));
@@ -1526,6 +1552,11 @@ body {
 .text-emerald-300 {
   --tw-text-opacity: 1;
   color: rgb(110 231 183 / var(--tw-text-opacity, 1));
+}
+
+.text-emerald-600 {
+  --tw-text-opacity: 1;
+  color: rgb(5 150 105 / var(--tw-text-opacity, 1));
 }
 
 .text-indigo-600 {
@@ -1968,6 +1999,12 @@ body {
   stroke-width: 3;
 }
 
+.packet-flow__link--stale {
+  stroke: #fbbf24;
+  stroke-dasharray: 5 5;
+  stroke-width: 4;
+}
+
 .packet-flow__link--isp {
   stroke: rgba(214,211,209,.16);
   stroke-dasharray: 6 8;
@@ -2035,6 +2072,91 @@ body {
   font-size: 12px;
   letter-spacing: .4px;
   pointer-events: none;
+}
+
+.packet-flow__path-label--stale {
+  fill: #fde68a;
+}
+
+.packet-flow__stale-hello, .packet-flow__causal-chain {
+  display: none;
+  pointer-events: none;
+}
+
+.packet-flow__stale-hello.is-visible, .packet-flow__causal-chain.is-visible {
+  display: block;
+}
+
+.packet-flow__stale-hello-packet {
+  animation: packet-flow-stale-hello 1.7s linear infinite;
+}
+
+.packet-flow__stale-hello-packet circle {
+  fill: #fbbf24;
+  filter: drop-shadow(0 0 6px rgba(251,191,36,.8));
+}
+
+.packet-flow__stale-hello-packet path {
+  fill: none;
+  stroke: #07110e;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+.packet-flow__stale-hello-label, .packet-flow__drop-label {
+  fill: #fde68a;
+  font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+  font-size: 11px;
+  pointer-events: none;
+}
+
+.packet-flow__drop-mark {
+  fill: none;
+  stroke: #fbbf24;
+  stroke-linecap: round;
+  stroke-width: 2.5;
+}
+
+.packet-flow__causal-chain rect {
+  fill: rgba(12,25,21,.96);
+  stroke: rgba(251,191,36,.72);
+  stroke-width: 1;
+}
+
+.packet-flow__causal-chain text {
+  fill: #fde68a;
+  font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+  font-size: 11px;
+  pointer-events: none;
+}
+
+@keyframes packet-flow-stale-hello {
+  0% {
+    opacity: 0;
+    transform: translate(630px,180px);
+  }
+
+  12% {
+    opacity: 1;
+  }
+
+  82% {
+    opacity: 1;
+    transform: translate(532px,180px);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(518px,180px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .packet-flow__stale-hello-packet {
+    animation: none;
+    transform: translate(575px,180px);
+  }
 }
 
 .packet-flow__node.is-active rect {
@@ -3285,6 +3407,10 @@ body {
     grid-template-columns: 1fr 5rem 1fr 1fr;
   }
 
+  .sm\:grid-cols-\[2\.75rem_1fr\] {
+    grid-template-columns: 2.75rem 1fr;
+  }
+
   .sm\:grid-cols-\[5rem_1fr_auto\] {
     grid-template-columns: 5rem 1fr auto;
   }
@@ -3378,6 +3504,10 @@ body {
 
   .md\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .md\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .md\:grid-cols-\[\.7fr_1\.3fr\] {

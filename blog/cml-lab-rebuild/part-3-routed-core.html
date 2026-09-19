@@ -352,15 +352,150 @@
                 <figcaption class="text-sm leading-relaxed text-slate-500">Observed stale remote member state: HQ-DSW-02 temporarily still reports both LACP members as bundled <code>(P)</code> after the one-sided member shutdown.</figcaption>
               </figure>
 
-              <div class="space-y-3">
-                <p class="leading-relaxed text-slate-700">I began with the CML GUI. First, I stopped the link, but the affected Port-channel member still showed as bundled <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">(P)</code>. I then used the GUI to disconnect the link: the interface status became down, yet the Po12 member still remained <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">(P)</code> on HQ-DSW-02. In other words, the virtual link looked unavailable while the remote switch had not immediately removed it from the bundle.</p>
-                <p class="leading-relaxed text-slate-700">That stale state meant HQ-DSW-02 could still send traffic&mdash;including OSPF Hellos&mdash;toward an unavailable member until the OSPF adjacency reached its dead timer and reconverged.</p>
-                <p class="leading-relaxed text-slate-700">The earlier 88% ping result therefore showed loss, not seamless resiliency, and is not suitable evidence of a clean member failover. This is an observed CML/IOSv emulation behaviour during a one-sided administrative shutdown, not evidence that the Layer-3 port-channel or OSPF configuration was wrong. On physical hardware, a genuine single-link failure normally signals down at both ends and the remaining member continues carrying the bundle.</p>
+              <div class="space-y-5">
+                <div class="space-y-2">
+                  <p class="text-sm font-semibold uppercase tracking-[0.16em] text-emerald-600">Troubleshooting path</p>
+                  <h3 class="text-lg font-semibold text-slate-900">Three one-sided tests exposed the same stale member state</h3>
+                  <p class="leading-relaxed text-slate-700">I worked from the CML GUI to a manual interface action, keeping the same continuous ping running from HQ-ASW-01 to HQ-DSW-02 Loopback0.</p>
+                </div>
+
+                <ol class="grid gap-4 md:grid-cols-3" aria-label="One-sided LACP test sequence">
+                  <li class="flex h-full flex-col gap-3 rounded-xl border border-slate-200 p-5">
+                    <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-emerald-500 font-mono text-sm font-semibold text-emerald-600">01</span>
+                    <div class="space-y-2">
+                      <h4 class="font-semibold text-slate-900">Stop the link in the CML GUI</h4>
+                      <p class="text-sm leading-relaxed text-slate-700">The affected member was stopped, but HQ-DSW-02 still showed it as bundled <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">(P)</code>. The remote switch had not yet removed it from Po12.</p>
+                    </div>
+                  </li>
+                  <li class="flex h-full flex-col gap-3 rounded-xl border border-slate-200 p-5">
+                    <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-emerald-500 font-mono text-sm font-semibold text-emerald-600">02</span>
+                    <div class="space-y-2">
+                      <h4 class="font-semibold text-slate-900">Disconnect the link in the CML GUI</h4>
+                      <p class="text-sm leading-relaxed text-slate-700">The interface status now read down, yet the same Po12 member still remained <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">(P)</code> on HQ-DSW-02. The virtual link looked unavailable while the remote bundle still treated it as usable.</p>
+                    </div>
+                  </li>
+                  <li class="flex h-full flex-col gap-3 rounded-xl border border-slate-200 p-5">
+                    <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-amber-500 font-mono text-sm font-semibold text-amber-600">03</span>
+                    <div class="space-y-2">
+                      <h4 class="font-semibold text-slate-900">Manually shut the member on HQ-DSW-01 only</h4>
+                      <p class="text-sm leading-relaxed text-slate-700">I then manually disabled the affected physical member on the HQ-DSW-01 side only. The one-sided state again left HQ-DSW-02 with stale membership, so it could continue sending traffic and OSPF Hellos toward an unavailable path until the OSPF dead timer expired and the adjacency reconverged.</p>
+                    </div>
+                  </li>
+                </ol>
+
+                <figure class="space-y-3">
+                  <img class="w-full rounded-lg border border-slate-200" src="/assets/blog/cml-lab-rebuild/pt3/lacp-resiliency-evidence/03-one-sided-eth-sum-result.png" alt="EtherChannel summaries showing GigabitEthernet0/1 down on HQ-DSW-01 while HQ-DSW-02 still lists both members as bundled in Port-channel12." />
+                  <figcaption class="text-sm leading-relaxed text-slate-500">The final one-sided administrative shutdown is visible in the EtherChannel summaries: HQ-DSW-01 has removed Gi0/1 locally <code>(D)</code>, while HQ-DSW-02 temporarily still lists Gi0/1 and Gi0/2 as bundled <code>(P)</code> members. This observed CML/IOSv state can lose OSPF control traffic during reconvergence; it is not a seamless failover or a physical cable-failure result.</figcaption>
+                </figure>
+
+                <p class="leading-relaxed text-slate-700">The earlier 88% ping result therefore records loss, not seamless resiliency, and is not suitable evidence of a clean member failover. This is observed CML/IOSv behaviour during a one-sided administrative action, not evidence that the Layer-3 port-channel or OSPF configuration was wrong. On physical hardware, a genuine single-link failure normally signals down at both ends and the remaining member continues carrying the bundle.</p>
                 <figure class="space-y-3">
                   <img class="w-full rounded-lg border border-slate-200" src="/assets/blog/cml-lab-rebuild/pt3/lacp-resiliency-evidence/01-one-sided-test-ping-loss.png" alt="HQ-ASW-01 continuous ping showing packet loss during the one-sided LACP member shutdown test." />
                   <figcaption class="text-sm leading-relaxed text-slate-500">The one-sided test records the earlier 88% ping outcome. It documents the emulation edge case and is not evidence of seamless member resiliency.</figcaption>
                 </figure>
-                <p class="leading-relaxed text-slate-700">I therefore ran the continuous ping again while manually shutting down the same physical member&mdash;<code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">GigabitEthernet0/2</code>&mdash;on both distribution switches. Both devices immediately agreed on the active bundle membership, while <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">Port-channel12</code> remained operational over the remaining member.</p>
+
+                <aside class="packet-flow" data-packet-flow="lacp-one-sided" aria-labelledby="lacp-one-sided-title">
+                  <div class="packet-flow__header">
+                    <p class="packet-flow__eyebrow">Interactive one-sided test</p>
+                    <h3 id="lacp-one-sided-title">Replay the path to the 88% ping result</h3>
+                  </div>
+                  <div class="packet-flow__viewport">
+                    <svg class="packet-flow__diagram" viewBox="0 0 1000 500" role="img" aria-label="Interactive diagram showing the stale LACP member state observed in CML/IOSv during a one-sided administrative shutdown on HQ-DSW-01.">
+                      <path class="packet-flow__link" data-packet-flow-link="asw-dsw1" d="M220 210 L350 210" />
+                      <path class="packet-flow__link packet-flow__link--stale" data-packet-flow-link="po12-gi01" d="M510 180 L650 180" />
+                      <path class="packet-flow__link" data-packet-flow-link="po12-gi02" d="M510 240 L650 240" />
+                      <text class="packet-flow__path-label" x="580" y="105" text-anchor="middle">Port-channel12 &middot; Layer 3 LACP</text>
+                      <text class="packet-flow__path-label packet-flow__path-label--stale" x="580" y="126" text-anchor="middle">Gi0/1 &middot; down at HQ-DSW-01 &middot; stale remote (P) at HQ-DSW-02</text>
+                      <text class="packet-flow__path-label" x="580" y="285" text-anchor="middle">Gi0/2 &middot; healthy active member</text>
+
+                      <g class="packet-flow__node" data-packet-flow-node="asw">
+                        <rect x="50" y="155" width="170" height="110" rx="13" />
+                        <text class="packet-flow__node-role" x="135" y="183" text-anchor="middle">PING SOURCE</text>
+                        <text class="packet-flow__node-name" x="135" y="210" text-anchor="middle">HQ-ASW-01</text>
+                        <text class="packet-flow__node-address" x="135" y="238" text-anchor="middle">Target &middot; 10.255.1.2</text>
+                      </g>
+                      <g class="packet-flow__node" data-packet-flow-node="dsw1">
+                        <rect x="350" y="155" width="160" height="110" rx="13" />
+                        <text class="packet-flow__node-role" x="430" y="183" text-anchor="middle">DISTRIBUTION</text>
+                        <text class="packet-flow__node-name" x="430" y="210" text-anchor="middle">HQ-DSW-01</text>
+                        <text class="packet-flow__node-address" x="430" y="238" text-anchor="middle">Po12 L3 LACP</text>
+                      </g>
+                      <g class="packet-flow__node" data-packet-flow-node="dsw2">
+                        <rect x="650" y="155" width="170" height="110" rx="13" />
+                        <text class="packet-flow__node-role" x="735" y="183" text-anchor="middle">DISTRIBUTION / TARGET</text>
+                        <text class="packet-flow__node-name" x="735" y="210" text-anchor="middle">HQ-DSW-02</text>
+                        <text class="packet-flow__node-address" x="735" y="238" text-anchor="middle">Loopback0 &middot; 10.255.1.2</text>
+                      </g>
+                      <g class="packet-flow__stale-hello" data-packet-flow-stale-hello aria-hidden="true">
+                        <g class="packet-flow__stale-hello-packet" transform="translate(630 180)">
+                          <circle r="9" />
+                          <path d="M-4 -4 L5 0 L-4 4 M5 0 L-4 0" />
+                        </g>
+                        <text class="packet-flow__stale-hello-label" x="580" y="147" text-anchor="middle">OSPF Hello may be sent here</text>
+                        <path class="packet-flow__drop-mark" d="M518 174 L528 186 M528 174 L518 186" />
+                        <text class="packet-flow__drop-label" x="538" y="201">not received</text>
+                      </g>
+                      <g class="packet-flow__causal-chain" data-packet-flow-causal-chain aria-hidden="true">
+                        <rect x="314" y="292" width="580" height="50" rx="8" />
+                        <text x="604" y="313" text-anchor="middle">Stale remote member &rarr; OSPF Hellos lost</text>
+                        <text x="604" y="331" text-anchor="middle">&rarr; dead timer expires &rarr; adjacency reconverges</text>
+                      </g>
+                      <g class="packet-flow__packet" data-packet-flow-packet="lacp-one-sided-probe" aria-hidden="true">
+                        <circle r="18" />
+                        <rect x="-11" y="-8" width="22" height="16" rx="2" />
+                        <path d="M-10 -7 L0 1 L10 -7 M-10 7 L-3 0 M10 7 L3 0" />
+                      </g>
+                      <foreignObject class="packet-flow__callout" data-packet-flow-callout width="270" height="210">
+                        <div xmlns="http://www.w3.org/1999/xhtml" class="packet-flow__callout-card" role="status" aria-live="polite">
+                          <p class="packet-flow__status" data-packet-flow-progress></p>
+                          <p class="packet-flow__status" data-packet-flow-phase></p>
+                          <h4 class="packet-flow__callout-title" data-packet-flow-title></h4>
+                          <p class="packet-flow__callout-description" data-packet-flow-description></p>
+                        </div>
+                      </foreignObject>
+                    </svg>
+                  </div>
+                  <div class="packet-flow__controls packet-flow__controls--below-diagram" role="group" aria-label="One-sided LACP simulation step controls">
+                    <button class="packet-flow__button" type="button" data-packet-flow-action="reset">Reset</button>
+                    <button class="packet-flow__button" type="button" data-packet-flow-action="previous">&larr; Previous</button>
+                    <button class="packet-flow__button packet-flow__button--play" type="button" data-packet-flow-action="play" aria-pressed="false" aria-label="Play one-sided LACP simulation playback">&#x25B6; Play</button>
+                    <button class="packet-flow__button" type="button" data-packet-flow-action="next">Next step &rarr;</button>
+                  </div>
+                  <div class="packet-flow__legend" aria-label="One-sided CML GUI simulation legend">
+                    <span class="packet-flow__legend-item"><i class="packet-flow__legend-swatch packet-flow__legend-swatch--request" aria-hidden="true"></i>Ping attempt</span>
+                    <span class="packet-flow__legend-item"><i class="packet-flow__legend-warning" aria-hidden="true"></i>Stale remote member state</span>
+                  </div>
+                </aside>
+
+                <aside class="space-y-4 rounded-xl border border-slate-200 border-l-4 border-l-amber-500 px-5 py-4" aria-labelledby="failure-detection-title">
+                  <div class="space-y-1">
+                    <p class="text-sm font-semibold uppercase tracking-[0.16em] text-amber-600">Production context</p>
+                    <h3 id="failure-detection-title" class="text-lg font-semibold text-slate-900">How a supported platform can reduce this failure window</h3>
+                  </div>
+                  <div class="grid gap-4 md:grid-cols-3">
+                    <div class="space-y-1">
+                      <h4 class="font-semibold text-slate-900">LACP fast rate</h4>
+                      <p class="text-sm leading-relaxed text-slate-700">More frequent LACP control messages let a peer notice a missing member sooner than the default slow rate. It reduces detection time; it does not replace a clean two-ended failure signal.</p>
+                    </div>
+                    <div class="space-y-1">
+                      <h4 class="font-semibold text-slate-900">BFD and micro-BFD</h4>
+                      <p class="text-sm leading-relaxed text-slate-700">BFD adds rapid path-health checks. Micro-BFD applies that idea to each LAG member, allowing a supported platform to withdraw a faulty member from forwarding quickly.</p>
+                    </div>
+                    <div class="space-y-1">
+                      <h4 class="font-semibold text-slate-900">This lab&rsquo;s boundary</h4>
+                      <p class="text-sm leading-relaxed text-slate-700">The limitation here is the IOSv image used in CML-Free: <a class="font-medium text-emerald-600 underline-offset-2 hover:underline" href="https://developer.cisco.com/docs/modeling-labs/iosv/" target="_blank" rel="noopener noreferrer">Cisco lists BFD as unsupported for IOSv</a>. <a class="font-medium text-emerald-600 underline-offset-2 hover:underline" href="https://www.cisco.com/c/en/us/td/docs/routers/ios-xe/ip-routing/b-ip-routing/m-micro-bfd-sessions.html" target="_blank" rel="noopener noreferrer">Micro-BFD is a platform- and release-specific IOS XE feature</a>, so neither was available for this validation.</p>
+                    </div>
+                  </div>
+                  <p class="text-sm leading-relaxed text-slate-500">These are useful production design tools, but this exercise stays candid about what the virtual image can demonstrate.</p>
+                </aside>
+
+                <div class="grid gap-3 rounded-xl border border-emerald-500 p-4 sm:grid-cols-[2.75rem_1fr]">
+                  <span class="flex h-11 w-11 items-center justify-center rounded-full border border-emerald-500 font-mono text-sm font-semibold text-emerald-600">04</span>
+                  <div class="space-y-1">
+                    <h3 class="font-semibold text-slate-900">Run the controlled two-sided validation</h3>
+                    <p class="leading-relaxed text-slate-700">I therefore ran the continuous ping again while manually shutting down the same physical member&mdash;<code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">GigabitEthernet0/2</code>&mdash;on both distribution switches. Both devices immediately agreed on the active bundle membership, while <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">Port-channel12</code> remained operational over the remaining member.</p>
+                  </div>
+                </div>
               </div>
 
               <figure class="space-y-3">
@@ -370,8 +505,8 @@
 
               <aside class="packet-flow" data-packet-flow="lacp-resiliency" aria-labelledby="lacp-resiliency-title">
                 <div class="packet-flow__header">
-                  <p class="packet-flow__eyebrow">Interactive LACP resiliency simulation</p>
-                  <h3 id="lacp-resiliency-title">Follow the member-removal test on Port-channel12</h3>
+                  <p class="packet-flow__eyebrow">Interactive controlled LACP test</p>
+                  <h3 id="lacp-resiliency-title">Follow the intended member-removal behaviour on Port-channel12</h3>
                 </div>
                 <div class="packet-flow__viewport">
                   <svg class="packet-flow__diagram" viewBox="0 0 1000 500" role="img" aria-label="Interactive diagram showing Layer-3 Port-channel12 retaining OSPF service when one LACP member is removed from both distribution switches.">
@@ -424,8 +559,7 @@
                 <div class="packet-flow__legend" aria-label="LACP resiliency simulation legend">
                   <span class="packet-flow__legend-item"><i class="packet-flow__legend-swatch packet-flow__legend-swatch--request" aria-hidden="true"></i>Continuous ping</span>
                   <span class="packet-flow__legend-item"><i class="packet-flow__legend-swatch packet-flow__legend-swatch--reply" aria-hidden="true"></i>Echo reply</span>
-                  <span class="packet-flow__legend-item"><i class="packet-flow__legend-warning" aria-hidden="true"></i>Stale one-sided state</span>
-                  <span class="packet-flow__legend-item"><i class="packet-flow__legend-failure" aria-hidden="true"></i>Controlled removed member</span>
+                  <span class="packet-flow__legend-item"><i class="packet-flow__legend-failure" aria-hidden="true"></i>Gi0/2 shut on both ends</span>
                 </div>
               </aside>
 

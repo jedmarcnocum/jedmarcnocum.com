@@ -15,7 +15,10 @@
     const description = simulator.querySelector("[data-packet-flow-description]");
     const svg = simulator.querySelector("svg");
     const callout = simulator.querySelector("[data-packet-flow-callout]");
+    const staleHello = simulator.querySelector("[data-packet-flow-stale-hello]");
+    const causalChain = simulator.querySelector("[data-packet-flow-causal-chain]");
     const isResiliencySimulation = simulator.dataset.packetFlow === "resiliency";
+    const isLacpOneSidedSimulation = simulator.dataset.packetFlow === "lacp-one-sided";
     const isLacpResiliencySimulation = simulator.dataset.packetFlow === "lacp-resiliency";
 
     const coordinates = {
@@ -108,6 +111,47 @@
         reply: true,
       },
     ];
+    const lacpOneSidedSteps = [
+      {
+        phase: "ONE-SIDED ADMINISTRATIVE SHUTDOWN ON HQ-DSW-01",
+        title: "The remote member remains bundled",
+        description: "HQ-DSW-01 removes Gi0/1 locally, but HQ-DSW-02 temporarily continues to list Gi0/1 as a bundled Port-channel12 member (P). This was observed in the CML/IOSv lab during a one-sided administrative shutdown.",
+        points: lacpCoordinates.dsw1,
+        callout: { x: 20, y: 270 },
+        nodes: ["asw", "dsw1", "dsw2"],
+        warningNodes: ["dsw2"],
+        links: ["asw-dsw1", "po12-gi02"],
+        warningLinks: ["po12-gi01"],
+        staleHello: true,
+        reply: false,
+      },
+      {
+        phase: "OSPF reconvergence",
+        title: "Control-plane reconvergence explains the loss",
+        description: "HQ-DSW-02 may hash OSPF Hellos toward stale Gi0/1; HQ-DSW-01 does not receive them. The dead timer then expires and OSPF reconverges. The 88% ping result is the visible symptom, not proof every ping used the unavailable member.",
+        points: lacpCoordinates.dsw2,
+        callout: { x: 20, y: 270 },
+        nodes: ["asw", "dsw1", "dsw2"],
+        warningNodes: ["dsw2"],
+        links: ["asw-dsw1", "po12-gi02"],
+        warningLinks: ["po12-gi01"],
+        staleHello: true,
+        causalChain: true,
+        reply: false,
+      },
+      {
+        phase: "Observed CML/IOSv result",
+        title: "88% ping records OSPF reconvergence",
+        description: "Simplified replay: a continuous ping is one hashed flow. The observed packet loss occurred during OSPF reconvergence; it does not prove every probe used the unavailable member.",
+        points: lacpCoordinates.asw,
+        callout: { x: 20, y: 270 },
+        nodes: ["asw", "dsw1", "dsw2"],
+        warningNodes: ["dsw2"],
+        links: ["asw-dsw1", "po12-gi02"],
+        warningLinks: ["po12-gi01"],
+        reply: false,
+      },
+    ];
     const lacpResiliencySteps = [
       {
         phase: "Healthy LACP bundle",
@@ -120,35 +164,22 @@
         reply: false,
       },
       {
-        phase: "One-sided shutdown",
-        title: "Gi0/2 is removed only on HQ-DSW-01",
-        description: "HQ-DSW-01 removes the member locally, but HQ-DSW-02 temporarily still reports it as bundled. This is the observed CML/IOSv emulation edge case.",
-        points: lacpCoordinates.dsw1,
-        callout: { x: 300, y: 270 },
-        nodes: ["asw", "dsw1", "dsw2"],
-        warningNodes: ["dsw2"],
-        links: ["asw-dsw1", "po12-gi01"],
-        warningLinks: ["po12-gi02"],
-        reply: false,
-      },
-      {
-        phase: "Delayed reconvergence",
-        title: "The stale remote state is not seamless resiliency",
-        description: "HQ-DSW-02 can still send traffic and OSPF Hellos toward the unavailable member until the adjacency reaches its dead timer. The earlier 88% ping result is loss, not a successful failover test.",
-        points: lacpCoordinates.asw,
-        callout: { x: 20, y: 270 },
-        nodes: ["asw", "dsw1", "dsw2"],
-        warningNodes: ["dsw2"],
-        links: ["asw-dsw1", "po12-gi01"],
-        warningLinks: ["po12-gi02"],
-        reply: false,
-      },
-      {
         phase: "Controlled member removal",
-        title: "Gi0/2 is removed on both distribution switches",
-        description: "Removing the same member administratively on both ends makes the bundle state agree immediately. Port-channel12 stays up over GigabitEthernet0/1.",
+        title: "Gi0/2 is shut down on both distribution switches",
+        description: "The same physical member is administratively removed at both ends while the continuous ping is running. Both switches immediately agree that Gi0/2 is unavailable.",
         points: lacpCoordinates.dsw1,
         callout: { x: 300, y: 270 },
+        nodes: ["asw", "dsw1", "dsw2"],
+        links: ["asw-dsw1", "po12-gi01"],
+        failedLinks: ["po12-gi02"],
+        reply: false,
+      },
+      {
+        phase: "Logical link stays up",
+        title: "Port-channel12 continues over Gi0/1",
+        description: "The physical member is gone, but the logical routed port-channel remains operational over GigabitEthernet0/1. The ping can continue without relying on the removed member.",
+        points: lacpCoordinates.dsw2,
+        callout: { x: 690, y: 270 },
         nodes: ["asw", "dsw1", "dsw2"],
         links: ["asw-dsw1", "po12-gi01"],
         failedLinks: ["po12-gi02"],
@@ -240,7 +271,7 @@
         reply: true,
       },
     ];
-    const steps = isLacpResiliencySimulation ? lacpResiliencySteps : isResiliencySimulation ? resiliencySteps : normalSteps;
+    const steps = isLacpOneSidedSimulation ? lacpOneSidedSteps : isLacpResiliencySimulation ? lacpResiliencySteps : isResiliencySimulation ? resiliencySteps : normalSteps;
 
     let step = 0;
     let previousPoints;
@@ -318,6 +349,8 @@
         link.classList.toggle("is-failed", (current.failedLinks || []).includes(link.dataset.packetFlowLink));
         link.classList.toggle("is-warning", (current.warningLinks || []).includes(link.dataset.packetFlowLink));
       });
+      staleHello?.classList.toggle("is-visible", Boolean(current.staleHello));
+      causalChain?.classList.toggle("is-visible", Boolean(current.causalChain));
 
       progress.textContent = `Step ${step + 1} of ${steps.length}`;
       phase.textContent = current.phase;

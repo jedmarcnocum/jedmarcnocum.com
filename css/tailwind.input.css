@@ -143,6 +143,7 @@
 .packet-flow__diagram { display: block; min-width: 44rem; width: 100%; }
 .packet-flow__link { fill: none; stroke: rgba(214,211,209,.35); stroke-linecap: round; stroke-width: 4; transition: filter .2s ease,stroke .2s ease,stroke-width .2s ease; }
 .packet-flow__link--bundle { stroke-dasharray: 9 8; stroke-width: 3; }
+.packet-flow__link--stale { stroke: #fbbf24; stroke-dasharray: 5 5; stroke-width: 4; }
 .packet-flow__link--isp { stroke: rgba(214,211,209,.16); stroke-dasharray: 6 8; }
 .packet-flow__link.is-active { filter: drop-shadow(0 0 5px rgba(110,231,183,.8)); stroke: #6ee7b7; stroke-width: 6; }
 .packet-flow.is-reply .packet-flow__link.is-active { filter: drop-shadow(0 0 5px rgba(125,211,252,.8)); stroke: #7dd3fc; }
@@ -154,6 +155,25 @@
 .packet-flow__node .packet-flow__node-name { fill: #fafaf9; font-size: 18px; font-weight: 700; }
 .packet-flow__node .packet-flow__node-address { fill: #a7f3d0; font-size: 10px; letter-spacing: 0; }
 .packet-flow__path-label { fill: #d6d3d1; font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace; font-size: 12px; letter-spacing: .4px; pointer-events: none; }
+.packet-flow__path-label--stale { fill: #fde68a; }
+.packet-flow__stale-hello, .packet-flow__causal-chain { display: none; pointer-events: none; }
+.packet-flow__stale-hello.is-visible, .packet-flow__causal-chain.is-visible { display: block; }
+.packet-flow__stale-hello-packet { animation: packet-flow-stale-hello 1.7s linear infinite; }
+.packet-flow__stale-hello-packet circle { fill: #fbbf24; filter: drop-shadow(0 0 6px rgba(251,191,36,.8)); }
+.packet-flow__stale-hello-packet path { fill: none; stroke: #07110e; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2; }
+.packet-flow__stale-hello-label, .packet-flow__drop-label { fill: #fde68a; font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace; font-size: 11px; pointer-events: none; }
+.packet-flow__drop-mark { fill: none; stroke: #fbbf24; stroke-linecap: round; stroke-width: 2.5; }
+.packet-flow__causal-chain rect { fill: rgba(12,25,21,.96); stroke: rgba(251,191,36,.72); stroke-width: 1; }
+.packet-flow__causal-chain text { fill: #fde68a; font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace; font-size: 11px; pointer-events: none; }
+@keyframes packet-flow-stale-hello {
+  0% { opacity: 0; transform: translate(630px,180px); }
+  12% { opacity: 1; }
+  82% { opacity: 1; transform: translate(532px,180px); }
+  100% { opacity: 0; transform: translate(518px,180px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .packet-flow__stale-hello-packet { animation: none; transform: translate(575px,180px); }
+}
 .packet-flow__node.is-active rect { fill: rgba(110,231,183,.12); filter: drop-shadow(0 0 8px rgba(110,231,183,.38)); stroke: #6ee7b7; }
 .packet-flow.is-reply .packet-flow__node.is-active rect { fill: rgba(125,211,252,.12); filter: drop-shadow(0 0 8px rgba(125,211,252,.38)); stroke: #7dd3fc; }
 .packet-flow__node.is-failed rect { fill: rgba(251,113,133,.12); filter: none; stroke: #fb7185; stroke-dasharray: 6 5; }
