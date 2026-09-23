@@ -65,31 +65,23 @@
             </section>
 
             <section class="space-y-5 border-t border-slate-200 pt-6">
-              <div class="grid gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(20rem,.95fr)] lg:items-start">
-                <div class="space-y-4">
-                  <div class="space-y-3">
-                    <h2 class="text-xl font-semibold text-slate-900">&#x1F3E2; HQ access services: VLANs and dual-stack gateways</h2>
-                    <p class="leading-relaxed text-slate-700">
-                      I started at HQ-ASW-01, where the Site 1 VLANs become useful services rather than just rows in an address plan. Each SVI gives its VLAN an IPv4 and IPv6 default-gateway presence, while keeping the naming and addressing conventions from the previous post intact.
-                    </p>
-                    <p class="leading-relaxed text-slate-700">
-                      This is the point where the routed-access design starts to feel real. Endpoints will eventually use these SVIs as their first hop, but the switch itself can already use the dual-stack gateways to participate cleanly in the wider infrastructure.
-                    </p>
-                  </div>
-                </div>
+              <div class="space-y-3">
+                <h2 class="text-xl font-semibold text-slate-900">&#x1F3E2; HQ access services: VLANs and dual-stack gateways</h2>
+                <p class="leading-relaxed text-slate-700">
+                  I started at HQ-ASW-01, where the Site 1 VLANs become useful services rather than just rows in an address plan. Each SVI gives its VLAN an IPv4 and IPv6 default-gateway presence, while keeping the naming and addressing conventions from the previous post intact.
+                </p>
+                <p class="leading-relaxed text-slate-700">
+                  This is the point where the routed-access design starts to feel real. Endpoints will eventually use these SVIs as their first hop, but the switch itself can already use the dual-stack gateways to participate cleanly in the wider infrastructure.
+                </p>
+              </div>
+              <div class="grid gap-5 lg:grid-cols-2 lg:items-start">
                 <figure class="space-y-3">
                   <img class="max-h-[22rem] w-full rounded-lg border border-slate-200 object-contain" src="/assets/blog/cml-lab-rebuild/pt3/vlans-asw1.png" alt="HQ-ASW-01 terminal output showing the configured Site 1 VLANs." />
                   <figcaption class="text-sm leading-relaxed text-slate-500">Site 1 VLANs created on HQ-ASW-01, ready for their SVI gateway services.</figcaption>
                 </figure>
-              </div>
-              <div class="grid gap-4 sm:grid-cols-2">
                 <figure class="space-y-3">
-                  <img class="w-full rounded-lg border border-slate-200" src="/assets/blog/cml-lab-rebuild/pt3/asw1-ipv4-gateway.png" alt="HQ-ASW-01 terminal output showing IPv4 gateway interface status." />
-                  <figcaption class="text-sm leading-relaxed text-slate-500">IPv4 gateway interfaces on the access switch.</figcaption>
-                </figure>
-                <figure class="space-y-3">
-                  <img class="w-full rounded-lg border border-slate-200" src="/assets/blog/cml-lab-rebuild/pt3/asw1-ipv6-gateway.png" alt="HQ-ASW-01 terminal output showing IPv6 gateway interface status." />
-                  <figcaption class="text-sm leading-relaxed text-slate-500">The matching IPv6 gateway state&mdash;same service layer, second protocol stack.</figcaption>
+                  <img class="w-full rounded-lg border border-slate-200" src="/assets/blog/cml-lab-rebuild/pt3/asw1-ipv4-6-gateway.png" alt="HQ-ASW-01 terminal output showing combined IPv4 and IPv6 gateway interface status for the Site 1 VLANs." />
+                  <figcaption class="text-sm leading-relaxed text-slate-500">Combined IPv4 and IPv6 gateway state for the Site 1 VLAN SVIs.</figcaption>
                 </figure>
               </div>
             </section>
@@ -572,6 +564,153 @@
                 <h3 class="text-base font-semibold text-slate-900">What this proves</h3>
                 <p class="mt-2 leading-relaxed text-slate-700">Port-channel12 is resilient to the controlled removal of one member: the logical routed link remains up, OSPF stays established, and the access switch retains reachability to HQ-DSW-02. The one-sided test also highlighted an emulation edge case worth recognising when interpreting virtual-lab results.</p>
               </aside>
+            </section>
+
+            <section class="space-y-5 border-t border-slate-200 pt-6" aria-labelledby="ospfv3-troubleshooting-title">
+              <div class="space-y-3">
+                <p class="text-sm font-semibold uppercase tracking-[0.16em] text-emerald-600">Evidence walkthrough</p>
+                <h2 id="ospfv3-troubleshooting-title" class="text-xl font-semibold text-slate-900">Troubleshooting OSPFv3 on the Routed Port-Channel</h2>
+                <p class="leading-relaxed text-slate-700">IPv4 OSPF was already working over the Layer-3 LACP <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">Port-channel12</code> between HQ-DSW-01 and HQ-DSW-02. The fault appeared only after IPv6 and OSPFv3 were added, so this was a control-plane troubleshooting exercise&mdash;not a complete link failure.</p>
+              </div>
+
+              <div class="rounded-2xl border border-slate-800 bg-slate-950 p-4 text-slate-100 sm:p-6">
+                <div class="mb-5 flex flex-col gap-2 border-b border-slate-800 pb-4 sm:flex-row sm:items-end sm:justify-between">
+                  <div>
+                    <p class="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-emerald-300">Four checks, one narrow cause</p>
+                    <p class="mt-1 text-sm leading-relaxed text-slate-300">Follow the evidence from working IPv6 forwarding to the OSPFv3 state that stopped neighbour formation.</p>
+                  </div>
+                  <p class="font-mono text-xs text-slate-400">DATA PLANE &rarr; CONTROL PLANE</p>
+                </div>
+
+                <ol class="grid gap-4 md:grid-cols-2" aria-label="OSPFv3 troubleshooting timeline">
+                  <li class="rounded-xl border border-slate-800 bg-slate-900/70 p-4">
+                    <div class="flex items-start gap-3">
+                      <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-emerald-300/60 font-mono text-sm font-semibold text-emerald-200">01</span>
+                      <div class="space-y-2">
+                        <p class="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-emerald-300">Prove the data plane</p>
+                        <h3 class="font-semibold text-white">IPv6 crossed the existing bundle</h3>
+                        <p class="text-sm leading-relaxed text-slate-300">IPv6 was configured on the logical <code class="text-emerald-200">Port-channel12</code>, not on either physical LACP member. The same EtherChannel carries IPv4 and IPv6; there is no separate &ldquo;IPv6 EtherChannel&rdquo; command. A direct IPv6 ping across Po12 succeeded, proving basic unicast forwarding.</p>
+                      </div>
+                    </div>
+                    <details class="mt-4 rounded-lg border border-slate-700 bg-slate-950/70">
+                      <summary class="cursor-pointer px-3 py-2 text-sm font-semibold text-emerald-200 marker:text-slate-400 hover:text-emerald-100">Show the three data-plane checks</summary>
+                      <div class="grid gap-3 border-t border-slate-800 p-3">
+                        <figure class="space-y-2">
+                          <img class="max-h-40 w-full rounded border border-slate-700 object-contain" src="/assets/blog/cml-lab-rebuild/pt3/ipv6-po12-ospfv3-troubleshooting-evidence/02a_po12_ipv6_addressing.png" alt="Terminal output showing IPv6 addresses configured on Port-channel12 on both distribution switches." loading="lazy" />
+                          <figcaption class="text-xs leading-relaxed text-slate-400">IPv6 addresses live on the two logical Po12 interfaces.</figcaption>
+                        </figure>
+                        <figure class="space-y-2">
+                          <img class="max-h-40 w-full rounded border border-slate-700 object-contain" src="/assets/blog/cml-lab-rebuild/pt3/ipv6-po12-ospfv3-troubleshooting-evidence/02b_po12_dual_stack_config.png" alt="Terminal configuration showing IPv4, IPv6, and OSPF settings applied to logical Port-channel12 rather than its physical LACP members." loading="lazy" />
+                          <figcaption class="text-xs leading-relaxed text-slate-400">The logical interface is where the Layer-3 and routing configuration belongs.</figcaption>
+                        </figure>
+                        <figure class="space-y-2">
+                          <img class="max-h-40 w-full rounded border border-slate-700 object-contain" src="/assets/blog/cml-lab-rebuild/pt3/ipv6-po12-ospfv3-troubleshooting-evidence/03_direct_ipv6_ping_across_po12.png" alt="Successful direct IPv6 ping between the Port-channel12 interfaces on the two distribution switches." loading="lazy" />
+                          <figcaption class="text-xs leading-relaxed text-slate-400">A direct IPv6 ping crossed Po12 successfully.</figcaption>
+                        </figure>
+                      </div>
+                    </details>
+                  </li>
+
+                  <li class="rounded-xl border border-slate-800 bg-slate-900/70 p-4">
+                    <div class="flex items-start gap-3">
+                      <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-sky-300/60 font-mono text-sm font-semibold text-sky-200">02</span>
+                      <div class="space-y-2">
+                        <p class="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-sky-300">Find the interface</p>
+                        <h3 class="font-semibold text-white">DSW1 had not registered Po12 with OSPFv3</h3>
+                        <p class="text-sm leading-relaxed text-slate-300">HQ-DSW-02 listed Po12 in <code class="text-sky-200">show ipv6 ospf interface brief</code>, but HQ-DSW-01 did not. Refreshing <code class="text-sky-200">ipv6 ospf 1 area 0</code> specifically on DSW1&rsquo;s logical Port-channel registered it correctly.</p>
+                      </div>
+                    </div>
+                    <details class="mt-4 rounded-lg border border-slate-700 bg-slate-950/70">
+                      <summary class="cursor-pointer px-3 py-2 text-sm font-semibold text-sky-200 marker:text-slate-400 hover:text-sky-100">Show the attachment checks</summary>
+                      <div class="grid gap-3 border-t border-slate-800 p-3">
+                        <figure class="space-y-2">
+                          <img class="max-h-40 w-full rounded border border-slate-700 object-contain" src="/assets/blog/cml-lab-rebuild/pt3/ipv6-po12-ospfv3-troubleshooting-evidence/04_dsw1_po12_missing_from_ospfv3.png" alt="OSPFv3 interface brief showing Port-channel12 listed on HQ-DSW-02 but missing from HQ-DSW-01." loading="lazy" />
+                          <figcaption class="text-xs leading-relaxed text-slate-400">At first, Po12 existed in OSPFv3 only on DSW2.</figcaption>
+                        </figure>
+                        <figure class="space-y-2">
+                          <img class="max-h-40 w-full rounded border border-slate-700 object-contain" src="/assets/blog/cml-lab-rebuild/pt3/ipv6-po12-ospfv3-troubleshooting-evidence/06_po12_attached_no_neighbors.png" alt="OSPFv3 interface output showing Port-channel12 registered on both distribution switches but with zero neighbors." loading="lazy" />
+                          <figcaption class="text-xs leading-relaxed text-slate-400">After attachment, Po12 appeared on both ends&mdash;but still had no neighbours.</figcaption>
+                        </figure>
+                      </div>
+                    </details>
+                  </li>
+
+                  <li class="rounded-xl border border-slate-800 bg-slate-900/70 p-4">
+                    <div class="flex items-start gap-3">
+                      <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-amber-300/60 font-mono text-sm font-semibold text-amber-200">03</span>
+                      <div class="space-y-2">
+                        <p class="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-amber-300">Rule out transport</p>
+                        <h3 class="font-semibold text-white">The basic delivery checks passed</h3>
+                        <p class="text-sm leading-relaxed text-slate-300">Both logical Port-channel interfaces had unique MAC addresses, and both had joined <code class="text-amber-200">FF02::5</code>, the OSPFv3 AllSPFRouters multicast group. That narrowed the search away from basic Layer-2 identity, IPv6 reachability, and multicast-group membership.</p>
+                      </div>
+                    </div>
+                    <div class="mt-4 rounded-lg border border-emerald-300/30 bg-emerald-300/10 p-3">
+                      <p class="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-emerald-200">Checks that passed</p>
+                      <ul class="mt-2 space-y-1 text-sm leading-relaxed text-slate-200">
+                        <li>Distinct Po12 MAC addresses on DSW1 and DSW2.</li>
+                        <li><code class="text-emerald-200">FF02::5</code> membership on both ends.</li>
+                      </ul>
+                      <p class="mt-2 text-xs leading-relaxed text-slate-400">Membership confirms that each interface joined the group; it does not, by itself, prove an OSPF adjacency.</p>
+                      <details class="mt-3 rounded border border-slate-700 bg-slate-950/70">
+                        <summary class="cursor-pointer px-3 py-2 text-xs font-semibold text-emerald-200 marker:text-slate-400 hover:text-emerald-100">View the passed checks</summary>
+                        <div class="grid gap-3 border-t border-slate-800 p-3 sm:grid-cols-2">
+                          <figure class="space-y-2">
+                            <img class="max-h-32 w-full rounded border border-slate-700 object-contain" src="/assets/blog/cml-lab-rebuild/pt3/ipv6-po12-ospfv3-troubleshooting-evidence/05_distinct_portchannel_macs.png" alt="Terminal outputs showing distinct hardware MAC addresses for Port-channel12 on the two distribution switches." loading="lazy" />
+                            <figcaption class="text-xs leading-relaxed text-slate-400">The two Po12 interfaces do not share a MAC address.</figcaption>
+                          </figure>
+                          <figure class="space-y-2">
+                            <img class="max-h-32 w-full rounded border border-slate-700 object-contain" src="/assets/blog/cml-lab-rebuild/pt3/ipv6-po12-ospfv3-troubleshooting-evidence/08_ff02_allspfrouters_membership.png" alt="Terminal outputs showing FF02::5 AllSPFRouters multicast membership on Port-channel12 on both distribution switches." loading="lazy" />
+                            <figcaption class="text-xs leading-relaxed text-slate-400">Both interfaces joined the OSPFv3 multicast group.</figcaption>
+                          </figure>
+                        </div>
+                      </details>
+                    </div>
+                  </li>
+
+                  <li class="rounded-xl border border-slate-800 bg-slate-900/70 p-4">
+                    <div class="flex items-start gap-3">
+                      <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-rose-300/60 font-mono text-sm font-semibold text-rose-200">04</span>
+                      <div class="space-y-2">
+                        <p class="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-rose-300">Read operational state</p>
+                        <h3 class="font-semibold text-white">DSW1 was suppressing OSPFv3 Hellos</h3>
+                        <p class="text-sm leading-relaxed text-slate-300">OSPF Hellos are the small messages routers exchange to discover and keep neighbours. The detailed DSW1 interface output said <strong class="text-rose-200">No Hellos (Passive interface)</strong>: although the intended configuration used <code class="text-rose-200">passive-interface default</code> plus <code class="text-rose-200">no passive-interface Port-channel12</code>, IOSv/CML retained a stale operational passive state after Po12 was attached to OSPFv3.</p>
+                      </div>
+                    </div>
+                    <div class="mt-4 rounded-lg border border-slate-700 bg-slate-950 p-3">
+                      <p class="text-xs leading-relaxed text-slate-300">Refresh only that interface override under <code class="text-rose-200">ipv6 router ospf 1</code>:</p>
+                      <pre class="mt-2 overflow-x-auto font-mono text-xs leading-relaxed text-emerald-200"><code>passive-interface Port-channel12
+no passive-interface Port-channel12</code></pre>
+                      <p class="mt-2 text-xs leading-relaxed text-slate-400">This was a targeted control-plane refresh&mdash;not a reason to remove <code>passive-interface default</code> globally, clear the whole OSPF process, or reboot a router.</p>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+
+              <div class="grid gap-5 lg:grid-cols-2">
+                <figure class="overflow-hidden rounded-xl border border-slate-800 bg-slate-950 p-3 sm:p-4">
+                  <div class="mb-3 flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-rose-300"><span class="h-2 w-2 rounded-full bg-rose-300"></span>Root cause</div>
+                  <img class="w-full rounded border border-slate-700" src="/assets/blog/cml-lab-rebuild/pt3/ipv6-po12-ospfv3-troubleshooting-evidence/07_dsw1_passive_interface_root_cause.png" alt="Detailed OSPFv3 interface output on HQ-DSW-01 Port-channel12 reporting No Hellos because it is a passive interface." loading="lazy" />
+                  <figcaption class="mt-3 text-sm leading-relaxed text-slate-300">DSW1 was up and attached, but it was not speaking OSPFv3 on Po12: the operational state explicitly says that Hellos are suppressed by a passive interface.</figcaption>
+                </figure>
+                <figure class="overflow-hidden rounded-xl border border-slate-800 bg-slate-950 p-3 sm:p-4">
+                  <div class="mb-3 flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-emerald-300"><span class="h-2 w-2 rounded-full bg-emerald-300"></span>Resolution</div>
+                  <img class="w-full rounded border border-slate-700" src="/assets/blog/cml-lab-rebuild/pt3/ipv6-po12-ospfv3-troubleshooting-evidence/09_passive_override_full_adjacency.png" alt="Terminal output showing the Port-channel12 passive-interface override refreshed on HQ-DSW-01 and the OSPFv3 adjacency reaching FULL on both distribution switches." loading="lazy" />
+                  <figcaption class="mt-3 text-sm leading-relaxed text-slate-300">Refreshing only the DSW1 passive-interface override lets the OSPFv3 adjacency reach <code class="text-emerald-200">FULL</code>; the follow-up reachability test also succeeds.</figcaption>
+                </figure>
+              </div>
+
+              <aside class="rounded-xl border-l-4 border-emerald-500 bg-emerald-50 px-5 py-4" aria-labelledby="ospfv3-what-this-proved-title">
+                <h3 id="ospfv3-what-this-proved-title" class="text-base font-semibold text-slate-900">What this proved</h3>
+                <ul class="mt-2 list-disc space-y-1 pl-5 text-sm leading-relaxed text-slate-700">
+                  <li>Po12 carried IPv6 unicast correctly.</li>
+                  <li>OSPFv3 needed to be attached to the logical Port-channel.</li>
+                  <li><code>FF02::5</code> membership was present on both ends.</li>
+                  <li>The failure was DSW1 suppressing OSPFv3 Hellos because it was operationally passive.</li>
+                  <li>Refreshing the specific override produced a <code>FULL</code> adjacency and successful reachability.</li>
+                </ul>
+              </aside>
+
+              <p class="leading-relaxed text-slate-700">This was an IOSv/CML lab state observed during configuration, not a generic production-Cisco diagnosis. Normal automatic IPv6 link-local addressing remains the right default; manually setting link-local addresses was investigated here only as part of the lab&rsquo;s methodical elimination process. With the dual-stack routed core and its OSPF control plane now validated, the lab can move on to the next design layer.</p>
             </section>
 
             <section class="space-y-3 border-t border-slate-200 pt-6">
