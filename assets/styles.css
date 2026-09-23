@@ -1130,10 +1130,6 @@ body {
   border-color: rgb(255 255 255 / 0.1);
 }
 
-.border-white\/15 {
-  border-color: rgb(255 255 255 / 0.15);
-}
-
 .\!bg-transparent {
   background-color: transparent !important;
 }
@@ -2084,26 +2080,6 @@ body {
     radial-gradient(circle at 8% 46%, rgba(251, 146, 60, 0.06), transparent 22rem);
 }
 
-.status-pulse {
-  animation: status-pulse 2.2s ease-out infinite;
-}
-
-@keyframes status-pulse {
-  0%, 100% {
-    box-shadow: 0 0 0 0 rgba(110, 231, 183, 0);
-  }
-
-  40% {
-    box-shadow: 0 0 0 6px rgba(110, 231, 183, 0.12);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .status-pulse {
-    animation: none;
-  }
-}
-
 .certification-embeds {
   display: grid;
   gap: 1rem;
@@ -2122,14 +2098,6 @@ body {
   height: 270px;
   max-width: 100%;
   width: 100% !important;
-}
-
-.resume-frame {
-  border: 0;
-  display: block;
-  height: 100rem;
-  max-width: 100%;
-  width: 100%;
 }
 
 /* Web development portfolio */
@@ -2756,10 +2724,6 @@ body {
 @media (max-width: 480px) {
   .certification-embeds {
     grid-template-columns: 1fr;
-  }
-
-  .resume-frame {
-    height: 120rem;
   }
 }
 
