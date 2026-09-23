@@ -318,18 +318,6 @@
     radial-gradient(circle at 8% 46%, rgba(251, 146, 60, 0.06), transparent 22rem);
 }
 
-.status-pulse {
-  animation: status-pulse 2.2s ease-out infinite;
-}
-
-@keyframes status-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(110, 231, 183, 0); }
-  40% { box-shadow: 0 0 0 6px rgba(110, 231, 183, 0.12); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .status-pulse { animation: none; }
-}
 
 .certification-embeds {
   display: grid;
@@ -351,13 +339,6 @@
   width: 100% !important;
 }
 
-.resume-frame {
-  border: 0;
-  display: block;
-  height: 100rem;
-  max-width: 100%;
-  width: 100%;
-}
 
 /* Web development portfolio */
 .web-section-heading { align-items: end; display: flex; gap: 1.5rem; justify-content: space-between; }
@@ -471,9 +452,5 @@
 @media (max-width: 480px) {
   .certification-embeds {
     grid-template-columns: 1fr;
-  }
-
-  .resume-frame {
-    height: 120rem;
   }
 }
