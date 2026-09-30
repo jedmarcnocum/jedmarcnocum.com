@@ -16,6 +16,7 @@
     const svg = simulator.querySelector("svg");
     const callout = simulator.querySelector("[data-packet-flow-callout]");
     const staleHello = simulator.querySelector("[data-packet-flow-stale-hello]");
+    const deadTimer = simulator.querySelector("[data-packet-flow-dead-timer]");
     const causalChain = simulator.querySelector("[data-packet-flow-causal-chain]");
     const isResiliencySimulation = simulator.dataset.packetFlow === "resiliency";
     const isLacpOneSidedSimulation = simulator.dataset.packetFlow === "lacp-one-sided";
@@ -135,7 +136,7 @@
         warningNodes: ["dsw2"],
         links: ["asw-dsw1", "po12-gi02"],
         warningLinks: ["po12-gi01"],
-        staleHello: true,
+        deadTimer: true,
         causalChain: true,
         reply: false,
       },
@@ -350,6 +351,7 @@
         link.classList.toggle("is-warning", (current.warningLinks || []).includes(link.dataset.packetFlowLink));
       });
       staleHello?.classList.toggle("is-visible", Boolean(current.staleHello));
+      deadTimer?.classList.toggle("is-visible", Boolean(current.deadTimer));
       causalChain?.classList.toggle("is-visible", Boolean(current.causalChain));
 
       progress.textContent = `Step ${step + 1} of ${steps.length}`;

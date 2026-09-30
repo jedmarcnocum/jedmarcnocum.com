@@ -2069,12 +2069,12 @@ body {
   fill: #fde68a;
 }
 
-.packet-flow__stale-hello, .packet-flow__causal-chain {
+.packet-flow__stale-hello, .packet-flow__dead-timer, .packet-flow__causal-chain {
   display: none;
   pointer-events: none;
 }
 
-.packet-flow__stale-hello.is-visible, .packet-flow__causal-chain.is-visible {
+.packet-flow__stale-hello.is-visible, .packet-flow__dead-timer.is-visible, .packet-flow__causal-chain.is-visible {
   display: block;
 }
 
@@ -2107,6 +2107,44 @@ body {
   stroke: #fbbf24;
   stroke-linecap: round;
   stroke-width: 2.5;
+}
+
+.packet-flow__dead-timer-loop {
+  animation: packet-flow-dead-timer-loop 1.8s linear infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.packet-flow__dead-timer-loop circle {
+  fill: rgba(251,191,36,.12);
+  stroke: #fbbf24;
+  stroke-dasharray: 3 3;
+  stroke-width: 2;
+}
+
+.packet-flow__dead-timer-loop path {
+  fill: none;
+  stroke: #fbbf24;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2.5;
+}
+
+.packet-flow__dead-timer-label, .packet-flow__reconverged-label {
+  font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  pointer-events: none;
+}
+
+.packet-flow__dead-timer-label {
+  fill: #fde68a;
+}
+
+.packet-flow__reconverged-label {
+  animation: packet-flow-adjacency-reconverged 1.8s ease-in-out infinite;
+  fill: #86efac;
 }
 
 .packet-flow__causal-chain rect {
@@ -2143,10 +2181,34 @@ body {
   }
 }
 
+@keyframes packet-flow-dead-timer-loop {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes packet-flow-adjacency-reconverged {
+  0%, 52% {
+    opacity: 0;
+  }
+
+  68%, 100% {
+    opacity: 1;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .packet-flow__stale-hello-packet {
     animation: none;
     transform: translate(575px,180px);
+  }
+
+  .packet-flow__dead-timer-loop, .packet-flow__reconverged-label {
+    animation: none;
+  }
+
+  .packet-flow__reconverged-label {
+    opacity: 1;
   }
 }
 

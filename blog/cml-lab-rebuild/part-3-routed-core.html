@@ -428,6 +428,15 @@
                         <path class="packet-flow__drop-mark" d="M518 174 L528 186 M528 174 L518 186" />
                         <text class="packet-flow__drop-label" x="538" y="201">not received</text>
                       </g>
+                      <g class="packet-flow__dead-timer" data-packet-flow-dead-timer aria-hidden="true">
+                        <g class="packet-flow__dead-timer-loop">
+                          <circle cx="580" cy="180" r="19" />
+                          <path d="M580 161 A19 19 0 1 1 562 185" />
+                          <path d="M561 179 L562 185 L568 183" />
+                        </g>
+                        <text class="packet-flow__dead-timer-label" x="580" y="214" text-anchor="middle">DEAD TIMER</text>
+                        <text class="packet-flow__reconverged-label" x="580" y="229" text-anchor="middle">ADJACENCY RECONVERGED</text>
+                      </g>
                       <g class="packet-flow__causal-chain" data-packet-flow-causal-chain aria-hidden="true">
                         <rect x="314" y="292" width="580" height="50" rx="8" />
                         <text x="604" y="313" text-anchor="middle">Stale remote member &rarr; OSPF Hellos lost</text>

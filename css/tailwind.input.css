@@ -156,13 +156,19 @@
 .packet-flow__node .packet-flow__node-address { fill: #a7f3d0; font-size: 10px; letter-spacing: 0; }
 .packet-flow__path-label { fill: #d6d3d1; font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace; font-size: 12px; letter-spacing: .4px; pointer-events: none; }
 .packet-flow__path-label--stale { fill: #fde68a; }
-.packet-flow__stale-hello, .packet-flow__causal-chain { display: none; pointer-events: none; }
-.packet-flow__stale-hello.is-visible, .packet-flow__causal-chain.is-visible { display: block; }
+.packet-flow__stale-hello, .packet-flow__dead-timer, .packet-flow__causal-chain { display: none; pointer-events: none; }
+.packet-flow__stale-hello.is-visible, .packet-flow__dead-timer.is-visible, .packet-flow__causal-chain.is-visible { display: block; }
 .packet-flow__stale-hello-packet { animation: packet-flow-stale-hello 1.7s linear infinite; }
 .packet-flow__stale-hello-packet circle { fill: #fbbf24; filter: drop-shadow(0 0 6px rgba(251,191,36,.8)); }
 .packet-flow__stale-hello-packet path { fill: none; stroke: #07110e; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2; }
 .packet-flow__stale-hello-label, .packet-flow__drop-label { fill: #fde68a; font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace; font-size: 11px; pointer-events: none; }
 .packet-flow__drop-mark { fill: none; stroke: #fbbf24; stroke-linecap: round; stroke-width: 2.5; }
+.packet-flow__dead-timer-loop { animation: packet-flow-dead-timer-loop 1.8s linear infinite; transform-box: fill-box; transform-origin: center; }
+.packet-flow__dead-timer-loop circle { fill: rgba(251,191,36,.12); stroke: #fbbf24; stroke-dasharray: 3 3; stroke-width: 2; }
+.packet-flow__dead-timer-loop path { fill: none; stroke: #fbbf24; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2.5; }
+.packet-flow__dead-timer-label, .packet-flow__reconverged-label { font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace; font-size: 9px; font-weight: 700; letter-spacing: .04em; pointer-events: none; }
+.packet-flow__dead-timer-label { fill: #fde68a; }
+.packet-flow__reconverged-label { animation: packet-flow-adjacency-reconverged 1.8s ease-in-out infinite; fill: #86efac; }
 .packet-flow__causal-chain rect { fill: rgba(12,25,21,.96); stroke: rgba(251,191,36,.72); stroke-width: 1; }
 .packet-flow__causal-chain text { fill: #fde68a; font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace; font-size: 11px; pointer-events: none; }
 @keyframes packet-flow-stale-hello {
@@ -171,8 +177,17 @@
   82% { opacity: 1; transform: translate(532px,180px); }
   100% { opacity: 0; transform: translate(518px,180px); }
 }
+@keyframes packet-flow-dead-timer-loop {
+  to { transform: rotate(360deg); }
+}
+@keyframes packet-flow-adjacency-reconverged {
+  0%, 52% { opacity: 0; }
+  68%, 100% { opacity: 1; }
+}
 @media (prefers-reduced-motion: reduce) {
   .packet-flow__stale-hello-packet { animation: none; transform: translate(575px,180px); }
+  .packet-flow__dead-timer-loop, .packet-flow__reconverged-label { animation: none; }
+  .packet-flow__reconverged-label { opacity: 1; }
 }
 .packet-flow__node.is-active rect { fill: rgba(110,231,183,.12); filter: drop-shadow(0 0 8px rgba(110,231,183,.38)); stroke: #6ee7b7; }
 .packet-flow.is-reply .packet-flow__node.is-active rect { fill: rgba(125,211,252,.12); filter: drop-shadow(0 0 8px rgba(125,211,252,.38)); stroke: #7dd3fc; }
