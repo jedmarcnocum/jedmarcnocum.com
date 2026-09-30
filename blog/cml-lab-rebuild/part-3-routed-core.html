@@ -40,15 +40,18 @@
           <article class="space-y-8">
             <header class="space-y-4">
               <time class="block text-sm text-slate-500" datetime="2026-09-16">16 September 2026</time>
-              <h1 class="text-3xl font-bold tracking-tight text-slate-900">&#x1F500; CML Lab Rebuild, Part 3: VLANs, OSPF &amp; a Resilient Routed Core</h1>
+              <h1 class="text-3xl font-bold tracking-tight text-slate-900">🔀 CML Lab Rebuild, Part 3: VLANs, OSPF &amp; a Resilient Routed Core</h1>
             </header>
 
             <section class="space-y-5 border-t border-slate-200 pt-6">
               <p class="leading-relaxed text-slate-700">
-                Welcome back! In <a class="font-semibold text-indigo-600 underline-offset-2 hover:underline" href="/blog/cml-lab-rebuild/part-2-foundation.html">Part 2</a>, I planned the five-node topology and the dual-stack addressing scheme. This time, the lab finally starts behaving like a network: VLAN services go live on the access switch, the routed links get their point-to-point addressing, and OSPF takes over the job of finding the best path. &#x1F680;
+                Welcome back! 👋 In <a class="font-semibold text-indigo-600 underline-offset-2 hover:underline" href="/blog/cml-lab-rebuild/part-2-foundation.html">Part 2</a>, I ripped up my original plans, pivoted to a modern routed campus design, and planned out our dual-stack <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">/16</code> and <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">/48</code> addressing scheme. This time, the lab finally stops being just a drawing and starts behaving like an actual network! 🚀
               </p>
               <p class="leading-relaxed text-slate-700">
-                The goal was deliberately simple: build each layer in a way that I can prove. Rather than stopping at a green topology diagram, I wanted gateway checks, neighbour adjacencies, routing-table evidence, and end-to-end pings for both IPv4 and IPv6.
+                VLAN services are going live on the access switch, our routed links are getting their point-to-point IP addresses, and OSPF is officially stepping in to handle the heavy lifting of finding the best path.
+              </p>
+              <p class="leading-relaxed text-slate-700">
+                The goal for this stage was simple: build each layer in a way that I can prove. Rather than just stopping at a green topology diagram and hoping for the best, I wanted hard evidence at every step: gateway checks, neighbour adjacencies, routing-table verifications, and end-to-end dual-stack pings. 🕵️‍♂️
               </p>
               <div class="overflow-x-auto rounded-lg border border-slate-200">
                 <table class="w-full min-w-[42rem] border-collapse text-left text-sm">
@@ -66,12 +69,12 @@
 
             <section class="space-y-5 border-t border-slate-200 pt-6">
               <div class="space-y-3">
-                <h2 class="text-xl font-semibold text-slate-900">&#x1F3E2; HQ access services: VLANs and dual-stack gateways</h2>
+                <h2 class="text-xl font-semibold text-slate-900">🏢 HQ Access Services: Bringing VLANs to Life</h2>
                 <p class="leading-relaxed text-slate-700">
-                  I started at HQ-ASW-01, where the Site 1 VLANs become useful services rather than just rows in an address plan. Each SVI gives its VLAN an IPv4 and IPv6 default-gateway presence, while keeping the naming and addressing conventions from the previous post intact.
+                  I started right at the edge on HQ-ASW-01. This is where those Site 1 VLANs we planned in <a target="_blank" class="font-semibold text-indigo-600 underline-offset-2 hover:underline" href="/blog/cml-lab-rebuild/part-2-foundation.html">Part 2</a> graduate from being just rows in a spreadsheet to actual, useful services.
                 </p>
                 <p class="leading-relaxed text-slate-700">
-                  This is the point where the routed-access design starts to feel real. Endpoints will eventually use these SVIs as their first hop, but the switch itself can already use the dual-stack gateways to participate cleanly in the wider infrastructure.
+                  Each Switch Virtual Interface (SVI) gives its VLAN a shiny new IPv4 and IPv6 default gateway. I was careful to keep the naming and addressing conventions we hashed out in the previous post. This is the moment the routed-access design starts to feel real. Eventually, end-user devices will use these SVIs as their first hop, but for now, the switch itself can use these dual-stack gateways to cleanly participate in the wider infrastructure.
                 </p>
               </div>
               <div class="grid gap-5 lg:grid-cols-2 lg:items-start">
@@ -88,16 +91,16 @@
 
             <section class="space-y-5 border-t border-slate-200 pt-6">
               <div class="space-y-3">
-                <h2 class="text-xl font-semibold text-slate-900">&#x1F517; Routed infrastructure: small prefixes, clear boundaries</h2>
+                <h2 class="text-xl font-semibold text-slate-900">🔗 The Routed Core: Small Prefixes, Zero Waste</h2>
                 <p class="leading-relaxed text-slate-700">
-                  Next came the infrastructure links. The point-to-point uplinks use IPv4 <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">/31</code> and IPv6 <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">/127</code> allocations: exactly two usable addresses per link and no wasted space. Loopbacks provide stable infrastructure identities for routing and troubleshooting, even if a physical path changes later.
+                  Next up: the infrastructure links. Remember how deep we went into the subnetting weeds in Part 2? 🌿 That discipline continues here.
                 </p>
                 <p class="leading-relaxed text-slate-700">
-                  I also kept the inter-switch bundle visible and verifiable. A neat design on paper is nice; checking the VLAN, LACP state, and port-channel addresses is what makes it something I can confidently build on.
+                  For the point-to-point uplinks, I used IPv4 <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">/31</code> and IPv6 <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">/127</code> allocations. That means exactly two usable addresses per link—absolutely zero wasted space! I also configured Loopback interfaces to provide stable, always-on identities for routing and troubleshooting, just in case a physical cable gets yanked later on.
                 </p>
               </div>
-              <p class="leading-relaxed text-slate-700">On HQ-DSW-01 and HQ-DSW-02, VLAN 998 is created as the parking VLAN for unused ports.</p>
-              <p class="leading-relaxed text-slate-700">Need a refresher before the routed links? <a class="font-semibold text-indigo-600 underline-offset-2 hover:underline" href="/blog/cml-lab-rebuild/part-2-foundation.html#ipv6-allocation-title">Review the dual-stack endpoint allocation from Part 2</a>.</p>
+              <p class="leading-relaxed text-slate-700">I also wanted to make sure the inter-switch bundle between the distribution switches was solid. A neat design on paper is great, but checking the VLAN, LACP state, and port-channel addresses is what makes it something I can confidently build on. Oh, and on HQ-DSW-01 and HQ-DSW-02, I spun up VLAN 998 purely as a &quot;parking VLAN&quot; for unused ports—gotta keep things secure! 🔒</p>
+              <p class="leading-relaxed text-slate-700">Need a quick refresher on the addressing math? <a class="font-semibold text-indigo-600 underline-offset-2 hover:underline" href="/blog/cml-lab-rebuild/part-2-foundation.html#ipv6-allocation-title">Review the dual-stack endpoint allocation from Part 2</a>.</p>
               <div class="grid gap-4 sm:grid-cols-2">
                 <figure class="space-y-3">
                   <img class="w-full rounded-lg border border-slate-200" src="/assets/blog/cml-lab-rebuild/pt3/dsw1-lacp.png" alt="HQ-DSW-01 terminal output showing LACP port-channel status." />
@@ -109,19 +112,22 @@
                 </figure>
               </div>
               <figure class="space-y-3">
-                <img class="w-full rounded-lg border border-slate-200" src="/assets/blog/cml-lab-rebuild/pt3/dsw1-po12-ip-addresses.png" alt="HQ-DSW-01 terminal output showing Port-channel12 IP addressing." />
-                <figcaption class="text-sm leading-relaxed text-slate-500">The Layer 3 addressing check for Port-channel12 on HQ-DSW-01.</figcaption>
+                <img class="w-full rounded-lg border border-slate-200" src="/assets/blog/cml-lab-rebuild/pt3/asw1-routed-transit-ping-test.png" alt="HQ-ASW-01 terminal output showing successful IPv4 and IPv6 pings to the routed transit interfaces on both distribution switches." />
+                <figcaption class="text-sm leading-relaxed text-slate-500">HQ-ASW-01 reaches both distribution switches&rsquo; routed transit interfaces over IPv4 and IPv6 before OSPF is enabled.</figcaption>
               </figure>
             </section>
 
             <section class="space-y-5 border-t border-slate-200 pt-6">
               <div class="space-y-3">
-                <h2 class="text-xl font-semibold text-slate-900">&#x1F500; Dynamic routing: OSPF for IPv4 and IPv6</h2>
+                <h2 class="text-xl font-semibold text-slate-900">🔀 Dynamic Routing: Firing STP, Hiring OSPF</h2>
                 <p class="leading-relaxed text-slate-700">
-                  With the interfaces addressed and reachable, OSPF was the fun part. I enabled the IPv4 and IPv6 processes across the routed infrastructure, advertised the loopbacks, and let each node learn the rest of the core dynamically. No static-route maze, no manual failover edits&mdash;just a routing protocol doing the bookkeeping.
+                  With the interfaces addressed and happily pinging each other, it was time for the fun part: OSPF! 🎉
                 </p>
                 <p class="leading-relaxed text-slate-700">
-                  The neighbour view is my first sanity check. If both protocol families form the expected adjacencies, the routing tables should have enough information to choose paths through either distribution switch.
+                  I enabled the IPv4 (OSPFv2) and IPv6 (OSPFv3) processes across the routed infrastructure, advertised those loopbacks I mentioned earlier, and let each node learn the rest of the core dynamically.
+                </p>
+                <p class="leading-relaxed text-slate-700">
+                  Seeing the neighbour view pop up is always my favorite sanity check. Because both protocol families successfully formed their expected adjacencies, the routing tables now had enough information to load-balance traffic through either distribution switch.
                 </p>
               </div>
               <figure class="space-y-3">
@@ -139,24 +145,24 @@
                 </figure>
               </div>
               <p class="leading-relaxed text-slate-700">
-                This is the payoff for the routed-access pivot from Part 2. The routing tables show the learned OSPF routes, and equal-cost paths can be used through the routed core instead of leaving redundant uplinks idle behind a spanning-tree block. That gives the lab both useful bandwidth and a much cleaner failure story.
+                This right here is the ultimate payoff for our Part 2 architecture pivot! 🏆 The routing tables show the learned OSPF routes, meaning we finally get Equal-Cost Multi-Path (ECMP) routing. Instead of having redundant uplinks sitting idle and blocked by Spanning Tree, we get to use all our bandwidth. It gives the lab better performance and a much cleaner failure story.
               </p>
             </section>
 
             <section class="space-y-5 border-t border-slate-200 pt-6">
               <div class="space-y-3">
-                <h2 class="text-xl font-semibold text-slate-900">🧪 Validation: Dual-Stack Reachability and ECMP Path Selection</h2>
+                <h2 class="text-xl font-semibold text-slate-900">🧪 Validation: Dual-Stack Pings and ECMP Path Selection</h2>
                 <p class="leading-relaxed text-slate-700">
-                  With OSPFv2 and OSPFv3 established, I validated reachability from HQ-ASW-01 to HQ-EDGE-01’s Loopback0. Successful IPv4 and IPv6 pings, together with the OSPF route tables, confirmed that the routed transit links, learned routes, and return paths were working end to end.
+                  With OSPF established, I needed to prove it actually worked. I ran reachability tests from HQ-ASW-01 all the way to HQ-EDGE-01&rsquo;s Loopback0. Hitting successful IPv4 and IPv6 pings confirmed that the transit links, learned routes, and return paths were functioning flawlessly end-to-end.
                 </p>
 
                 <p class="leading-relaxed text-slate-700">
-           The traceroute test then made the routing decision visible. Responses were observed through both HQ-DSW-01 and HQ-DSW-02, confirming that OSPF had installed two equal-cost paths to the edge. The simulation below illustrates the same behaviour: separate traceroute probes can be forwarded through either distribution switch on their way to the destination.
+                  To make the routing decision visible, I ran a traceroute. It was satisfying to watch the responses alternate through both HQ-DSW-01 and HQ-DSW-02. OSPF successfully installed two equal-cost paths to the edge! The simulation below illustrates this exact behavior.
                 </p>
               </div>
               <aside class="packet-flow" data-packet-flow aria-labelledby="packet-flow-title">
                 <div class="packet-flow__header">
-                  <p class="packet-flow__eyebrow">Interactive packet-flow simulation</p>
+                  <p class="packet-flow__eyebrow">INTERACTIVE PACKET-FLOW SIMULATION</p>
                   <h3 id="packet-flow-title">Follow ECMP traceroute probes through the routed core</h3>
                 </div>
                 <div class="packet-flow__viewport">
@@ -245,13 +251,13 @@
 
             <section class="space-y-5 border-t border-slate-200 pt-6">
               <div class="space-y-3">
-                <h2 class="text-xl font-semibold text-slate-900">&#x1F6E1;&#xFE0F; ECMP resiliency: proving the path survives a failure</h2>
-                <p class="leading-relaxed text-slate-700">ECMP is most useful when it is more than two healthy lines in a routing table. To test the failure path, I took HQ-DSW-01 out of service and watched OSPF remove its links from the topology.</p>
-                <p class="leading-relaxed text-slate-700">The IPv6 traceroute from HQ-ASW-01 to HQ-EDGE-01 still completed through HQ-DSW-02. That is the practical result I wanted: the core degrades to one path, but reachability stays intact without a manual route change.</p>
+                <h2 class="text-xl font-semibold text-slate-900">🛡️ The Failover Test: Proving the Network Survives</h2>
+                <p class="leading-relaxed text-slate-700">ECMP is awesome, but it’s most valuable when things go wrong. To test our failure path, I played chaos monkey 🐒 and deliberately took HQ-DSW-01 completely out of service, just to watch OSPF rip its links out of the topology.</p>
+                <p class="leading-relaxed text-slate-700">The result? The IPv6 traceroute seamlessly completed through HQ-DSW-02. This is exactly what I wanted: the core automatically shifted to a single path, keeping 100% reachability without me touching a single route. 😎</p>
               </div>
               <aside class="packet-flow" data-packet-flow="resiliency" aria-labelledby="packet-resiliency-title">
                 <div class="packet-flow__header">
-                  <p class="packet-flow__eyebrow">Interactive resiliency simulation</p>
+                  <p class="packet-flow__eyebrow">INTERACTIVE RESILIENCY SIMULATION</p>
                   <h3 id="packet-resiliency-title">Watch OSPF converge onto the surviving ECMP path</h3>
                 </div>
                 <div class="packet-flow__viewport">
@@ -334,15 +340,10 @@
 
             <section class="space-y-5 border-t border-slate-200 pt-6">
               <div class="space-y-3">
-                <h2 class="text-xl font-semibold text-slate-900">Validation: LACP Member Resiliency and an Unexpected Lab Behaviour</h2>
-                <p class="leading-relaxed text-slate-700">This check asked a practical question: if one cable inside the inter-distribution bundle is removed, can the rest of the lab keep talking? The answer from the controlled test was yes&mdash;the logical routed link stayed online and the access switch kept reaching HQ-DSW-02.</p>
+                <h2 class="text-xl font-semibold text-slate-900">🔍 Bonus Validation: LACP Resiliency</h2>
+                <p class="leading-relaxed text-slate-700">Finally, if a unidirectional link error breaks one cable in the bundle, what happens? Turns out that the logical link held steady, keeping the access switch connected to HQ-DSW-02 without a hitch.</p>
                 <p class="leading-relaxed text-slate-700">HQ-DSW-01 and HQ-DSW-02 are joined by <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">Port-channel12</code>, a Layer-3 LACP EtherChannel built from <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">GigabitEthernet0/1</code> and <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">GigabitEthernet0/2</code>. OSPFv2 and OSPFv3 run on that logical port-channel, not on its individual physical members. I used a continuous ping from HQ-ASW-01 to HQ-DSW-02 Loopback0 (<code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.255.1.2</code>) to observe the result.</p>
               </div>
-
-              <figure class="space-y-3">
-                <img class="w-full rounded-lg border border-slate-200" src="/assets/blog/cml-lab-rebuild/pt3/lacp-resiliency-evidence/03-dsw02-stale-lacp-member.png" alt="HQ-DSW-02 showing both GigabitEthernet0/1 and GigabitEthernet0/2 as bundled LACP members after a one-sided shutdown." />
-                <figcaption class="text-sm leading-relaxed text-slate-500">Observed stale remote member state: HQ-DSW-02 temporarily still reports both LACP members as bundled <code>(P)</code> after the one-sided member shutdown.</figcaption>
-              </figure>
 
               <div class="space-y-5">
                 <div class="space-y-2">
@@ -355,21 +356,21 @@
                   <li class="flex h-full flex-col gap-3 rounded-xl border border-slate-200 p-5">
                     <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-emerald-500 font-mono text-sm font-semibold text-emerald-600">01</span>
                     <div class="space-y-2">
-                      <h4 class="font-semibold text-slate-900">Stop the link in the CML GUI</h4>
+                      <h4 class="font-semibold text-slate-900"><strong class="font-bold text-amber-600">Stop</strong> the link in the CML GUI</h4>
                       <p class="text-sm leading-relaxed text-slate-700">The affected member was stopped, but HQ-DSW-02 still showed it as bundled <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">(P)</code>. The remote switch had not yet removed it from Po12.</p>
                     </div>
                   </li>
                   <li class="flex h-full flex-col gap-3 rounded-xl border border-slate-200 p-5">
                     <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-emerald-500 font-mono text-sm font-semibold text-emerald-600">02</span>
                     <div class="space-y-2">
-                      <h4 class="font-semibold text-slate-900">Disconnect the link in the CML GUI</h4>
-                      <p class="text-sm leading-relaxed text-slate-700">The interface status now read down, yet the same Po12 member still remained <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">(P)</code> on HQ-DSW-02. The virtual link looked unavailable while the remote bundle still treated it as usable.</p>
+                      <h4 class="font-semibold text-slate-900"><strong class="font-bold text-amber-600">Disconnect</strong> the link in the CML GUI</h4>
+                      <p class="text-sm leading-relaxed text-slate-700">The interface status now read as "down", yet the same Po12 member still remained <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">(P)</code> on HQ-DSW-02. The virtual link looked unavailable while the remote bundle still treated it as usable.</p>
                     </div>
                   </li>
                   <li class="flex h-full flex-col gap-3 rounded-xl border border-slate-200 p-5">
-                    <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-amber-500 font-mono text-sm font-semibold text-amber-600">03</span>
+                    <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-emerald-500 font-mono text-sm font-semibold text-emerald-600">03</span>
                     <div class="space-y-2">
-                      <h4 class="font-semibold text-slate-900">Manually shut the member on HQ-DSW-01 only</h4>
+                      <h4 class="font-semibold text-slate-900"><strong class="font-bold text-amber-600">Manually</strong> shut the member on HQ-DSW-01 only</h4>
                       <p class="text-sm leading-relaxed text-slate-700">I then manually disabled the affected physical member on the HQ-DSW-01 side only. The one-sided state again left HQ-DSW-02 with stale membership, so it could continue sending traffic and OSPF Hellos toward an unavailable path until the OSPF dead timer expired and the adjacency reconverged.</p>
                     </div>
                   </li>
@@ -377,10 +378,10 @@
 
                 <figure class="space-y-3">
                   <img class="w-full rounded-lg border border-slate-200" src="/assets/blog/cml-lab-rebuild/pt3/lacp-resiliency-evidence/03-one-sided-eth-sum-result.png" alt="EtherChannel summaries showing GigabitEthernet0/1 down on HQ-DSW-01 while HQ-DSW-02 still lists both members as bundled in Port-channel12." />
-                  <figcaption class="text-sm leading-relaxed text-slate-500">The final one-sided administrative shutdown is visible in the EtherChannel summaries: HQ-DSW-01 has removed Gi0/1 locally <code>(D)</code>, while HQ-DSW-02 temporarily still lists Gi0/1 and Gi0/2 as bundled <code>(P)</code> members. This observed CML/IOSv state can lose OSPF control traffic during reconvergence; it is not a seamless failover or a physical cable-failure result.</figcaption>
+                  <figcaption class="text-sm leading-relaxed text-slate-500">Look closely at the EtherChannel summaries above: HQ-DSW-01 removed Gi0/1 locally, but HQ-DSW-02 is trapped in a stale state, still listing the port as an active bundled member (P). This stale state is the culprit behind our 88% ping result below. HQ-DSW-02 blindly keeps firing OSPF Hellos (and our ping traffic) down the dead link, causing packet loss right up until the OSPF dead timer finally expires and forces the adjacency to reconverge.</figcaption>
                 </figure>
 
-                <p class="leading-relaxed text-slate-700">The earlier 88% ping result therefore records loss, not seamless resiliency, and is not suitable evidence of a clean member failover. This is observed CML/IOSv behaviour during a one-sided administrative action, not evidence that the Layer-3 port-channel or OSPF configuration was wrong. On physical hardware, a genuine single-link failure normally signals down at both ends and the remaining member continues carrying the bundle.</p>
+                <p class="leading-relaxed text-slate-700">This dropped traffic is just an artifact of a one-sided administrative shutdown in CML/IOSv, not evidence of a broken Layer-3 port-channel config. On real physical hardware, a pulled cable signals &quot;down&quot; on both sides, and the remaining member takes over seamlessly!</p>
                 <figure class="space-y-3">
                   <img class="w-full rounded-lg border border-slate-200" src="/assets/blog/cml-lab-rebuild/pt3/lacp-resiliency-evidence/01-one-sided-test-ping-loss.png" alt="HQ-ASW-01 continuous ping showing packet loss during the one-sided LACP member shutdown test." />
                   <figcaption class="text-sm leading-relaxed text-slate-500">The one-sided test records the earlier 88% ping outcome. It documents the emulation edge case and is not evidence of seamless member resiliency.</figcaption>
@@ -575,7 +576,8 @@
                 <li>Created the Site 1 VLAN services and dual-stack gateway SVIs on HQ-ASW-01.</li>
                 <li>Applied the compact point-to-point addressing approach to the routed infrastructure and checked the inter-switch bundle.</li>
                 <li>Formed OSPF adjacencies for IPv4 and IPv6, then verified learned routes and end-to-end reachability.</li>
-                <li>Set the stage for ECMP-capable paths through the core&mdash;the big reason for choosing routed access in the first place.</li>
+                <li>Validated ECMP forwarding and the surviving path through HQ-DSW-02 after a simulated distribution-switch failure.</li>
+                <li>Confirmed that Port-channel12 retains routing and OSPF reachability when one LACP member is removed in the controlled test.</li>
               </ul>
             </section>
 
