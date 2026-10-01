@@ -28,7 +28,6 @@
           </a>
           <ul class="flex items-center gap-4 text-xs font-semibold uppercase tracking-[0.16em] text-stone-400 sm:gap-7">
             <li><a class="transition hover:text-emerald-300" href="/">Home</a></li>
-            <li><a class="transition hover:text-emerald-300" href="/resume.html">Resume</a></li>
             <li><a class="transition hover:text-emerald-300" href="/portfolio.html">Work</a></li>
             <li><a class="text-emerald-300" href="/blog.html" aria-current="page">Blog</a></li>
           </ul>
@@ -39,7 +38,7 @@
         <main class="site-panel rounded-3xl p-5 sm:p-12">
           <article class="space-y-8">
             <header class="space-y-4">
-              <time class="block text-sm text-slate-500" datetime="2026-09-16">16 September 2026</time>
+              <time class="block text-sm text-slate-500" datetime="2026-10-02">02 October 2026</time>
               <h1 class="text-3xl font-bold tracking-tight text-slate-900">🔀 CML Lab Rebuild, Part 3: VLANs, OSPF &amp; a Resilient Routed Core</h1>
             </header>
 
@@ -96,10 +95,10 @@
                   Next up: the infrastructure links. Remember how deep we went into the subnetting weeds in Part 2? 🌿 That discipline continues here.
                 </p>
                 <p class="leading-relaxed text-slate-700">
-                  For the point-to-point uplinks, I used IPv4 <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">/31</code> and IPv6 <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">/127</code> allocations. That means exactly two usable addresses per link—absolutely zero wasted space! I also configured Loopback interfaces to provide stable, always-on identities for routing and troubleshooting, just in case a physical cable gets yanked later on.
+                  For the point-to-point uplinks, I used IPv4 <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">/31</code> and IPv6 <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">/127</code> allocations. That means exactly two usable addresses per link — absolutely zero wasted space! I also configured Loopback interfaces to provide stable, always-on identities for routing and troubleshooting, just in case a physical cable gets yanked later on.
                 </p>
               </div>
-              <p class="leading-relaxed text-slate-700">I also wanted to make sure the inter-switch bundle between the distribution switches was solid. A neat design on paper is great, but checking the VLAN, LACP state, and port-channel addresses is what makes it something I can confidently build on. Oh, and on HQ-DSW-01 and HQ-DSW-02, I spun up VLAN 998 purely as a &quot;parking VLAN&quot; for unused ports—gotta keep things secure! 🔒</p>
+              <p class="leading-relaxed text-slate-700">I also wanted to make sure the inter-switch bundle between the distribution switches was solid. A neat design on paper is great, but checking the VLAN, LACP state, and port-channel addresses is what makes it something I can confidently build on. Oh, and on HQ-DSW-01 and HQ-DSW-02, I spun up VLAN 998 purely as a &quot;parking VLAN&quot; for unused ports — gotta keep things secure! 🔒</p>
               <p class="leading-relaxed text-slate-700">Need a quick refresher on the addressing math? <a class="font-semibold text-indigo-600 underline-offset-2 hover:underline" href="/blog/cml-lab-rebuild/part-2-foundation.html#ipv6-allocation-title">Review the dual-stack endpoint allocation from Part 2</a>.</p>
               <div class="grid gap-4 sm:grid-cols-2">
                 <figure class="space-y-3">
@@ -126,9 +125,6 @@
                 <p class="leading-relaxed text-slate-700">
                   I enabled the IPv4 (OSPFv2) and IPv6 (OSPFv3) processes across the routed infrastructure, advertised those loopbacks I mentioned earlier, and let each node learn the rest of the core dynamically.
                 </p>
-                <p class="leading-relaxed text-slate-700">
-                  Seeing the neighbour view pop up is always my favorite sanity check. Because both protocol families successfully formed their expected adjacencies, the routing tables now had enough information to load-balance traffic through either distribution switch.
-                </p>
               </div>
               <figure class="space-y-3">
                 <img class="w-full rounded-lg border border-slate-200" src="/assets/blog/cml-lab-rebuild/pt3/asw1-ospf-neighbor-ipv4-6.png" alt="HQ-ASW-01 terminal output showing OSPF IPv4 and IPv6 neighbour adjacencies." />
@@ -141,7 +137,7 @@
                 </figure>
                 <figure class="space-y-3">
                   <img class="w-full rounded-lg border border-slate-200" src="/assets/blog/cml-lab-rebuild/pt3/asw1-ipv6-route.png" alt="HQ-ASW-01 IPv6 routing table showing learned OSPF routes." />
-                  <figcaption class="text-sm leading-relaxed text-slate-500">The IPv6 routing-table view&mdash;dual stack means validating twice.</figcaption>
+                  <figcaption class="text-sm leading-relaxed text-slate-500">The IPv6 routing-table view &mdash; dual stack means validating twice.</figcaption>
                 </figure>
               </div>
               <p class="leading-relaxed text-slate-700">
@@ -153,7 +149,7 @@
               <div class="space-y-3">
                 <h2 class="text-xl font-semibold text-slate-900">🧪 Validation: Dual-Stack Pings and ECMP Path Selection</h2>
                 <p class="leading-relaxed text-slate-700">
-                  With OSPF established, I needed to prove it actually worked. I ran reachability tests from HQ-ASW-01 all the way to HQ-EDGE-01&rsquo;s Loopback0. Hitting successful IPv4 and IPv6 pings confirmed that the transit links, learned routes, and return paths were functioning flawlessly end-to-end.
+                  With OSPF established, I needed to prove it actually worked. I ran reachability tests from HQ-ASW-01 all the way to HQ-EDGE-01&rsquo;s Loopback0. Hitting successful IPv4 and IPv6 pings confirmed that the transit links, learned routes, and return paths were functioning end-to-end.
                 </p>
 
                 <p class="leading-relaxed text-slate-700">
@@ -252,7 +248,7 @@
             <section class="space-y-5 border-t border-slate-200 pt-6">
               <div class="space-y-3">
                 <h2 class="text-xl font-semibold text-slate-900">🛡️ The Failover Test: Proving the Network Survives</h2>
-                <p class="leading-relaxed text-slate-700">ECMP is awesome, but it’s most valuable when things go wrong. To test our failure path, I played chaos monkey 🐒 and deliberately took HQ-DSW-01 completely out of service, just to watch OSPF rip its links out of the topology.</p>
+                <p class="leading-relaxed text-slate-700">ECMP is awesome, but it’s most valuable when things go wrong. To test our failure path, I deliberately took HQ-DSW-01 completely out of service, just to watch OSPF rip its links out of the topology.</p>
                 <p class="leading-relaxed text-slate-700">The result? The IPv6 traceroute seamlessly completed through HQ-DSW-02. This is exactly what I wanted: the core automatically shifted to a single path, keeping 100% reachability without me touching a single route. 😎</p>
               </div>
               <aside class="packet-flow" data-packet-flow="resiliency" aria-labelledby="packet-resiliency-title">
@@ -341,7 +337,7 @@
             <section class="space-y-5 border-t border-slate-200 pt-6">
               <div class="space-y-3">
                 <h2 class="text-xl font-semibold text-slate-900">🔍 Bonus Validation: LACP Resiliency</h2>
-                <p class="leading-relaxed text-slate-700">Finally, if a unidirectional link error breaks one cable in the bundle, what happens? Turns out that the logical link held steady, keeping the access switch connected to HQ-DSW-02 without a hitch.</p>
+                <p class="leading-relaxed text-slate-700">Finally, if a unidirectional link error breaks one cable in the bundle, what happens?</p>
                 <p class="leading-relaxed text-slate-700">HQ-DSW-01 and HQ-DSW-02 are joined by <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">Port-channel12</code>, a Layer-3 LACP EtherChannel built from <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">GigabitEthernet0/1</code> and <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">GigabitEthernet0/2</code>. OSPFv2 and OSPFv3 run on that logical port-channel, not on its individual physical members. I used a continuous ping from HQ-ASW-01 to HQ-DSW-02 Loopback0 (<code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">10.255.1.2</code>) to observe the result.</p>
               </div>
 
@@ -353,26 +349,26 @@
                 </div>
 
                 <ol class="grid gap-4 md:grid-cols-3" aria-label="One-sided LACP test sequence">
-                  <li class="flex h-full flex-col gap-3 rounded-xl border border-slate-200 p-5">
-                    <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-emerald-500 font-mono text-sm font-semibold text-emerald-600">01</span>
-                    <div class="space-y-2">
+                  <li class="h-full rounded-xl border border-slate-200 p-5">
+                    <div class="flex items-center gap-3">
+                      <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-emerald-500 font-mono text-sm font-semibold text-emerald-600">01</span>
                       <h4 class="font-semibold text-slate-900"><strong class="font-bold text-amber-600">Stop</strong> the link in the CML GUI</h4>
-                      <p class="text-sm leading-relaxed text-slate-700">The affected member was stopped, but HQ-DSW-02 still showed it as bundled <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">(P)</code>. The remote switch had not yet removed it from Po12.</p>
                     </div>
+                    <p class="mt-2 text-sm leading-relaxed text-slate-700">The affected member was stopped, but HQ-DSW-02 still showed it as bundled <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">(P)</code>. The remote switch had not yet removed it from Po12.</p>
                   </li>
-                  <li class="flex h-full flex-col gap-3 rounded-xl border border-slate-200 p-5">
-                    <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-emerald-500 font-mono text-sm font-semibold text-emerald-600">02</span>
-                    <div class="space-y-2">
+                  <li class="h-full rounded-xl border border-slate-200 p-5">
+                    <div class="flex items-center gap-3">
+                      <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-emerald-500 font-mono text-sm font-semibold text-emerald-600">02</span>
                       <h4 class="font-semibold text-slate-900"><strong class="font-bold text-amber-600">Disconnect</strong> the link in the CML GUI</h4>
-                      <p class="text-sm leading-relaxed text-slate-700">The interface status now read as "down", yet the same Po12 member still remained <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">(P)</code> on HQ-DSW-02. The virtual link looked unavailable while the remote bundle still treated it as usable.</p>
                     </div>
+                    <p class="mt-2 text-sm leading-relaxed text-slate-700">The interface status now read as "down", yet the same Po12 member still remained <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">(P)</code> on HQ-DSW-02. The virtual link looked unavailable while the remote bundle still treated it as usable.</p>
                   </li>
-                  <li class="flex h-full flex-col gap-3 rounded-xl border border-slate-200 p-5">
-                    <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-emerald-500 font-mono text-sm font-semibold text-emerald-600">03</span>
-                    <div class="space-y-2">
+                  <li class="h-full rounded-xl border border-slate-200 p-5">
+                    <div class="flex items-center gap-3">
+                      <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-emerald-500 font-mono text-sm font-semibold text-emerald-600">03</span>
                       <h4 class="font-semibold text-slate-900"><strong class="font-bold text-amber-600">Manually</strong> shut the member on HQ-DSW-01 only</h4>
-                      <p class="text-sm leading-relaxed text-slate-700">I then manually disabled the affected physical member on the HQ-DSW-01 side only. The one-sided state again left HQ-DSW-02 with stale membership, so it could continue sending traffic and OSPF Hellos toward an unavailable path until the OSPF dead timer expired and the adjacency reconverged.</p>
                     </div>
+                    <p class="mt-2 text-sm leading-relaxed text-slate-700">I then manually disabled the affected physical member on the HQ-DSW-01 side only. The one-sided state again left HQ-DSW-02 with stale membership, so it could continue sending traffic and OSPF Hellos toward an unavailable path until the OSPF dead timer expired and the adjacency reconverged.</p>
                   </li>
                 </ol>
 
@@ -381,7 +377,7 @@
                   <figcaption class="text-sm leading-relaxed text-slate-500">Look closely at the EtherChannel summaries above: HQ-DSW-01 removed Gi0/1 locally, but HQ-DSW-02 is trapped in a stale state, still listing the port as an active bundled member (P). This stale state is the culprit behind our 88% ping result below. HQ-DSW-02 blindly keeps firing OSPF Hellos (and our ping traffic) down the dead link, causing packet loss right up until the OSPF dead timer finally expires and forces the adjacency to reconverge.</figcaption>
                 </figure>
 
-                <p class="leading-relaxed text-slate-700">This dropped traffic is just an artifact of a one-sided administrative shutdown in CML/IOSv, not evidence of a broken Layer-3 port-channel config. On real physical hardware, a pulled cable signals &quot;down&quot; on both sides, and the remaining member takes over seamlessly!</p>
+                <p class="leading-relaxed text-slate-700">This dropped traffic is just an artifact of a one-sided administrative shutdown in CML/IOSv, not evidence of a broken Layer-3 port-channel config. On real physical hardware (AFAIK), a pulled cable signals &quot;down&quot; on both sides, and the remaining member takes over seamlessly!</p>
                 <figure class="space-y-3">
                   <img class="w-full rounded-lg border border-slate-200" src="/assets/blog/cml-lab-rebuild/pt3/lacp-resiliency-evidence/01-one-sided-test-ping-loss.png" alt="HQ-ASW-01 continuous ping showing packet loss during the one-sided LACP member shutdown test." />
                   <figcaption class="text-sm leading-relaxed text-slate-500">The one-sided test records the earlier 88% ping outcome. It documents the emulation edge case and is not evidence of seamless member resiliency.</figcaption>
@@ -415,7 +411,7 @@
                       </g>
                       <g class="packet-flow__node" data-packet-flow-node="dsw2">
                         <rect x="650" y="155" width="170" height="110" rx="13" />
-                        <text class="packet-flow__node-role" x="735" y="183" text-anchor="middle">DISTRIBUTION / TARGET</text>
+                        <text class="packet-flow__node-role" x="735" y="183" text-anchor="middle">DISTRIBUTION/TARGET</text>
                         <text class="packet-flow__node-name" x="735" y="210" text-anchor="middle">HQ-DSW-02</text>
                         <text class="packet-flow__node-address" x="735" y="238" text-anchor="middle">Loopback0 &middot; 10.255.1.2</text>
                       </g>
@@ -491,18 +487,21 @@
                   <p class="text-sm leading-relaxed text-slate-500">These are useful production design tools, but this exercise stays candid about what the virtual image can demonstrate.</p>
                 </aside>
 
-                <div class="grid gap-3 rounded-xl border border-emerald-500 p-4 sm:grid-cols-[2.75rem_1fr]">
-                  <span class="flex h-11 w-11 items-center justify-center rounded-full border border-emerald-500 font-mono text-sm font-semibold text-emerald-600">04</span>
-                  <div class="space-y-1">
-                    <h3 class="font-semibold text-slate-900">Run the controlled two-sided validation</h3>
-                    <p class="leading-relaxed text-slate-700">I therefore ran the continuous ping again while manually shutting down the same physical member&mdash;<code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">GigabitEthernet0/2</code>&mdash;on both distribution switches. Both devices immediately agreed on the active bundle membership, while <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">Port-channel12</code> remained operational over the remaining member.</p>
-                  </div>
                 </div>
-              </div>
+
+              <div class="space-y-5">
+                <div class="rounded-xl border border-emerald-500 p-4">
+                  <div class="flex items-center gap-3">
+                    <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-emerald-500 font-mono text-sm font-semibold text-emerald-600">04</span>
+                    <h3 class="font-semibold text-slate-900">Run the controlled two-sided validation</h3>
+                  </div>
+                  <p class="mt-2 leading-relaxed text-slate-700">I therefore ran the continuous ping again while manually shutting down the same physical member &mdash; <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">GigabitEthernet0/2</code> &mdash; on both distribution switches. Both devices immediately agreed on the active bundle membership, while <code class="rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-800">Port-channel12</code> remained operational over the remaining member.</p>
+                </div>
 
               <figure class="space-y-3">
                 <img class="w-full rounded-lg border border-slate-200" src="/assets/blog/cml-lab-rebuild/pt3/lacp-resiliency-evidence/05-ospf-neighbors-stay-full.png" alt="OSPF neighbor output on both distribution switches showing the Port-channel12 adjacency remains FULL after the controlled member-removal test." />
                 <figcaption class="text-sm leading-relaxed text-slate-500">Control-plane continuity over the logical port-channel: the Po12 OSPF adjacency remains <code>FULL</code> after the controlled test.</figcaption>
+                <br>
               </figure>
 
               <aside class="packet-flow" data-packet-flow="lacp-resiliency" aria-labelledby="lacp-resiliency-title">
@@ -515,9 +514,9 @@
                     <path class="packet-flow__link" data-packet-flow-link="asw-dsw1" d="M220 210 L350 210" />
                     <path class="packet-flow__link" data-packet-flow-link="po12-gi01" d="M510 180 L650 180" />
                     <path class="packet-flow__link" data-packet-flow-link="po12-gi02" d="M510 240 L650 240" />
-                    <text class="packet-flow__path-label" x="580" y="128" text-anchor="middle">Port-channel12 &middot; Layer 3 LACP</text>
-                    <text class="packet-flow__path-label" x="580" y="168" text-anchor="middle">Gi0/1 &middot; active member</text>
-                    <text class="packet-flow__path-label" x="580" y="270" text-anchor="middle">Gi0/2 &middot; removed for test</text>
+                    <text class="packet-flow__path-label" x="580" y="100" text-anchor="middle">Port-channel12 &middot; Layer 3 LACP</text>
+                    <text class="packet-flow__path-label" x="580" y="143" text-anchor="middle">Gi0/1 &middot; active member</text>
+                    <text class="packet-flow__path-label" x="580" y="282" text-anchor="middle">Gi0/2 &middot; removed for test</text>
 
                     <g class="packet-flow__node" data-packet-flow-node="asw">
                       <rect x="50" y="155" width="170" height="110" rx="13" />
@@ -533,7 +532,7 @@
                     </g>
                     <g class="packet-flow__node" data-packet-flow-node="dsw2">
                       <rect x="650" y="155" width="170" height="110" rx="13" />
-                      <text class="packet-flow__node-role" x="735" y="183" text-anchor="middle">DISTRIBUTION / TARGET</text>
+                      <text class="packet-flow__node-role" x="735" y="183" text-anchor="middle">DISTRIBUTION/TARGET</text>
                       <text class="packet-flow__node-name" x="735" y="210" text-anchor="middle">HQ-DSW-02</text>
                       <text class="packet-flow__node-address" x="735" y="238" text-anchor="middle">Loopback0 &middot; 10.255.1.2</text>
                     </g>
@@ -574,6 +573,7 @@
                 <h3 class="text-base font-semibold text-slate-900">What this proves</h3>
                 <p class="mt-2 leading-relaxed text-slate-700">Port-channel12 is resilient to the controlled removal of one member: the logical routed link remains up, OSPF stays established, and the access switch retains reachability to HQ-DSW-02. The one-sided test also highlighted an emulation edge case worth recognising when interpreting virtual-lab results.</p>
               </aside>
+              </div>
             </section>
 
    
@@ -607,6 +607,12 @@
                 <li>&#x1F916; <span class="font-semibold">Part 7:</span> Network Automation, Programmability &amp; Monitoring</li>
                 <li>&#x1F680; <span class="font-semibold">Part 8:</span> CML Personal Expansion &mdash; Full Campus, Wireless &amp; Advanced Services</li>
               </ul>
+            </section>
+
+            <section class="space-y-3 border-t border-slate-200 pt-6">
+              <h2 class="text-xl font-semibold text-slate-900">&#x1F4D3; Why I&rsquo;m documenting the build</h2>
+              <p class="leading-relaxed text-slate-700">This blog is part of my networking portfolio. I want to share my progress, explain what I&rsquo;m trying to achieve, and be transparent about what goes wrong and how I fix it.</p>
+              <p class="leading-relaxed text-slate-700">Stay tuned for Part 4!</p>
             </section>
           </article>
         </main>

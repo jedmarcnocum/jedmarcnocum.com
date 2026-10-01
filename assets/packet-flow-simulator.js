@@ -1,6 +1,76 @@
 (() => {
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
+  const createMobileDiagram = (isLacpSimulation) => {
+    const node = (id, role, name) => `
+      <div class="packet-flow__mobile-node" data-packet-flow-mobile-node="${id}">
+        <span class="packet-flow__mobile-node-role">${role}</span>
+        <strong class="packet-flow__mobile-node-name">${name}</strong>
+        <span class="packet-flow__mobile-packet" data-packet-flow-mobile-packet="${id}" aria-hidden="true">
+          <svg viewBox="0 0 36 36" focusable="false">
+            <circle cx="18" cy="18" r="18" />
+            <rect x="7" y="10" width="22" height="16" rx="2" />
+            <path d="M8 11 L18 19 L28 11 M8 25 L15 18 M28 25 L21 18" />
+          </svg>
+        </span>
+      </div>`;
+    const link = (id, label = "") => `
+      <div class="packet-flow__mobile-link" data-packet-flow-mobile-link="${id}">
+        ${label ? `<span>${label}</span>` : ""}
+      </div>`;
+    const diagram = document.createElement("div");
+
+    diagram.className = `packet-flow__mobile-diagram${isLacpSimulation ? " packet-flow__mobile-diagram--lacp" : ""}`;
+    diagram.setAttribute("role", "group");
+    diagram.setAttribute("aria-label", "Mobile network-flow simulation");
+    diagram.innerHTML = isLacpSimulation
+      ? `
+        <div class="packet-flow__mobile-status" aria-live="polite">
+          <p class="packet-flow__mobile-phase" data-packet-flow-mobile-phase></p>
+          <h4 data-packet-flow-mobile-title></h4>
+          <p data-packet-flow-mobile-description></p>
+        </div>
+        <div class="packet-flow__mobile-flow">
+          ${node("asw", "PING SOURCE", "HQ-ASW-01")}
+          ${link("asw-dsw1", "routed access link")}
+          ${node("dsw1", "DISTRIBUTION", "HQ-DSW-01")}
+          <div class="packet-flow__mobile-bundle" aria-label="Port-channel12 LACP members">
+            ${link("po12-gi01", "Gi0/1")}
+            ${link("po12-gi02", "Gi0/2")}
+          </div>
+          <div class="packet-flow__mobile-dead-timer" data-packet-flow-mobile-dead-timer aria-hidden="true">
+            <span class="packet-flow__mobile-dead-timer-loop" aria-hidden="true">↻</span>
+            <span class="packet-flow__mobile-dead-timer-label">DEAD TIMER</span>
+            <strong class="packet-flow__mobile-reconverged-label">ADJACENCY RECONVERGED</strong>
+          </div>
+          ${node("dsw2", "DISTRIBUTION/TARGET", "HQ-DSW-02")}
+        </div>`
+      : `
+        <div class="packet-flow__mobile-status" aria-live="polite">
+          <p class="packet-flow__mobile-phase" data-packet-flow-mobile-phase></p>
+          <h4 data-packet-flow-mobile-title></h4>
+          <p data-packet-flow-mobile-description></p>
+        </div>
+        <div class="packet-flow__mobile-flow">
+          ${node("asw", "ACCESS / SOURCE", "HQ-ASW-01")}
+          <div class="packet-flow__mobile-branches">
+            <div class="packet-flow__mobile-branch">
+              ${link("asw-dsw1", "Path 1")}
+              ${node("dsw1", "DISTRIBUTION", "HQ-DSW-01")}
+              ${link("dsw1-edge")}
+            </div>
+            <div class="packet-flow__mobile-branch">
+              ${link("asw-dsw2", "Path 2")}
+              ${node("dsw2", "DISTRIBUTION", "HQ-DSW-02")}
+              ${link("dsw2-edge")}
+            </div>
+          </div>
+          ${node("edge", "EDGE / DESTINATION", "HQ-EDGE-01")}
+        </div>`;
+
+    return diagram;
+  };
+
   document.querySelectorAll("[data-packet-flow]").forEach((simulator) => {
     const packets = [...simulator.querySelectorAll("[data-packet-flow-packet]")];
     const nodes = [...simulator.querySelectorAll("[data-packet-flow-node]")];
@@ -21,6 +91,17 @@
     const isResiliencySimulation = simulator.dataset.packetFlow === "resiliency";
     const isLacpOneSidedSimulation = simulator.dataset.packetFlow === "lacp-one-sided";
     const isLacpResiliencySimulation = simulator.dataset.packetFlow === "lacp-resiliency";
+    const isLacpSimulation = isLacpOneSidedSimulation || isLacpResiliencySimulation;
+    const mobileDiagram = createMobileDiagram(isLacpSimulation);
+    const mobileNodes = [...mobileDiagram.querySelectorAll("[data-packet-flow-mobile-node]")];
+    const mobileLinks = [...mobileDiagram.querySelectorAll("[data-packet-flow-mobile-link]")];
+    const mobilePackets = [...mobileDiagram.querySelectorAll("[data-packet-flow-mobile-packet]")];
+    const mobilePhase = mobileDiagram.querySelector("[data-packet-flow-mobile-phase]");
+    const mobileTitle = mobileDiagram.querySelector("[data-packet-flow-mobile-title]");
+    const mobileDescription = mobileDiagram.querySelector("[data-packet-flow-mobile-description]");
+    const mobileDeadTimer = mobileDiagram.querySelector("[data-packet-flow-mobile-dead-timer]");
+
+    simulator.querySelector(".packet-flow__viewport")?.append(mobileDiagram);
 
     const coordinates = {
       asw: [{ x: 95, y: 190 }, { x: 95, y: 228 }],
@@ -159,7 +240,7 @@
         title: "Port-channel12 starts with two active members",
         description: "GigabitEthernet0/1 and GigabitEthernet0/2 form one Layer-3 LACP EtherChannel. OSPFv2 and OSPFv3 run on logical Port-channel12, not on either individual member.",
         points: lacpCoordinates.asw,
-        callout: { x: 20, y: 270 },
+        callout: { x: 20, y: 290 },
         nodes: ["asw", "dsw1", "dsw2"],
         links: ["asw-dsw1", "po12-gi01", "po12-gi02"],
         reply: false,
@@ -169,7 +250,7 @@
         title: "Gi0/2 is shut down on both distribution switches",
         description: "The same physical member is administratively removed at both ends while the continuous ping is running. Both switches immediately agree that Gi0/2 is unavailable.",
         points: lacpCoordinates.dsw1,
-        callout: { x: 300, y: 270 },
+        callout: { x: 300, y: 290 },
         nodes: ["asw", "dsw1", "dsw2"],
         links: ["asw-dsw1", "po12-gi01"],
         failedLinks: ["po12-gi02"],
@@ -180,7 +261,7 @@
         title: "Port-channel12 continues over Gi0/1",
         description: "The physical member is gone, but the logical routed port-channel remains operational over GigabitEthernet0/1. The ping can continue without relying on the removed member.",
         points: lacpCoordinates.dsw2,
-        callout: { x: 690, y: 270 },
+        callout: { x: 690, y: 290 },
         nodes: ["asw", "dsw1", "dsw2"],
         links: ["asw-dsw1", "po12-gi01"],
         failedLinks: ["po12-gi02"],
@@ -190,19 +271,19 @@
         phase: "OSPF remains FULL",
         title: "The logical routed link keeps carrying service",
         description: "The ping flow crosses Port-channel12 on its remaining member. The test proves the logical route and OSPF adjacency remain available; it does not prove that any prior flow used the removed member.",
-        points: lacpCoordinates.dsw2,
-        callout: { x: 690, y: 270 },
+        points: lacpCoordinates.dsw1,
+        callout: { x: 300, y: 290 },
         nodes: ["asw", "dsw1", "dsw2"],
         links: ["asw-dsw1", "po12-gi01"],
         failedLinks: ["po12-gi02"],
-        reply: false,
+        reply: true,
       },
       {
         phase: "Controlled test passed",
         title: "HQ-ASW-01 completes 1000 of 1000 pings",
         description: "With Gi0/2 removed at both ends, Port-channel12 and OSPF stay established. HQ-ASW-01 retains uninterrupted reachability to HQ-DSW-02 Loopback0 at 10.255.1.2.",
         points: lacpCoordinates.asw,
-        callout: { x: 20, y: 270 },
+        callout: { x: 20, y: 290 },
         nodes: ["asw", "dsw1", "dsw2"],
         links: ["asw-dsw1", "po12-gi01"],
         failedLinks: ["po12-gi02"],
@@ -333,15 +414,34 @@
       window.clearTimeout(playbackTimer);
     };
 
+    const getFocusedNodes = (points) => {
+      if (isLacpSimulation) {
+        if (points === lacpCoordinates.asw) return ["asw"];
+        if (points === lacpCoordinates.dsw1) return ["dsw1"];
+        return ["dsw2"];
+      }
+
+      if (isResiliencySimulation) {
+        if (points === resiliencyCoordinates.asw) return ["asw"];
+        if (points === resiliencyCoordinates.dsw2) return ["dsw2"];
+        return ["edge"];
+      }
+
+      if (points === coordinates.asw) return ["asw"];
+      if (points === coordinates.dsw) return ["dsw1", "dsw2"];
+      return ["edge"];
+    };
+
     const render = (animate = true) => {
       const current = steps[step];
+      const focusedNodes = getFocusedNodes(current.points);
 
       simulator.classList.toggle("is-reply", current.reply);
       packets.forEach((packet) => packet.classList.add("is-visible"));
       animatePackets(current.points, current.callout, animate);
 
       nodes.forEach((node) => {
-        node.classList.toggle("is-active", current.nodes.includes(node.dataset.packetFlowNode));
+        node.classList.toggle("is-active", focusedNodes.includes(node.dataset.packetFlowNode));
         node.classList.toggle("is-failed", (current.failedNodes || []).includes(node.dataset.packetFlowNode));
         node.classList.toggle("is-warning", (current.warningNodes || []).includes(node.dataset.packetFlowNode));
       });
@@ -350,8 +450,22 @@
         link.classList.toggle("is-failed", (current.failedLinks || []).includes(link.dataset.packetFlowLink));
         link.classList.toggle("is-warning", (current.warningLinks || []).includes(link.dataset.packetFlowLink));
       });
+      mobileNodes.forEach((node) => {
+        node.classList.toggle("is-active", focusedNodes.includes(node.dataset.packetFlowMobileNode));
+        node.classList.toggle("is-failed", (current.failedNodes || []).includes(node.dataset.packetFlowMobileNode));
+        node.classList.toggle("is-warning", (current.warningNodes || []).includes(node.dataset.packetFlowMobileNode));
+      });
+      mobilePackets.forEach((packet) => {
+        packet.classList.toggle("is-visible", focusedNodes.includes(packet.dataset.packetFlowMobilePacket));
+      });
+      mobileLinks.forEach((link) => {
+        link.classList.toggle("is-active", current.links.includes(link.dataset.packetFlowMobileLink));
+        link.classList.toggle("is-failed", (current.failedLinks || []).includes(link.dataset.packetFlowMobileLink));
+        link.classList.toggle("is-warning", (current.warningLinks || []).includes(link.dataset.packetFlowMobileLink));
+      });
       staleHello?.classList.toggle("is-visible", Boolean(current.staleHello));
       deadTimer?.classList.toggle("is-visible", Boolean(current.deadTimer));
+      mobileDeadTimer?.classList.toggle("is-visible", Boolean(current.deadTimer));
       causalChain?.classList.toggle("is-visible", Boolean(current.causalChain));
 
       progress.textContent = `Step ${step + 1} of ${steps.length}`;
@@ -359,6 +473,10 @@
       title.textContent = current.title;
       description.textContent = current.description;
       svg.setAttribute("aria-label", `${current.title}. ${current.description}`);
+      mobilePhase.textContent = current.phase;
+      mobileTitle.textContent = current.title;
+      mobileDescription.textContent = current.description;
+      mobileDiagram.setAttribute("aria-label", `${current.title}. ${current.description}`);
       previousButton.disabled = step === 0;
       nextButton.disabled = step === steps.length - 1;
       if (nextButton.disabled) stopPlayback();
